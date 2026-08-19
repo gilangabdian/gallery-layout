@@ -55,3 +55,61 @@
   color: #555;
   text-align: left;
 }
+
+/* Lightbox Styles */
+.gallery-layout__lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  animation: lightbox-fade-in 0.2s forwards;
+  backdrop-filter: blur(5px);
+}
+
+.gallery-layout__lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-layout__lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-layout__lightbox-close:hover,
+.gallery-layout__lightbox-close:focus {
+  opacity: 1;
+  outline: none;
+}
+
+@keyframes lightbox-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

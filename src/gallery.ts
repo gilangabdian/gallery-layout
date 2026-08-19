@@ -1,4 +1,5 @@
 import type { GalleryOptions } from "./types";
+import { openLightbox } from "./lightbox";
 
 export function createGallery(container: HTMLElement, options: GalleryOptions): void {
   container.innerHTML = "";
@@ -25,8 +26,7 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
 
     if (options.lightbox) {
       img.addEventListener("click", () => {
-        console.log("Lightbox clicked:", image.src);
-        // TODO: Lightbox feature to be implemented
+        openLightbox(image);
       });
     }
 
