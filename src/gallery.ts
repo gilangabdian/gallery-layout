@@ -1,9 +1,6 @@
 import type { GalleryOptions } from "./types";
 
-export function createGallery(
-  container: HTMLElement,
-  options: GalleryOptions
-): void {
+export function createGallery(container: HTMLElement, options: GalleryOptions): void {
   container.innerHTML = "";
   container.classList.add("gallery-layout");
 
@@ -27,7 +24,6 @@ export function createGallery(
     img.loading = "lazy";
 
     if (options.lightbox) {
-      img.style.cursor = "pointer";
       img.addEventListener("click", () => {
         console.log("Lightbox clicked:", image.src);
         // TODO: Lightbox feature to be implemented
