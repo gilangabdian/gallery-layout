@@ -7,6 +7,10 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
 
   const size = options.size ?? "medium";
   container.dataset.size = size;
+  
+  if (options.captions) {
+    container.dataset.captionPosition = options.captionPosition ?? "bottom";
+  }
 
   if (options.gap) {
     container.style.setProperty("--gallery-gap", options.gap);
@@ -25,8 +29,16 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     img.loading = "lazy";
 
     if (options.lightbox) {
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
       img.addEventListener("click", () => {
         openLightbox(image);
+      });
+      img.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openLightbox(image);
+        }
       });
     }
 
@@ -35,7 +47,12 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     if (options.captions && image.title) {
       const caption = document.createElement("figcaption");
       caption.textContent = image.title;
-      item.appendChild(caption);
+      
+      if (options.captionPosition === "top") {
+        item.insertBefore(caption, img);
+      } else {
+        item.appendChild(caption);
+      }
     }
 
     track.appendChild(item);

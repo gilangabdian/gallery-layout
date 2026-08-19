@@ -10,6 +10,7 @@ export interface GalleryOptions {
   images: GalleryImage[];
   size?: GallerySize;
   captions?: boolean;
+  captionPosition?: "top" | "bottom" | "overlay";
   lightbox?: boolean;
   gap?: string;
 }

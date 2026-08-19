@@ -30,7 +30,14 @@ export default function Home() {
         {/* Gallery Component */}
         <div className="-mx-8 md:-mx-24 px-8 md:px-24">
           <section className="my-12">
-            <Gallery images={images} size="large" captions={false} lightbox={true} gap="24px" />
+            <Gallery
+              images={images}
+              size="large"
+              captions={true}
+              captionPosition="overlay"
+              lightbox={true}
+              gap="24px"
+            />
           </section>
         </div>
 

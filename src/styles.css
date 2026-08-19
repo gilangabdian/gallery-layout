@@ -56,6 +56,36 @@
   text-align: left;
 }
 
+/* Caption Overlay Styles */
+.gallery-layout[data-caption-position="overlay"] .gallery-layout__item {
+  position: relative;
+}
+
+.gallery-layout[data-caption-position="overlay"] .gallery-layout__item figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: 0;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  border-bottom-left-radius: var(--gallery-radius);
+  border-bottom-right-radius: var(--gallery-radius);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-layout[data-caption-position="overlay"] .gallery-layout__item:hover figcaption {
+  opacity: 1;
+}
+
+/* Keyboard Focus Styles */
+.gallery-layout__item img:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
 /* Lightbox Styles */
 .gallery-layout__lightbox {
   position: fixed;
