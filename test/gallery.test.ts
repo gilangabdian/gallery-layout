@@ -50,10 +50,10 @@ describe("createGallery", () => {
     createGallery(container, { 
       images: sampleImages, 
       captions: true, 
-      captionPosition: "top" 
+      captionPosition: "top-center" 
     });
 
-    expect(container.dataset.captionPosition).toBe("top");
+    expect(container.dataset.captionPosition).toBe("top-center");
 
     const item = container.querySelector(".gallery-layout__item");
     const firstChild = item?.firstElementChild;
@@ -66,5 +66,10 @@ describe("createGallery", () => {
     const img = container.querySelector("img");
     expect(img?.getAttribute("tabindex")).toBe("0");
     expect(img?.getAttribute("role")).toBe("button");
+  });
+
+  it("should configure pointer properly", () => {
+    createGallery(container, { images: sampleImages, pointer: true });
+    expect(container.dataset.pointer).toBe("true");
   });
 });

@@ -1,6 +1,6 @@
-import type { GalleryImage } from "./types";
+import type { GalleryImage, GalleryOptions } from "./types";
 
-export function openLightbox(image: GalleryImage): void {
+export function openLightbox(image: GalleryImage, options: GalleryOptions): void {
   // Create overlay container
   const overlay = document.createElement("div");
   overlay.className = "gallery-layout__lightbox";
@@ -19,6 +19,14 @@ export function openLightbox(image: GalleryImage): void {
 
   // Append elements
   overlay.appendChild(imgElement);
+
+  if (options.captions && image.title) {
+    const captionElement = document.createElement("div");
+    captionElement.className = "gallery-layout__lightbox-caption";
+    captionElement.textContent = image.title;
+    overlay.appendChild(captionElement);
+  }
+
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
 
@@ -38,11 +46,8 @@ export function openLightbox(image: GalleryImage): void {
 
   // Event listeners
   closeBtn.addEventListener("click", closeLightbox);
-  overlay.addEventListener("click", (e) => {
-    // Only close if clicking the dark overlay, not the image itself
-    if (e.target === overlay) {
-      closeLightbox();
-    }
+  overlay.addEventListener("click", () => {
+    closeLightbox();
   });
 
   const onKeyDown = (e: KeyboardEvent) => {

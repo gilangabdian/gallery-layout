@@ -32,9 +32,10 @@ export default function Home() {
           <section className="my-12">
             <Gallery
               images={images}
-              size="large"
+              size="small"
               captions={true}
-              captionPosition="overlay"
+              captionPosition="top-left"
+              pointer={true}
               lightbox={true}
               gap="24px"
             />

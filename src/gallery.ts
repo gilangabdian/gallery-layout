@@ -9,7 +9,11 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   container.dataset.size = size;
   
   if (options.captions) {
-    container.dataset.captionPosition = options.captionPosition ?? "bottom";
+    container.dataset.captionPosition = options.captionPosition ?? "bottom-center";
+  }
+
+  if (options.pointer) {
+    container.dataset.pointer = "true";
   }
 
   if (options.gap) {
@@ -32,12 +36,12 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       img.setAttribute("tabindex", "0");
       img.setAttribute("role", "button");
       img.addEventListener("click", () => {
-        openLightbox(image);
+        openLightbox(image, options);
       });
       img.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openLightbox(image);
+          openLightbox(image, options);
         }
       });
     }
@@ -48,7 +52,7 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       const caption = document.createElement("figcaption");
       caption.textContent = image.title;
       
-      if (options.captionPosition === "top") {
+      if (options.captionPosition?.startsWith("top")) {
         item.insertBefore(caption, img);
       } else {
         item.appendChild(caption);
