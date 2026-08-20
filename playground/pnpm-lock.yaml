@@ -1191,7 +1191,7 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
   gallery-layout@file:../gallery-layout-1.0.0.tgz:
-    resolution: {integrity: sha512-oYQVqfYdOAw1CWqKfQq90ITL6tYnwhHSo3MmYhqdlGfU9SK7fPTq5XZJqzLOycryk0G92hTgkFUn7xS6IDtX6w==, tarball: file:../gallery-layout-1.0.0.tgz}
+    resolution: {integrity: sha512-Fj6VYIXvUmNyFW2nl0NQiR7kmnWjZPJvkXqvy5Zy2/LNhTWry28oUaSUiis68pEiRNIvvweeWoJY9Q1rvksSzw==, tarball: file:../gallery-layout-1.0.0.tgz}
     version: 1.0.0
     engines: {node: '>=22.18.0'}
 

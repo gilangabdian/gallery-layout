@@ -13,7 +13,8 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding-bottom: 8px;
+  padding: 4px 4px 8px 4px;
+  scroll-padding: 4px;
 }
 
 .gallery-layout__track::-webkit-scrollbar {
@@ -115,25 +116,50 @@
   backdrop-filter: blur(5px);
 }
 
+.gallery-layout__lightbox-inner {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+}
+
 .gallery-layout__lightbox-img {
   max-width: 90vw;
   max-height: 85vh;
-  object-fit: contain;
+  display: block;
   border-radius: 4px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  min-height: 0;
 }
 
 .gallery-layout__lightbox-caption {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
   color: white;
   font-size: 1rem;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 12px 0;
   pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-align: left;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay"] .gallery-layout__lightbox-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  text-align: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  text-shadow: none;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.gallery-layout__lightbox[data-caption-position$="-center"] .gallery-layout__lightbox-caption {
+  text-align: center;
+}
+
+.gallery-layout__lightbox[data-caption-position$="-right"] .gallery-layout__lightbox-caption {
+  text-align: right;
 }
 
 .gallery-layout__lightbox-close {

@@ -4,6 +4,10 @@ export function openLightbox(image: GalleryImage, options: GalleryOptions): void
   // Create overlay container
   const overlay = document.createElement("div");
   overlay.className = "gallery-layout__lightbox";
+  
+  if (options.captions) {
+    overlay.dataset.captionPosition = options.captionPosition ?? "bottom-center";
+  }
 
   // Create image element
   const imgElement = document.createElement("img");
@@ -17,15 +21,27 @@ export function openLightbox(image: GalleryImage, options: GalleryOptions): void
   closeBtn.setAttribute("aria-label", "Close lightbox");
   closeBtn.innerHTML = "&times;";
 
-  // Append elements
-  overlay.appendChild(imgElement);
-
+  // Create inner wrapper (similar to figure in gallery)
+  const innerWrapper = document.createElement("figure");
+  innerWrapper.className = "gallery-layout__lightbox-inner";
+  
   if (options.captions && image.title) {
-    const captionElement = document.createElement("div");
+    const captionElement = document.createElement("figcaption");
     captionElement.className = "gallery-layout__lightbox-caption";
     captionElement.textContent = image.title;
-    overlay.appendChild(captionElement);
+    
+    if (options.captionPosition?.startsWith("top")) {
+      innerWrapper.appendChild(captionElement);
+      innerWrapper.appendChild(imgElement);
+    } else {
+      innerWrapper.appendChild(imgElement);
+      innerWrapper.appendChild(captionElement);
+    }
+  } else {
+    innerWrapper.appendChild(imgElement);
   }
+
+  overlay.appendChild(innerWrapper);
 
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
