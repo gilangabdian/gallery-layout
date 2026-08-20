@@ -21,4 +21,6 @@ export interface GalleryOptions {
   lightbox?: boolean;
   gap?: string;
   pointer?: boolean;
+  snap?: boolean;
+  aspectRatio?: string;
 }

@@ -6,6 +6,8 @@ export default function Home() {
     { src: "/photos/photo-2.png", alt: "Tokyo street", title: "A quiet afternoon" },
     { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Somewhere in Tokyo" },
     { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
+    { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
+    { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
   ];
 
   return (
@@ -31,12 +33,14 @@ export default function Home() {
           <section className="my-12">
             <Gallery
               images={images}
-              size="large"
+              size="medium"
               captions={true}
               captionPosition="overlay"
               pointer={false}
               lightbox={true}
               gap="10px"
+              aspectRatio="16/9"
+              snap={true}
             />
           </section>
         </div>

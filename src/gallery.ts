@@ -20,6 +20,14 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     container.style.setProperty("--gallery-gap", options.gap);
   }
 
+  if (options.snap === false || options.snap === undefined) {
+    container.dataset.snap = "false";
+  }
+
+  if (options.aspectRatio) {
+    container.style.setProperty("--gallery-aspect-ratio", options.aspectRatio);
+  }
+
   const track = document.createElement("div");
   track.className = "gallery-layout__track";
 
