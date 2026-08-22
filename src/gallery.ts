@@ -28,6 +28,16 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     container.style.setProperty("--gallery-aspect-ratio", options.aspectRatio);
   }
 
+  if (options.captionSize) {
+    container.style.setProperty("--gallery-caption-size", options.captionSize);
+  }
+
+  if (options.radius === false) {
+    container.style.setProperty("--gallery-radius", "0px");
+  } else if (typeof options.radius === "string") {
+    container.style.setProperty("--gallery-radius", options.radius);
+  }
+
   const track = document.createElement("div");
   track.className = "gallery-layout__track";
 

@@ -1105,6 +1105,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -1191,7 +1192,7 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
   gallery-layout@file:../gallery-layout-1.0.0.tgz:
-    resolution: {integrity: sha512-8+JKsp1YCJfP6BBbdyLNnAyymag3wLeYQerFeppGAlnynWZStQI3oIAEDuHKttUd/z/+fHCu43c54LQj8TcU+A==, tarball: file:../gallery-layout-1.0.0.tgz}
+    resolution: {integrity: sha512-J9Crs6wdWTWM5575vbY8l3KHCZDQ6Rd8+MAswhoHd7wlsd/MkzVOO/2jDsb2ZcQhP/re9jFvswn1tfCg+G1IuA==, tarball: file:../gallery-layout-1.0.0.tgz}
     version: 1.0.0
     engines: {node: '>=22.18.0'}
 

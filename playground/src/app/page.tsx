@@ -33,14 +33,16 @@ export default function Home() {
           <section className="my-12">
             <Gallery
               images={images}
-              size="medium"
+              size="small"
               captions={true}
-              captionPosition="overlay"
+              captionPosition="overlay-bottom-left"
               pointer={false}
               lightbox={true}
               gap="10px"
-              aspectRatio="16/9"
-              snap={true}
+              aspectRatio="1/1"
+              snap={false}
+              radius="0px"
+              captionSize="10px"
             />
           </section>
         </div>

@@ -17,10 +17,18 @@ export interface GalleryOptions {
     | "bottom-left"
     | "bottom-center"
     | "bottom-right"
-    | "overlay";
+    | "overlay"
+    | "overlay-top-left"
+    | "overlay-top-center"
+    | "overlay-top-right"
+    | "overlay-bottom-left"
+    | "overlay-bottom-center"
+    | "overlay-bottom-right";
   lightbox?: boolean;
   gap?: string;
   pointer?: boolean;
   snap?: boolean;
   aspectRatio?: string;
+  captionSize?: string;
+  radius?: boolean | string;
 }
