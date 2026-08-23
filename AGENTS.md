@@ -895,6 +895,24 @@ fix things
 
 ---
 
+# Versioning and Releases
+
+When a new feature, MVP milestone, or significant bug fix is completed and verified, AI agents must proactively suggest creating a new Git tag and GitHub release.
+
+AI agents must:
+1. **Enforce Semantic Versioning (SemVer):** Check previous tags (e.g., via `git tag` or `package.json` version) to determine the next logical version number.
+   * `v1.x.0` for new features (minor)
+   * `v1.0.x` for bug fixes (patch)
+2. **Teach the User (Annotated Tags):** Always provide the exact, copy-pasteable Git commands to create an **annotated tag** (do not use lightweight tags).
+   Example:
+   ```bash
+   git tag -a v1.1.0 -m "Release v1.1.0: Add horizontal scroll layout"
+   git push origin v1.1.0
+   ```
+3. **Draft Release Notes:** Propose a clear, concise release note draft summarizing the latest commits/features. This helps the user quickly copy-paste the notes into the GitHub Release UI. If the user prefers a silent release, explain how to publish the tag without additional notes.
+
+---
+
 # Agent Behavior
 
 When working on this repository, AI agents must:
