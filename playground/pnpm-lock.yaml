@@ -1192,7 +1192,7 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
   gallery-layout@file:../gallery-layout-1.0.0.tgz:
-    resolution: {integrity: sha512-J9Crs6wdWTWM5575vbY8l3KHCZDQ6Rd8+MAswhoHd7wlsd/MkzVOO/2jDsb2ZcQhP/re9jFvswn1tfCg+G1IuA==, tarball: file:../gallery-layout-1.0.0.tgz}
+    resolution: {integrity: sha512-9F1B4+CfMQyWj3h6ZPEuNeEPwORogqGc4JluCT84EEZkkWG7Wct5n6eVBicUNfo5c3GkVnasW7EECetyRo2tsg==, tarball: file:../gallery-layout-1.0.0.tgz}
     version: 1.0.0
     engines: {node: '>=22.18.0'}
 

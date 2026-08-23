@@ -5,8 +5,29 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   container.innerHTML = "";
   container.classList.add("gallery-layout");
 
-  const size = options.size ?? "medium";
-  container.dataset.size = size;
+  const layout = options.layout ?? "scroll";
+  container.dataset.layout = layout;
+
+  if (layout === "scroll") {
+    const scrollOptions = options as Extract<GalleryOptions, { layout?: "scroll" }>;
+    const size = scrollOptions.size ?? "medium";
+    container.dataset.size = size;
+    
+    if (scrollOptions.snap === false || scrollOptions.snap === undefined) {
+      container.dataset.snap = "false";
+    }
+  } else if (layout === "grid") {
+    const gridOptions = options as Extract<GalleryOptions, { layout: "grid" }>;
+    if (typeof gridOptions.columns === "number") {
+      container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.toString());
+      container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.toString());
+      container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.toString());
+    } else if (gridOptions.columns) {
+      if (gridOptions.columns.desktop) container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.desktop.toString());
+      if (gridOptions.columns.tablet) container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.tablet.toString());
+      if (gridOptions.columns.mobile) container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.mobile.toString());
+    }
+  }
   
   if (options.captions) {
     container.dataset.captionPosition = options.captionPosition ?? "bottom-center";
@@ -18,10 +39,6 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
 
   if (options.gap) {
     container.style.setProperty("--gallery-gap", options.gap);
-  }
-
-  if (options.snap === false || options.snap === undefined) {
-    container.dataset.snap = "false";
   }
 
   if (options.aspectRatio) {

@@ -10,7 +10,6 @@ const images = [
 ];
 
 export default function Home() {
-
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 p-8 md:p-24 font-[family-name:var(--font-geist-sans)]">
       <div className="max-w-3xl mx-auto space-y-12">
@@ -29,22 +28,39 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Gallery Component */}
+        {/* Gallery Component (Scroll) */}
         <div className="-mx-8 md:-mx-24 px-8 md:px-24">
           <section className="my-12">
+            <h2 className="text-2xl font-semibold mb-6">Layout: Scroll (Default)</h2>
             <Gallery
               images={images}
-              size="small"
+              size="medium"
               captions={true}
               captionPosition="overlay-bottom-center"
               pointer={true}
               lightbox={true}
               gap="12px"
+              radius="0"
               aspectRatio="1/1"
               snap={false}
               captionSize="8px"
             />
           </section>
+
+          {/* <section className="my-12">
+            <h2 className="text-2xl font-semibold mb-6">Layout: Grid</h2>
+            <Gallery
+              images={images}
+              layout="grid"
+              columns={{ desktop: 3 }}
+              gap="12px"
+              aspectRatio="1/1"
+              radius="0px"
+              captions={false}
+              lightbox={true}
+              pointer={true}
+            />
+          </section> */}
         </div>
 
         <section className="prose prose-invert">

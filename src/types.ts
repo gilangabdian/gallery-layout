@@ -6,9 +6,18 @@ export interface GalleryImage {
 
 export type GallerySize = "small" | "medium" | "large";
 
-export interface GalleryOptions {
+export interface GridResponsiveSettings {
+  mobile?: number;
+  tablet?: number;
+  desktop?: number;
+}
+
+export interface BaseGalleryOptions {
   images: GalleryImage[];
-  size?: GallerySize;
+  lightbox?: boolean;
+  gap?: string;
+  pointer?: boolean;
+  radius?: boolean | string;
   captions?: boolean;
   captionPosition?:
     | "top-left"
@@ -24,11 +33,20 @@ export interface GalleryOptions {
     | "overlay-bottom-left"
     | "overlay-bottom-center"
     | "overlay-bottom-right";
-  lightbox?: boolean;
-  gap?: string;
-  pointer?: boolean;
+  captionSize?: string;
+}
+
+export interface ScrollGalleryOptions extends BaseGalleryOptions {
+  layout?: "scroll";
+  size?: GallerySize;
   snap?: boolean;
   aspectRatio?: string;
-  captionSize?: string;
-  radius?: boolean | string;
 }
+
+export interface GridGalleryOptions extends BaseGalleryOptions {
+  layout: "grid";
+  columns?: number | GridResponsiveSettings;
+  aspectRatio?: string;
+}
+
+export type GalleryOptions = ScrollGalleryOptions | GridGalleryOptions;

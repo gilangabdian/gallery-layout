@@ -262,3 +262,41 @@
     opacity: 1;
   }
 }
+
+/* =========================================
+   Layout: Grid (Appended Feature)
+   ========================================= */
+
+.gallery-layout[data-layout="grid"] .gallery-layout__track {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols-desktop, 4), 1fr);
+  grid-auto-rows: 1fr;
+  /* Reset scroll logic for grid */
+  overflow-x: visible;
+  scroll-snap-type: none;
+  /* Adjust padding so grid items fit nicely without the extra scroll padding */
+  padding: 4px; 
+  margin: -4px;
+}
+
+@media (max-width: 1024px) {
+  .gallery-layout[data-layout="grid"] .gallery-layout__track {
+    grid-template-columns: repeat(var(--gallery-cols-tablet, 3), 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-layout[data-layout="grid"] .gallery-layout__track {
+    grid-template-columns: repeat(var(--gallery-cols-mobile, 2), 1fr);
+  }
+}
+
+.gallery-layout[data-layout="grid"] .gallery-layout__item {
+  width: 100%;
+}
+
+/* Make image block-level inside the grid layout so it fills height if needed */
+.gallery-layout[data-layout="grid"] .gallery-layout__item img {
+  display: block;
+  height: 100%;
+}
