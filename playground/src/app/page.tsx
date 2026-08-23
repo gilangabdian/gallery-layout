@@ -1,5 +1,5 @@
 import Gallery from "@/components/Gallery";
-
+import TiptapEditor from "@/components/TiptapEditor";
 const images = [
   { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Tokyo" },
   { src: "/photos/photo-2.png", alt: "Tokyo street", title: "A quiet afternoon" },
@@ -47,20 +47,10 @@ export default function Home() {
             />
           </section>
 
-          {/* <section className="my-12">
-            <h2 className="text-2xl font-semibold mb-6">Layout: Grid</h2>
-            <Gallery
-              images={images}
-              layout="grid"
-              columns={{ desktop: 3 }}
-              gap="12px"
-              aspectRatio="1/1"
-              radius="0px"
-              captions={false}
-              lightbox={true}
-              pointer={true}
-            />
-          </section> */}
+          <section className="my-12">
+            <h2 className="text-2xl font-semibold mb-6">Tiptap Extension Demo</h2>
+            <TiptapEditor />
+          </section>
         </div>
 
         <section className="prose prose-invert">

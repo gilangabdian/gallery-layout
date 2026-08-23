@@ -9,10 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "gallery-layout": "file:..\\gallery-layout-1.0.0.tgz",
+    "gallery-layout": "workspace:*",
     "next": "16.3.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "@tiptap/react": "^2.0.0",
+    "@tiptap/starter-kit": "^2.0.0",
+    "@tiptap/pm": "^2.0.0",
+    "tiptap-extension-gallery-layout": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
