@@ -1,14 +1,15 @@
 import Gallery from "@/components/Gallery";
 
+const images = [
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Tokyo" },
+  { src: "/photos/photo-2.png", alt: "Tokyo street", title: "A quiet afternoon" },
+  { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Somewhere in Tokyo" },
+  { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
+  { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
+  { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
+];
+
 export default function Home() {
-  const images = [
-    { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Tokyo" },
-    { src: "/photos/photo-2.png", alt: "Tokyo street", title: "A quiet afternoon" },
-    { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Somewhere in Tokyo" },
-    { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
-    { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
-    { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
-  ];
 
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 p-8 md:p-24 font-[family-name:var(--font-geist-sans)]">
@@ -35,14 +36,13 @@ export default function Home() {
               images={images}
               size="small"
               captions={true}
-              captionPosition="overlay-bottom-left"
-              pointer={false}
+              captionPosition="overlay-bottom-center"
+              pointer={true}
               lightbox={true}
-              gap="10px"
+              gap="12px"
               aspectRatio="1/1"
               snap={false}
-              radius="0px"
-              captionSize="10px"
+              captionSize="8px"
             />
           </section>
         </div>
