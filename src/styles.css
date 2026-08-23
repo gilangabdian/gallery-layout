@@ -13,11 +13,16 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding-bottom: 8px;
+  padding: 4px 4px 8px 4px;
+  scroll-padding: 4px;
 }
 
 .gallery-layout__track::-webkit-scrollbar {
   display: none;
+}
+
+.gallery-layout[data-snap="false"] .gallery-layout__track {
+  scroll-snap-type: none;
 }
 
 .gallery-layout__item {
@@ -32,6 +37,7 @@
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: var(--gallery-aspect-ratio, auto);
   object-fit: cover;
   border-radius: var(--gallery-radius);
 }
@@ -56,27 +62,68 @@
   text-align: left;
 }
 
+.gallery-layout[data-caption-position$="-center"] .gallery-layout__item figcaption {
+  text-align: center;
+}
+
+.gallery-layout[data-caption-position$="-right"] .gallery-layout__item figcaption {
+  text-align: right;
+}
+
+.gallery-layout[data-pointer="true"] .gallery-layout__item img {
+  cursor: pointer;
+}
+
 /* Caption Overlay Styles */
-.gallery-layout[data-caption-position="overlay"] .gallery-layout__item {
+.gallery-layout[data-caption-position^="overlay"] .gallery-layout__item {
   position: relative;
 }
 
-.gallery-layout[data-caption-position="overlay"] .gallery-layout__item figcaption {
+.gallery-layout[data-caption-position^="overlay"] .gallery-layout__item figcaption {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   margin-top: 0;
-  padding: 12px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.6);
   color: white;
-  border-bottom-left-radius: var(--gallery-radius);
-  border-bottom-right-radius: var(--gallery-radius);
+  border-radius: var(--gallery-radius);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
-.gallery-layout[data-caption-position="overlay"] .gallery-layout__item:hover figcaption {
+.gallery-layout[data-caption-position="overlay"] .gallery-layout__item figcaption,
+.gallery-layout[data-caption-position="overlay-bottom-left"] .gallery-layout__item figcaption {
+  bottom: 12px;
+  left: 12px;
+}
+
+.gallery-layout[data-caption-position="overlay-bottom-center"] .gallery-layout__item figcaption {
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gallery-layout[data-caption-position="overlay-bottom-right"] .gallery-layout__item figcaption {
+  bottom: 12px;
+  right: 12px;
+}
+
+.gallery-layout[data-caption-position="overlay-top-left"] .gallery-layout__item figcaption {
+  top: 12px;
+  left: 12px;
+}
+
+.gallery-layout[data-caption-position="overlay-top-center"] .gallery-layout__item figcaption {
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gallery-layout[data-caption-position="overlay-top-right"] .gallery-layout__item figcaption {
+  top: 12px;
+  right: 12px;
+}
+
+.gallery-layout[data-caption-position^="overlay"] .gallery-layout__item:hover figcaption {
   opacity: 1;
 }
 
@@ -103,12 +150,84 @@
   backdrop-filter: blur(5px);
 }
 
+.gallery-layout__lightbox-inner {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+}
+
 .gallery-layout__lightbox-img {
   max-width: 90vw;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 4px;
+  max-height: 85vh;
+  display: block;
+  border-radius: var(--gallery-radius);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  min-height: 0;
+}
+
+.gallery-layout__lightbox-caption {
+  color: white;
+  font-size: 1rem;
+  padding: 12px 0;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-align: left;
+}
+
+.gallery-layout__lightbox[data-caption-position^="overlay"] .gallery-layout__lightbox-caption {
+  position: absolute;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.6);
+  text-shadow: none;
+  border-radius: var(--gallery-radius);
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay"] .gallery-layout__lightbox-caption,
+.gallery-layout__lightbox[data-caption-position="overlay-bottom-left"] .gallery-layout__lightbox-caption {
+  bottom: 12px;
+  left: 12px;
+  text-align: left;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay-bottom-center"] .gallery-layout__lightbox-caption {
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay-bottom-right"] .gallery-layout__lightbox-caption {
+  bottom: 12px;
+  right: 12px;
+  text-align: right;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay-top-left"] .gallery-layout__lightbox-caption {
+  top: 12px;
+  left: 12px;
+  text-align: left;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay-top-center"] .gallery-layout__lightbox-caption {
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.gallery-layout__lightbox[data-caption-position="overlay-top-right"] .gallery-layout__lightbox-caption {
+  top: 12px;
+  right: 12px;
+  text-align: right;
+}
+
+.gallery-layout__lightbox[data-caption-position$="-center"] .gallery-layout__lightbox-caption {
+  text-align: center;
+}
+
+.gallery-layout__lightbox[data-caption-position$="-right"] .gallery-layout__lightbox-caption {
+  text-align: right;
 }
 
 .gallery-layout__lightbox-close {
@@ -142,4 +261,42 @@
   to {
     opacity: 1;
   }
+}
+
+/* =========================================
+   Layout: Grid (Appended Feature)
+   ========================================= */
+
+.gallery-layout[data-layout="grid"] .gallery-layout__track {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols-desktop, 4), 1fr);
+  grid-auto-rows: 1fr;
+  /* Reset scroll logic for grid */
+  overflow-x: visible;
+  scroll-snap-type: none;
+  /* Adjust padding so grid items fit nicely without the extra scroll padding */
+  padding: 4px; 
+  margin: -4px;
+}
+
+@media (max-width: 1024px) {
+  .gallery-layout[data-layout="grid"] .gallery-layout__track {
+    grid-template-columns: repeat(var(--gallery-cols-tablet, 3), 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-layout[data-layout="grid"] .gallery-layout__track {
+    grid-template-columns: repeat(var(--gallery-cols-mobile, 2), 1fr);
+  }
+}
+
+.gallery-layout[data-layout="grid"] .gallery-layout__item {
+  width: 100%;
+}
+
+/* Make image block-level inside the grid layout so it fills height if needed */
+.gallery-layout[data-layout="grid"] .gallery-layout__item img {
+  display: block;
+  height: 100%;
 }

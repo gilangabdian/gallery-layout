@@ -5,15 +5,54 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   container.innerHTML = "";
   container.classList.add("gallery-layout");
 
-  const size = options.size ?? "medium";
-  container.dataset.size = size;
+  const layout = options.layout ?? "scroll";
+  container.dataset.layout = layout;
+
+  if (layout === "scroll") {
+    const scrollOptions = options as Extract<GalleryOptions, { layout?: "scroll" }>;
+    const size = scrollOptions.size ?? "medium";
+    container.dataset.size = size;
+    
+    if (scrollOptions.snap === false || scrollOptions.snap === undefined) {
+      container.dataset.snap = "false";
+    }
+  } else if (layout === "grid") {
+    const gridOptions = options as Extract<GalleryOptions, { layout: "grid" }>;
+    if (typeof gridOptions.columns === "number") {
+      container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.toString());
+      container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.toString());
+      container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.toString());
+    } else if (gridOptions.columns) {
+      if (gridOptions.columns.desktop) container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.desktop.toString());
+      if (gridOptions.columns.tablet) container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.tablet.toString());
+      if (gridOptions.columns.mobile) container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.mobile.toString());
+    }
+  }
   
   if (options.captions) {
-    container.dataset.captionPosition = options.captionPosition ?? "bottom";
+    container.dataset.captionPosition = options.captionPosition ?? "bottom-center";
+  }
+
+  if (options.pointer) {
+    container.dataset.pointer = "true";
   }
 
   if (options.gap) {
     container.style.setProperty("--gallery-gap", options.gap);
+  }
+
+  if (options.aspectRatio) {
+    container.style.setProperty("--gallery-aspect-ratio", options.aspectRatio);
+  }
+
+  if (options.captionSize) {
+    container.style.setProperty("--gallery-caption-size", options.captionSize);
+  }
+
+  if (options.radius === false) {
+    container.style.setProperty("--gallery-radius", "0px");
+  } else if (typeof options.radius === "string") {
+    container.style.setProperty("--gallery-radius", options.radius);
   }
 
   const track = document.createElement("div");
@@ -32,12 +71,12 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       img.setAttribute("tabindex", "0");
       img.setAttribute("role", "button");
       img.addEventListener("click", () => {
-        openLightbox(image);
+        openLightbox(image, options);
       });
       img.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openLightbox(image);
+          openLightbox(image, options);
         }
       });
     }
@@ -48,7 +87,7 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       const caption = document.createElement("figcaption");
       caption.textContent = image.title;
       
-      if (options.captionPosition === "top") {
+      if (options.captionPosition?.startsWith("top")) {
         item.insertBefore(caption, img);
       } else {
         item.appendChild(caption);

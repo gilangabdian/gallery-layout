@@ -1,9 +1,13 @@
-import type { GalleryImage } from "./types";
+import type { GalleryImage, GalleryOptions } from "./types";
 
-export function openLightbox(image: GalleryImage): void {
+export function openLightbox(image: GalleryImage, options: GalleryOptions): void {
   // Create overlay container
   const overlay = document.createElement("div");
   overlay.className = "gallery-layout__lightbox";
+  
+  if (options.captions) {
+    overlay.dataset.captionPosition = options.captionPosition ?? "bottom-center";
+  }
 
   // Create image element
   const imgElement = document.createElement("img");
@@ -17,8 +21,28 @@ export function openLightbox(image: GalleryImage): void {
   closeBtn.setAttribute("aria-label", "Close lightbox");
   closeBtn.innerHTML = "&times;";
 
-  // Append elements
-  overlay.appendChild(imgElement);
+  // Create inner wrapper (similar to figure in gallery)
+  const innerWrapper = document.createElement("figure");
+  innerWrapper.className = "gallery-layout__lightbox-inner";
+  
+  if (options.captions && image.title) {
+    const captionElement = document.createElement("figcaption");
+    captionElement.className = "gallery-layout__lightbox-caption";
+    captionElement.textContent = image.title;
+    
+    if (options.captionPosition?.startsWith("top")) {
+      innerWrapper.appendChild(captionElement);
+      innerWrapper.appendChild(imgElement);
+    } else {
+      innerWrapper.appendChild(imgElement);
+      innerWrapper.appendChild(captionElement);
+    }
+  } else {
+    innerWrapper.appendChild(imgElement);
+  }
+
+  overlay.appendChild(innerWrapper);
+
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
 
@@ -38,11 +62,8 @@ export function openLightbox(image: GalleryImage): void {
 
   // Event listeners
   closeBtn.addEventListener("click", closeLightbox);
-  overlay.addEventListener("click", (e) => {
-    // Only close if clicking the dark overlay, not the image itself
-    if (e.target === overlay) {
-      closeLightbox();
-    }
+  overlay.addEventListener("click", () => {
+    closeLightbox();
   });
 
   const onKeyDown = (e: KeyboardEvent) => {

@@ -11,6 +11,14 @@ export default function Gallery(options: GalleryOptions) {
     if (containerRef.current) {
       createGallery(containerRef.current, options);
     }
+    
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = "";
+      }
+      // Clean up any open lightboxes appended to body during hot-reloads
+      document.querySelectorAll(".gallery-layout__lightbox").forEach(el => el.remove());
+    };
   }, [options]);
 
   return <div ref={containerRef} />;
