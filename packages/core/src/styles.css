@@ -90,8 +90,8 @@
   transition: opacity 0.2s ease;
 }
 
-.gallery-layout[data-caption-position="overlay"] .gallery-layout__item figcaption,
 .gallery-layout[data-caption-position="overlay-bottom-left"] .gallery-layout__item figcaption {
+  position: absolute;
   bottom: 12px;
   left: 12px;
 }
@@ -183,8 +183,8 @@
   border-radius: var(--gallery-radius);
 }
 
-.gallery-layout__lightbox[data-caption-position="overlay"] .gallery-layout__lightbox-caption,
 .gallery-layout__lightbox[data-caption-position="overlay-bottom-left"] .gallery-layout__lightbox-caption {
+  position: absolute;
   bottom: 12px;
   left: 12px;
   text-align: left;

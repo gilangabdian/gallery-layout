@@ -6,9 +6,9 @@ import { GalleryExtension } from 'tiptap-extension-gallery-layout'
 import 'gallery-layout/style.css' // Import the core css
 
 const initialImages = [
-  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall" },
-  { src: "/photos/photo-2.png", alt: "Tokyo street" },
-  { src: "/photos/photo-3.png", alt: "Building in Tokyo" }
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-2.png", alt: "Tokyo street", title: "Neon Nights" },
+  { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Urban Architecture" }
 ]
 
 export default function TiptapEditor() {

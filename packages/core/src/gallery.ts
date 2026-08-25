@@ -13,7 +13,7 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     const size = scrollOptions.size ?? "medium";
     container.dataset.size = size;
     
-    if (scrollOptions.snap === false || scrollOptions.snap === undefined) {
+    if (scrollOptions.snap === false) {
       container.dataset.snap = "false";
     }
   } else if (layout === "grid") {
@@ -80,7 +80,9 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     const img = document.createElement("img");
     img.src = image.src;
     img.alt = image.alt;
-    img.loading = "lazy";
+    if (options.lazyLoad !== false) {
+      img.loading = "lazy";
+    }
 
     if (options.lightbox) {
       img.setAttribute("tabindex", "0");

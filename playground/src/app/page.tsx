@@ -1,9 +1,10 @@
 import Gallery from "@/components/Gallery";
 import TiptapEditor from "@/components/TiptapEditor";
 const images = [
-  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Tokyo" },
-  { src: "/photos/photo-2.png", alt: "Tokyo street", title: "A quiet afternoon" },
-  { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Somewhere in Tokyo" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-2.png", alt: "Tokyo street", title: "Neon Nights" },
+  { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Urban Architecture" },
+  { src: "/photos/photo-4.png", alt: "Tokyo night street with signs", title: "City Lights" },
   { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
   { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
   { src: "/photos/photo-4.png", alt: "Neon lights", title: "Nightlife" },
@@ -56,7 +57,7 @@ export default function Home() {
               captionPosition="overlay-bottom-center"
               captionSize="6px"
               pointer={false}
-              size="small"
+              size="medium"
               aspectRatio="1/1"
               lightbox={true}
               gap="12px"

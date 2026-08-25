@@ -26,7 +26,6 @@ export interface BaseGalleryOptions {
     | "bottom-left"
     | "bottom-center"
     | "bottom-right"
-    | "overlay"
     | "overlay-top-left"
     | "overlay-top-center"
     | "overlay-top-right"
@@ -34,6 +33,7 @@ export interface BaseGalleryOptions {
     | "overlay-bottom-center"
     | "overlay-bottom-right";
   captionSize?: string;
+  lazyLoad?: boolean;
 }
 
 export interface ScrollGalleryOptions extends BaseGalleryOptions {
