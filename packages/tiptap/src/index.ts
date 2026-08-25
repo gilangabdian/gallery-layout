@@ -227,7 +227,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .settings-label { flex: 1; }
           .settings-input, .settings-select {
-            width: 120px;
+            width: 160px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
@@ -386,12 +386,13 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         });
 
         const rowCustomWidth = createSettingRow("Custom Width", inpCustomWidth);
+        const rowAlign = createSettingRow("Align", selAlign);
         const rowColumns = createSettingRow("Columns", inpColumns);
         const rowSnap = createSettingRow("Scroll Snap", chkSnap);
 
         settingsPanel.append(
           rowCustomWidth,
-          createSettingRow("Align", selAlign),
+          rowAlign,
           createSettingRow("Gap", inpGap),
           createSettingRow("Radius", inpRadius),
           createSettingRow("Aspect Ratio", inpRatio),
@@ -483,6 +484,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           btnXL.classList.toggle("active", currentSize === "extra-large");
 
           // Dynamic UI toggling based on Layout
+          const isCustomSize = !["extra-small", "small", "medium", "large", "extra-large"].includes(currentSize);
+          rowAlign.style.display = (isGrid && isCustomSize) ? "flex" : "none";
           rowColumns.style.display = isGrid ? "flex" : "none";
           rowSnap.style.display = !isGrid ? "flex" : "none";
 
