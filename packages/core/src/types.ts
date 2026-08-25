@@ -45,6 +45,7 @@ export interface ScrollGalleryOptions extends BaseGalleryOptions {
 
 export interface GridGalleryOptions extends BaseGalleryOptions {
   layout: "grid";
+  size?: GallerySize;
   columns?: number | GridResponsiveSettings;
   aspectRatio?: string;
 }

@@ -18,14 +18,29 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     }
   } else if (layout === "grid") {
     const gridOptions = options as Extract<GalleryOptions, { layout: "grid" }>;
-    if (typeof gridOptions.columns === "number") {
-      container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.toString());
-      container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.toString());
-      container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.toString());
-    } else if (gridOptions.columns) {
-      if (gridOptions.columns.desktop) container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.desktop.toString());
-      if (gridOptions.columns.tablet) container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.tablet.toString());
-      if (gridOptions.columns.mobile) container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.mobile.toString());
+    
+    // Determine the columns configuration
+    let finalCols = gridOptions.columns;
+    
+    // If columns is not explicitly set, fallback to mapping from the size attribute
+    if (finalCols === undefined) {
+      if (gridOptions.size === "small") {
+        finalCols = 4;
+      } else if (gridOptions.size === "large") {
+        finalCols = 2;
+      } else {
+        finalCols = 3; // Medium / Default
+      }
+    }
+
+    if (typeof finalCols === "number") {
+      container.style.setProperty("--gallery-cols-desktop", finalCols.toString());
+      container.style.setProperty("--gallery-cols-tablet", finalCols.toString());
+      container.style.setProperty("--gallery-cols-mobile", finalCols.toString());
+    } else if (finalCols) {
+      if (finalCols.desktop) container.style.setProperty("--gallery-cols-desktop", finalCols.desktop.toString());
+      if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
+      if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
     }
   }
   

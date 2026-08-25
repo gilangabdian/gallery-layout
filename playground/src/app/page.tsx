@@ -48,6 +48,23 @@ export default function Home() {
           </section>
 
           <section className="my-12">
+            <h2 className="text-2xl font-semibold mb-6">Layout: Grid</h2>
+            <Gallery
+              images={images}
+              layout="grid"
+              captions={true}
+              captionPosition="overlay-bottom-center"
+              captionSize="6px"
+              pointer={false}
+              size="small"
+              aspectRatio="1/1"
+              lightbox={true}
+              gap="12px"
+              radius="0"
+            />
+          </section>
+
+          <section className="my-12">
             <h2 className="text-2xl font-semibold mb-6">Tiptap Extension Demo</h2>
             <TiptapEditor />
           </section>
