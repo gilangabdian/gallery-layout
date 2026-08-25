@@ -2,7 +2,7 @@
   --gallery-gap: 16px;
   --gallery-radius: 4px;
   --gallery-caption-size: 0.9rem;
-  
+
   width: 100%;
   overflow: hidden;
 }
@@ -42,8 +42,12 @@
   border-radius: var(--gallery-radius);
 }
 
+.gallery-layout[data-size="extra-small"] .gallery-layout__item {
+  width: 140px;
+}
+
 .gallery-layout[data-size="small"] .gallery-layout__item {
-  width: 220px;
+  width: 150px;
 }
 
 .gallery-layout[data-size="medium"] .gallery-layout__item {
@@ -52,6 +56,15 @@
 
 .gallery-layout[data-size="large"] .gallery-layout__item {
   width: 520px;
+}
+
+.gallery-layout[data-size="extra-large"] .gallery-layout__item {
+  width: 720px;
+}
+
+.gallery-layout[data-size="custom"] .gallery-layout__item {
+  width: var(--gallery-custom-size);
+  max-width: 90vw;
 }
 
 .gallery-layout__item figcaption {
@@ -267,6 +280,40 @@
    Layout: Grid (Appended Feature)
    ========================================= */
 
+/* Size to Column mappings for Grid Layout */
+.gallery-layout[data-layout="grid"][data-size="custom"] .gallery-layout__track {
+  grid-template-columns: repeat(auto-fit, var(--gallery-custom-size));
+}
+.gallery-layout[data-layout="grid"][data-size="extra-large"] {
+  --gallery-cols-desktop: 1;
+  --gallery-cols-tablet: 1;
+  --gallery-cols-mobile: 1;
+}
+
+.gallery-layout[data-layout="grid"][data-size="large"] {
+  --gallery-cols-desktop: 2;
+  --gallery-cols-tablet: 2;
+  --gallery-cols-mobile: 1;
+}
+
+.gallery-layout[data-layout="grid"][data-size="medium"] {
+  --gallery-cols-desktop: 3;
+  --gallery-cols-tablet: 2;
+  --gallery-cols-mobile: 2;
+}
+
+.gallery-layout[data-layout="grid"][data-size="small"] {
+  --gallery-cols-desktop: 4;
+  --gallery-cols-tablet: 3;
+  --gallery-cols-mobile: 2;
+}
+
+.gallery-layout[data-layout="grid"][data-size="extra-small"] {
+  --gallery-cols-desktop: 6;
+  --gallery-cols-tablet: 4;
+  --gallery-cols-mobile: 3;
+}
+
 .gallery-layout[data-layout="grid"] .gallery-layout__track {
   display: grid;
   grid-template-columns: repeat(var(--gallery-cols-desktop, 4), 1fr);
@@ -275,17 +322,17 @@
   overflow-x: visible;
   scroll-snap-type: none;
   /* Adjust padding so grid items fit nicely without the extra scroll padding */
-  padding: 4px; 
+  padding: 4px;
   margin: -4px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .gallery-layout[data-layout="grid"] .gallery-layout__track {
     grid-template-columns: repeat(var(--gallery-cols-tablet, 3), 1fr);
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .gallery-layout[data-layout="grid"] .gallery-layout__track {
     grid-template-columns: repeat(var(--gallery-cols-mobile, 2), 1fr);
   }
@@ -299,4 +346,15 @@
 .gallery-layout[data-layout="grid"] .gallery-layout__item img {
   display: block;
   height: 100%;
+}
+
+/* =========================================
+   Alignment Utility
+   ========================================= */
+.gallery-layout[data-align="center"] .gallery-layout__track {
+  justify-content: center;
+}
+
+.gallery-layout[data-align="right"] .gallery-layout__track {
+  justify-content: flex-end;
 }

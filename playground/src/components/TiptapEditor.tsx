@@ -20,6 +20,7 @@ export default function TiptapEditor() {
         defaultSize: 'medium'
       })
     ],
+    immediatelyRender: false,
     content: `
       <h2>Tiptap Extension Demo</h2>
       <p>This editor uses the custom GalleryExtension! Click the button below to insert a gallery.</p>

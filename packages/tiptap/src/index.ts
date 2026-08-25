@@ -32,6 +32,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
     return {
       defaultLayout: "scroll",
       defaultSize: "medium",
+      defaultAlign: "left",
       defaultGap: "16px",
       defaultRadius: "4px",
       defaultCaptionSize: "14px",
@@ -132,6 +133,11 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         default: undefined,
         parseHTML: (element) => element.getAttribute("data-snap") === "true",
         renderHTML: (attributes) => (attributes.snap !== undefined ? { "data-snap": String(attributes.snap) } : {}),
+      },
+      align: {
+        default: "left",
+        parseHTML: (element) => element.getAttribute("data-align"),
+        renderHTML: (attributes) => (attributes.align ? { "data-align": attributes.align } : {}),
       },
     };
   },
@@ -253,6 +259,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         btnGrid.textContent = "Grid";
         const div1 = document.createElement("div");
         div1.className = "gallery-toolbar-divider";
+        const btnXS = document.createElement("button");
+        btnXS.className = "gallery-toolbar-btn";
+        btnXS.textContent = "XS";
         const btnS = document.createElement("button");
         btnS.className = "gallery-toolbar-btn";
         btnS.textContent = "S";
@@ -262,13 +271,17 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         const btnL = document.createElement("button");
         btnL.className = "gallery-toolbar-btn";
         btnL.textContent = "L";
+        const btnXL = document.createElement("button");
+        btnXL.className = "gallery-toolbar-btn";
+        btnXL.textContent = "XL";
         const div2 = document.createElement("div");
         div2.className = "gallery-toolbar-divider";
         const btnSettings = document.createElement("button");
         btnSettings.className = "gallery-toolbar-btn";
         btnSettings.textContent = "⚙️";
 
-        mainToolbar.append(btnScroll, btnGrid, div1, btnS, btnM, btnL, div2, btnSettings);
+        const sizeGroup = [div1, btnXS, btnS, btnM, btnL, btnXL, div2];
+        mainToolbar.append(btnScroll, btnGrid, ...sizeGroup, btnSettings);
 
         // Settings Panel
         const settingsPanel = document.createElement("div");
@@ -305,6 +318,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         const inpRatio = document.createElement("input");
         inpRatio.className = "settings-input";
         inpRatio.placeholder = "e.g. 1/1";
+        const inpCustomWidth = document.createElement("input");
+        inpCustomWidth.className = "settings-input";
+        inpCustomWidth.placeholder = "e.g. 360px";
         const inpColumns = document.createElement("input");
         inpColumns.className = "settings-input";
         inpColumns.placeholder = "e.g. 3 (number only)";
@@ -313,9 +329,27 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         inpCaptionSize.className = "settings-input";
         inpCaptionSize.placeholder = "e.g. 12px";
 
+        // Captions Setup
         const chkCaptions = document.createElement("input");
         chkCaptions.type = "checkbox";
         chkCaptions.className = "settings-checkbox";
+
+        // Align Setup
+        const selAlign = document.createElement("select");
+        selAlign.className = "settings-select";
+        const alignOpts = [
+          { v: "left", l: "Left" },
+          { v: "center", l: "Center" },
+          { v: "right", l: "Right" },
+        ];
+        alignOpts.forEach((o) => {
+          const opt = document.createElement("option");
+          opt.value = o.v;
+          opt.textContent = o.l;
+          selAlign.appendChild(opt);
+        });
+
+        // Pointer Setup
         const chkPointer = document.createElement("input");
         chkPointer.type = "checkbox";
         chkPointer.className = "settings-checkbox";
@@ -351,10 +385,13 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           selCaptionPos.appendChild(opt);
         });
 
-        const rowColumns = createSettingRow("Columns (Overrides Size)", inpColumns);
+        const rowCustomWidth = createSettingRow("Custom Width", inpCustomWidth);
+        const rowColumns = createSettingRow("Columns", inpColumns);
         const rowSnap = createSettingRow("Scroll Snap", chkSnap);
 
         settingsPanel.append(
+          rowCustomWidth,
+          createSettingRow("Align", selAlign),
           createSettingRow("Gap", inpGap),
           createSettingRow("Radius", inpRadius),
           createSettingRow("Aspect Ratio", inpRatio),
@@ -385,6 +422,10 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           e.preventDefault();
           updateAttr("layout", "grid");
         });
+        btnXS.addEventListener("click", (e) => {
+          e.preventDefault();
+          updateAttr("size", "extra-small");
+        });
         btnS.addEventListener("click", (e) => {
           e.preventDefault();
           updateAttr("size", "small");
@@ -397,6 +438,10 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           e.preventDefault();
           updateAttr("size", "large");
         });
+        btnXL.addEventListener("click", (e) => {
+          e.preventDefault();
+          updateAttr("size", "extra-large");
+        });
 
         let timeouts: Record<string, any> = {};
         const debounceUpdate = (key: string, val: any) => {
@@ -404,6 +449,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           timeouts[key] = setTimeout(() => updateAttr(key, val), 400);
         };
 
+        inpCustomWidth.addEventListener("input", () => debounceUpdate("size", inpCustomWidth.value || undefined));
         inpGap.addEventListener("input", () => debounceUpdate("gap", inpGap.value || undefined));
         inpRadius.addEventListener("input", () => debounceUpdate("radius", inpRadius.value || undefined));
         inpRatio.addEventListener("input", () => debounceUpdate("aspectRatio", inpRatio.value || undefined));
@@ -420,27 +466,40 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         chkLightbox.addEventListener("change", () => updateAttr("lightbox", chkLightbox.checked));
         chkSnap.addEventListener("change", () => updateAttr("snap", chkSnap.checked));
         selCaptionPos.addEventListener("change", () => updateAttr("captionPosition", selCaptionPos.value || undefined));
+        selAlign.addEventListener("change", () => updateAttr("align", selAlign.value || undefined));
 
         // Sync Function: Tiptap Attrs -> DOM State
         syncDOM = (attrs: Record<string, any>) => {
-          btnScroll.classList.toggle("active", attrs.layout === "scroll");
+          btnScroll.classList.toggle("active", attrs.layout === "scroll" || !attrs.layout);
           btnGrid.classList.toggle("active", attrs.layout === "grid");
-          btnS.classList.toggle("active", attrs.size === "small");
-          btnM.classList.toggle("active", attrs.size === "medium");
-          btnL.classList.toggle("active", attrs.size === "large");
+          
+          const currentSize = attrs.size || "medium";
+          const isGrid = attrs.layout === "grid";
 
-          // UX Feedback: Dim S/M/L buttons if columns are set AND we are in Grid mode
-          const hasCustomCols = attrs.layout === "grid" && !!attrs.columns;
-          btnS.style.opacity = hasCustomCols ? "0.4" : "1";
-          btnM.style.opacity = hasCustomCols ? "0.4" : "1";
-          btnL.style.opacity = hasCustomCols ? "0.4" : "1";
+          btnXS.classList.toggle("active", currentSize === "extra-small");
+          btnS.classList.toggle("active", currentSize === "small");
+          btnM.classList.toggle("active", currentSize === "medium");
+          btnL.classList.toggle("active", currentSize === "large");
+          btnXL.classList.toggle("active", currentSize === "extra-large");
 
           // Dynamic UI toggling based on Layout
-          rowColumns.style.display = attrs.layout === "grid" ? "flex" : "none";
-          rowSnap.style.display = attrs.layout === "scroll" || !attrs.layout ? "flex" : "none";
+          rowColumns.style.display = isGrid ? "flex" : "none";
+          rowSnap.style.display = !isGrid ? "flex" : "none";
+
+          // Placeholder logic for Custom Width
+          const presets: Record<string, string> = {
+            "extra-small": "e.g. 140px",
+            "small": "e.g. 220px",
+            "medium": "e.g. 360px",
+            "large": "e.g. 520px",
+            "extra-large": "e.g. 720px",
+          };
+          inpCustomWidth.placeholder = presets[currentSize] || "e.g. 360px";
 
           // Only update input values if they are NOT currently focused.
-          // This prevents the cursor from jumping to the end while typing.
+          if (document.activeElement !== inpCustomWidth) {
+            inpCustomWidth.value = presets[currentSize] ? "" : currentSize;
+          }
           if (document.activeElement !== inpGap) inpGap.value = attrs.gap || "";
           if (document.activeElement !== inpRadius) inpRadius.value = attrs.radius || "";
           if (document.activeElement !== inpRatio) inpRatio.value = attrs.aspectRatio || "";
@@ -454,6 +513,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
           if (document.activeElement !== selCaptionPos) {
             selCaptionPos.value = attrs.captionPosition || "";
+          }
+          if (document.activeElement !== selAlign) {
+            selAlign.value = attrs.align || "left";
           }
         };
 
@@ -477,6 +539,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           captionSize: attrs.captionSize,
           columns: attrs.columns,
           snap: attrs.snap,
+          align: attrs.align,
           lazyLoad: false, // MUST BE FALSE inside Tiptap to prevent the 0-height lazy-load rendering cancellation bug!
         };
         createGallery(galleryWrapper, options);

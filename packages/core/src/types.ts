@@ -4,7 +4,13 @@ export interface GalleryImage {
   title?: string;
 }
 
-export type GallerySize = "small" | "medium" | "large";
+export type GallerySize =
+  | "extra-small"
+  | "small"
+  | "medium"
+  | "large"
+  | "extra-large"
+  | (string & {});
 
 export interface GridResponsiveSettings {
   mobile?: number;
@@ -34,6 +40,7 @@ export interface BaseGalleryOptions {
     | "overlay-bottom-right";
   captionSize?: string;
   lazyLoad?: boolean;
+  align?: "left" | "center" | "right";
 }
 
 export interface ScrollGalleryOptions extends BaseGalleryOptions {

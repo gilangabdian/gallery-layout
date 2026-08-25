@@ -2,6 +2,11 @@ import Gallery from "@/components/Gallery";
 import TiptapEditor from "@/components/TiptapEditor";
 const images = [
   { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
+  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
   { src: "/photos/photo-2.png", alt: "Tokyo street", title: "Neon Nights" },
   { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Urban Architecture" },
   { src: "/photos/photo-4.png", alt: "Tokyo night street with signs", title: "City Lights" },
@@ -35,7 +40,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold mb-6">Layout: Scroll (Default)</h2>
             <Gallery
               images={images}
-              size="medium"
+              size="small"
               captions={true}
               captionPosition="overlay-bottom-center"
               pointer={true}
@@ -57,7 +62,7 @@ export default function Home() {
               captionPosition="overlay-bottom-center"
               captionSize="6px"
               pointer={false}
-              size="medium"
+              size="small"
               aspectRatio="1/1"
               lightbox={true}
               gap="12px"

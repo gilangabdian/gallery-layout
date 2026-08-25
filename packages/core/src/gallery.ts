@@ -8,10 +8,24 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   const layout = options.layout ?? "scroll";
   container.dataset.layout = layout;
 
+  if (options.align) {
+    container.dataset.align = options.align;
+  }
+
+  // 1. Apply Size Dataset for ALL Layouts
+  const presetSizes = ["extra-small", "small", "medium", "large", "extra-large"];
+  if (options.size && presetSizes.includes(options.size)) {
+    container.dataset.size = options.size;
+  } else if (options.size) {
+    container.dataset.size = "custom";
+    container.style.setProperty("--gallery-custom-size", options.size);
+  } else {
+    container.dataset.size = "medium";
+  }
+
+  // 2. Layout-specific processing
   if (layout === "scroll") {
     const scrollOptions = options as Extract<GalleryOptions, { layout?: "scroll" }>;
-    const size = scrollOptions.size ?? "medium";
-    container.dataset.size = size;
     
     if (scrollOptions.snap === false) {
       container.dataset.snap = "false";
@@ -19,28 +33,19 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   } else if (layout === "grid") {
     const gridOptions = options as Extract<GalleryOptions, { layout: "grid" }>;
     
-    // Determine the columns configuration
-    let finalCols = gridOptions.columns;
-    
-    // If columns is not explicitly set, fallback to mapping from the size attribute
-    if (finalCols === undefined) {
-      if (gridOptions.size === "small") {
-        finalCols = 4;
-      } else if (gridOptions.size === "large") {
-        finalCols = 2;
-      } else {
-        finalCols = 3; // Medium / Default
+    // Only set inline styles if the user explicitly defined columns.
+    // If undefined, the CSS data-size mapping will handle the column count automatically!
+    const finalCols = gridOptions.columns;
+    if (finalCols !== undefined) {
+      if (typeof finalCols === "number") {
+        container.style.setProperty("--gallery-cols-desktop", finalCols.toString());
+        container.style.setProperty("--gallery-cols-tablet", finalCols.toString());
+        container.style.setProperty("--gallery-cols-mobile", finalCols.toString());
+      } else if (finalCols) {
+        if (finalCols.desktop) container.style.setProperty("--gallery-cols-desktop", finalCols.desktop.toString());
+        if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
+        if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
       }
-    }
-
-    if (typeof finalCols === "number") {
-      container.style.setProperty("--gallery-cols-desktop", finalCols.toString());
-      container.style.setProperty("--gallery-cols-tablet", finalCols.toString());
-      container.style.setProperty("--gallery-cols-mobile", finalCols.toString());
-    } else if (finalCols) {
-      if (finalCols.desktop) container.style.setProperty("--gallery-cols-desktop", finalCols.desktop.toString());
-      if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
-      if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
     }
   }
   
