@@ -46,6 +46,11 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
         if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
         if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
       }
+    } else {
+      // CLEANUP: Remove inline styles to prevent DOM State Leak when columns are removed
+      container.style.removeProperty("--gallery-cols-desktop");
+      container.style.removeProperty("--gallery-cols-tablet");
+      container.style.removeProperty("--gallery-cols-mobile");
     }
   }
   

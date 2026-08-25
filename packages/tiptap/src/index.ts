@@ -161,19 +161,21 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
       let syncDOM: ((attrs: Record<string, any>) => void) | null = null;
       let toolbarWrapper: HTMLDivElement | null = null;
+      let closePanelOutside: ((e: MouseEvent) => void) | null = null;
 
       if (editor.isEditable) {
         // Inject styles for the toolbar and settings panel
         const style = document.createElement("style");
         style.innerHTML = `
           .tiptap-gallery-nodeview .gallery-toolbar-wrapper {
-            position: absolute;
-            top: 12px; right: 12px;
+            position: relative;
+            margin-bottom: 12px;
             z-index: 50;
             display: none;
             flex-direction: column;
             align-items: flex-end;
             gap: 8px;
+            width: 100%;
           }
           .ProseMirror-selectednode .gallery-toolbar-wrapper {
             display: flex;
@@ -188,6 +190,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .gallery-toolbar-main {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
             gap: 4px;
             align-items: center;
           }
@@ -204,30 +208,43 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .gallery-toolbar-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
           .gallery-toolbar-btn.active { background: white; color: black; font-weight: 500; }
+          .gallery-toolbar-btn.is-disabled, .settings-input.is-disabled {
+            opacity: 0.3 !important;
+            cursor: not-allowed !important;
+          }
           .gallery-toolbar-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
 
           .gallery-settings-panel {
             display: none; /* hidden by default */
-            width: 280px;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 0;
+            z-index: 100;
+            width: 100%;
+            min-width: 260px;
+            max-width: 600px;
+            box-sizing: border-box;
             padding: 12px;
-            flex-direction: column;
-            gap: 12px;
+            gap: 16px;
             font-size: 12px;
             color: #ddd;
             font-family: inherit;
           }
           .gallery-settings-panel.open {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           }
           .settings-row {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
           }
-          .settings-label { flex: 1; }
+          .settings-label { flex: 1 1 100px; }
           .settings-input, .settings-select {
-            width: 160px;
+            flex: 1 1 120px;
+            max-width: 100%;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
@@ -243,7 +260,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
         toolbarWrapper = document.createElement("div");
         toolbarWrapper.className = "gallery-toolbar-wrapper";
-        container.appendChild(toolbarWrapper);
+        container.insertBefore(toolbarWrapper, galleryWrapper);
 
         // Main Toolbar
         const mainToolbar = document.createElement("div");
@@ -293,9 +310,31 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         btnSettings.addEventListener("click", (e) => {
           e.preventDefault();
           isSettingsOpen = !isSettingsOpen;
+          
+          if (isSettingsOpen) {
+            const rect = btnSettings.getBoundingClientRect();
+            if (rect.top < 200) {
+              settingsPanel.style.bottom = "auto";
+              settingsPanel.style.top = "calc(100% + 8px)";
+            } else {
+              settingsPanel.style.top = "auto";
+              settingsPanel.style.bottom = "calc(100% + 8px)";
+            }
+          }
+
           settingsPanel.classList.toggle("open", isSettingsOpen);
           btnSettings.classList.toggle("active", isSettingsOpen);
         });
+
+        // Click outside to close
+        closePanelOutside = (e: MouseEvent) => {
+          if (isSettingsOpen && toolbarWrapper && !toolbarWrapper.contains(e.target as HTMLElement)) {
+            isSettingsOpen = false;
+            settingsPanel.classList.remove("open");
+            btnSettings.classList.remove("active");
+          }
+        };
+        document.addEventListener("mousedown", closePanelOutside);
 
         // Helper to create setting row
         const createSettingRow = (labelText: string, el: HTMLElement) => {
@@ -425,22 +464,27 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         });
         btnXS.addEventListener("click", (e) => {
           e.preventDefault();
+          if (btnXS.classList.contains("is-disabled")) return;
           updateAttr("size", "extra-small");
         });
         btnS.addEventListener("click", (e) => {
           e.preventDefault();
+          if (btnS.classList.contains("is-disabled")) return;
           updateAttr("size", "small");
         });
         btnM.addEventListener("click", (e) => {
           e.preventDefault();
+          if (btnM.classList.contains("is-disabled")) return;
           updateAttr("size", "medium");
         });
         btnL.addEventListener("click", (e) => {
           e.preventDefault();
+          if (btnL.classList.contains("is-disabled")) return;
           updateAttr("size", "large");
         });
         btnXL.addEventListener("click", (e) => {
           e.preventDefault();
+          if (btnXL.classList.contains("is-disabled")) return;
           updateAttr("size", "extra-large");
         });
 
@@ -450,7 +494,10 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           timeouts[key] = setTimeout(() => updateAttr(key, val), 400);
         };
 
-        inpCustomWidth.addEventListener("input", () => debounceUpdate("size", inpCustomWidth.value || undefined));
+        inpCustomWidth.addEventListener("input", () => {
+          if (inpCustomWidth.classList.contains("is-disabled")) return;
+          debounceUpdate("size", inpCustomWidth.value || undefined);
+        });
         inpGap.addEventListener("input", () => debounceUpdate("gap", inpGap.value || undefined));
         inpRadius.addEventListener("input", () => debounceUpdate("radius", inpRadius.value || undefined));
         inpRatio.addEventListener("input", () => debounceUpdate("aspectRatio", inpRatio.value || undefined));
@@ -476,6 +523,22 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           
           const currentSize = attrs.size || "medium";
           const isGrid = attrs.layout === "grid";
+
+          // Disabled state for Size buttons if Custom Columns is active
+          const hasCustomColumns = isGrid && attrs.columns !== undefined && attrs.columns !== "";
+          const sizeButtons = [btnXS, btnS, btnM, btnL, btnXL, inpCustomWidth];
+          sizeButtons.forEach(btn => {
+            if (hasCustomColumns) {
+              btn.classList.add("is-disabled");
+              btn.style.pointerEvents = ""; // Let the element receive hover events
+              btn.title = "Size is disabled because Custom Columns is in use. Clear the Custom Columns field to re-enable it.";
+            } else {
+              btn.classList.remove("is-disabled");
+              btn.style.pointerEvents = "";
+              btn.title = "";
+            }
+          });
+          inpCustomWidth.readOnly = hasCustomColumns;
 
           btnXS.classList.toggle("active", currentSize === "extra-small");
           btnS.classList.toggle("active", currentSize === "small");
@@ -572,6 +635,11 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
 
           return true;
+        },
+        destroy: () => {
+          if (closePanelOutside) {
+            document.removeEventListener("mousedown", closePanelOutside);
+          }
         },
       };
     };
