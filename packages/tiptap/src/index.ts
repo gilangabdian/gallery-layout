@@ -162,6 +162,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
       let syncDOM: ((attrs: Record<string, any>) => void) | null = null;
       let toolbarWrapper: HTMLDivElement | null = null;
       let closePanelOutside: ((e: MouseEvent) => void) | null = null;
+      const resizeObservers: ResizeObserver[] = [];
 
       {
         // Inject styles for the toolbar and settings panel
@@ -753,6 +754,10 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
       // Helper to render gallery
       const renderGallery = (attrs: Record<string, any>) => {
+        // Disconnect existing observers before re-rendering to prevent memory leaks
+        resizeObservers.forEach((obs) => obs.disconnect());
+        resizeObservers.length = 0;
+
         galleryWrapper.innerHTML = "";
         const options: GalleryOptions = {
           images: attrs.images,
@@ -800,6 +805,15 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
                 }
               };
               item.appendChild(delBtn);
+
+              // Dynamically position the delete button exactly at the top-right of the image
+              const ro = new ResizeObserver(() => {
+                if (img) {
+                  delBtn.style.top = `${img.offsetTop + 4}px`;
+                }
+              });
+              ro.observe(item);
+              resizeObservers.push(ro);
 
               const figcaption = item.querySelector("figcaption");
               if (figcaption) {
@@ -889,6 +903,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           if (observer) {
             observer.disconnect();
           }
+          resizeObservers.forEach((obs) => obs.disconnect());
+          resizeObservers.length = 0;
         },
       };
     };
