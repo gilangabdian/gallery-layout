@@ -168,20 +168,54 @@ export default function Home() {
       </nav>
 
       {/* Main Content */}
-      <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-20 space-y-24">
+      <div className="flex-1 max-w-5xl mx-auto w-full px-6 pb-20 pt-8 space-y-32">
         {/* Hero Section */}
-        <header className="text-center space-y-6 max-w-2xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 pb-2">
-            Beautiful layouts for your image collections.
-          </h1>
-          <p className="text-neutral-400 text-lg leading-relaxed">
-            Gallery Layout is a library to create beautiful layouts. It functions more to create layouts for image
-            collections/galleries. This library is framework-agnostic and also supports Tiptap integration.
-          </p>
+        <header className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-[calc(100vh-8rem)]">
+          {/* Left Side: Text and CTA */}
+          <div className="space-y-6 text-center md:text-left">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 pb-2">
+              Gallery Layout
+            </h1>
+            <p className="text-neutral-400 text-xl leading-relaxed max-w-md mx-auto md:mx-0">
+              Create beautiful layouts.
+            </p>
+            <div className="pt-4">
+              <a
+                href="#core-library"
+                className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-black bg-white rounded-full hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10">
+                Demo
+              </a>
+            </div>
+          </div>
+
+          {/* Right Side: Morphing SVG Animation */}
+          <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden">
+            {/* Fade edges */}
+            <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #0a0a0a 0%, transparent 15%, transparent 85%, #0a0a0a 100%)' }} />
+            
+            <div className="w-full max-w-[260px] aspect-square relative animate-shape-track">
+              {/* Box 1 */}
+              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-1 shadow-2xl flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
+              </div>
+              {/* Box 2 */}
+              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-2 shadow-2xl flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
+              </div>
+              {/* Box 3 */}
+              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-3 shadow-2xl flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
+              </div>
+              {/* Box 4 */}
+              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-4 shadow-2xl flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
+              </div>
+            </div>
+          </div>
         </header>
 
         {/* Vanilla JS Core Showcase */}
-        <section className="space-y-8">
+        <section id="core-library" className="space-y-8 scroll-mt-24">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-neutral-800 pb-4">
             <div>
               <h2 className="text-3xl font-semibold text-white tracking-tight">Core Library</h2>
@@ -589,6 +623,39 @@ export default function Home() {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(255,255,255,0.2);
         }
+
+        /* Shape Shifter Animations */
+        @keyframes shape-box-1 {
+          0%, 35% { left: 5%; top: 5%; width: 42.5%; height: 42.5%; }
+          50%, 85% { left: 0%; top: 25%; width: 45%; height: 50%; }
+          100% { left: 5%; top: 5%; width: 42.5%; height: 42.5%; }
+        }
+        @keyframes shape-box-2 {
+          0%, 35% { left: 52.5%; top: 5%; width: 42.5%; height: 42.5%; }
+          50%, 85% { left: 50%; top: 25%; width: 45%; height: 50%; }
+          100% { left: 52.5%; top: 5%; width: 42.5%; height: 42.5%; }
+        }
+        @keyframes shape-box-3 {
+          0%, 35% { left: 5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+          50%, 85% { left: 100%; top: 25%; width: 45%; height: 50%; }
+          100% { left: 5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+        }
+        @keyframes shape-box-4 {
+          0%, 35% { left: 52.5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+          50%, 85% { left: 150%; top: 25%; width: 45%; height: 50%; }
+          100% { left: 52.5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+        }
+        @keyframes shape-track {
+          0%, 35% { transform: translateX(0); }
+          50%, 85% { transform: translateX(-35%); }
+          100% { transform: translateX(0); }
+        }
+
+        .animate-shape-box-1 { animation: shape-box-1 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .animate-shape-box-2 { animation: shape-box-2 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .animate-shape-box-3 { animation: shape-box-3 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .animate-shape-box-4 { animation: shape-box-4 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .animate-shape-track { animation: shape-track 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
       `,
         }}
       />
