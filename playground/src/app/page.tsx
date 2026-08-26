@@ -196,21 +196,21 @@ export default function Home() {
             {/* Fade edges */}
             <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #0a0a0a 0%, transparent 15%, transparent 85%, #0a0a0a 100%)' }} />
             
-            <div className="w-full max-w-[260px] aspect-square relative animate-shape-track">
+            <div className="w-full max-w-[260px] aspect-square relative animate-shape-track will-change-transform">
               {/* Box 1 */}
-              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-1 shadow-2xl flex items-center justify-center overflow-hidden">
+              <div className="absolute w-[42.5%] h-[42.5%] left-0 top-0 origin-top-left rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-1 shadow-2xl flex items-center justify-center overflow-hidden will-change-transform">
                 <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
               </div>
               {/* Box 2 */}
-              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-2 shadow-2xl flex items-center justify-center overflow-hidden">
+              <div className="absolute w-[42.5%] h-[42.5%] left-0 top-0 origin-top-left rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-2 shadow-2xl flex items-center justify-center overflow-hidden will-change-transform">
                 <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
               </div>
               {/* Box 3 */}
-              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-3 shadow-2xl flex items-center justify-center overflow-hidden">
+              <div className="absolute w-[42.5%] h-[42.5%] left-0 top-0 origin-top-left rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-3 shadow-2xl flex items-center justify-center overflow-hidden will-change-transform">
                 <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
               </div>
               {/* Box 4 */}
-              <div className="absolute rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-4 shadow-2xl flex items-center justify-center overflow-hidden">
+              <div className="absolute w-[42.5%] h-[42.5%] left-0 top-0 origin-top-left rounded-xl bg-neutral-900 border border-neutral-800 animate-shape-box-4 shadow-2xl flex items-center justify-center overflow-hidden will-change-transform">
                 <div className="w-full h-full opacity-20 bg-gradient-to-br from-white/20 to-transparent" />
               </div>
             </div>
@@ -627,26 +627,26 @@ export default function Home() {
           background: rgba(255,255,255,0.2);
         }
 
-        /* Shape Shifter Animations */
+        /* Shape Shifter Animations (Hardware Accelerated via Transform) */
         @keyframes shape-box-1 {
-          0%, 35% { left: 5%; top: 5%; width: 42.5%; height: 42.5%; }
-          50%, 85% { left: 0%; top: 25%; width: 45%; height: 50%; }
-          100% { left: 5%; top: 5%; width: 42.5%; height: 42.5%; }
+          0%, 35% { transform: translate(11.76%, 11.76%) scale(1, 1); }
+          50%, 85% { transform: translate(0%, 58.82%) scale(1.0588, 1.1764); }
+          100% { transform: translate(11.76%, 11.76%) scale(1, 1); }
         }
         @keyframes shape-box-2 {
-          0%, 35% { left: 52.5%; top: 5%; width: 42.5%; height: 42.5%; }
-          50%, 85% { left: 50%; top: 25%; width: 45%; height: 50%; }
-          100% { left: 52.5%; top: 5%; width: 42.5%; height: 42.5%; }
+          0%, 35% { transform: translate(123.53%, 11.76%) scale(1, 1); }
+          50%, 85% { transform: translate(117.65%, 58.82%) scale(1.0588, 1.1764); }
+          100% { transform: translate(123.53%, 11.76%) scale(1, 1); }
         }
         @keyframes shape-box-3 {
-          0%, 35% { left: 5%; top: 52.5%; width: 42.5%; height: 42.5%; }
-          50%, 85% { left: 100%; top: 25%; width: 45%; height: 50%; }
-          100% { left: 5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+          0%, 35% { transform: translate(11.76%, 123.53%) scale(1, 1); }
+          50%, 85% { transform: translate(235.29%, 58.82%) scale(1.0588, 1.1764); }
+          100% { transform: translate(11.76%, 123.53%) scale(1, 1); }
         }
         @keyframes shape-box-4 {
-          0%, 35% { left: 52.5%; top: 52.5%; width: 42.5%; height: 42.5%; }
-          50%, 85% { left: 150%; top: 25%; width: 45%; height: 50%; }
-          100% { left: 52.5%; top: 52.5%; width: 42.5%; height: 42.5%; }
+          0%, 35% { transform: translate(123.53%, 123.53%) scale(1, 1); }
+          50%, 85% { transform: translate(352.94%, 58.82%) scale(1.0588, 1.1764); }
+          100% { transform: translate(123.53%, 123.53%) scale(1, 1); }
         }
         @keyframes shape-track {
           0%, 35% { transform: translateX(0); }
