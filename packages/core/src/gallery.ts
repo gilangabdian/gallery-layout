@@ -3,6 +3,24 @@ import { openLightbox } from "./lightbox";
 
 export function createGallery(container: HTMLElement, options: GalleryOptions): void {
   container.innerHTML = "";
+  
+  // CLEANUP: Prevent DOM State Leak when options are toggled off during hot-reloads
+  delete container.dataset.layout;
+  delete container.dataset.align;
+  delete container.dataset.size;
+  delete container.dataset.snap;
+  delete container.dataset.captionPosition;
+  delete container.dataset.pointer;
+  
+  container.style.removeProperty("--gallery-custom-size");
+  container.style.removeProperty("--gallery-gap");
+  container.style.removeProperty("--gallery-aspect-ratio");
+  container.style.removeProperty("--gallery-caption-size");
+  container.style.removeProperty("--gallery-radius");
+  container.style.removeProperty("--gallery-cols-desktop");
+  container.style.removeProperty("--gallery-cols-tablet");
+  container.style.removeProperty("--gallery-cols-mobile");
+
   container.classList.add("gallery-layout");
 
   const layout = options.layout ?? "scroll";
@@ -46,11 +64,6 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
         if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
         if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
       }
-    } else {
-      // CLEANUP: Remove inline styles to prevent DOM State Leak when columns are removed
-      container.style.removeProperty("--gallery-cols-desktop");
-      container.style.removeProperty("--gallery-cols-tablet");
-      container.style.removeProperty("--gallery-cols-mobile");
     }
   }
   

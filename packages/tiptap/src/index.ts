@@ -214,6 +214,30 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .gallery-toolbar-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
 
+          /* Delete Button on Images */
+          .tiptap-gallery-nodeview .gallery-image-wrapper { position: relative; display: block; width: 100%; height: 100%; }
+          .ProseMirror-selectednode .gallery-item-delete-btn { display: flex; }
+          .gallery-item-delete-btn {
+            display: none;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+          }
+          .gallery-item-delete-btn:hover { background: #dc2626; transform: scale(1.1); }
+
           .gallery-settings-panel {
             display: none; /* hidden by default */
             position: absolute;

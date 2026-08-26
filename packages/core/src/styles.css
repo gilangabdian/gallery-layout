@@ -83,6 +83,11 @@
   text-align: right;
 }
 
+.gallery-layout[data-caption-position^="top-"] .gallery-layout__item figcaption {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
 .gallery-layout[data-pointer="true"] .gallery-layout__item img {
   cursor: pointer;
 }
