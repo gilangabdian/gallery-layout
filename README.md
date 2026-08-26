@@ -155,7 +155,7 @@ Tiptap extensions are for you if you use Tiptap rich text:
 
 ### Quick Start
 
-To use the Gallery within your Tiptap editor, simply add the `GalleryExtension` to your extensions list. 
+To use the Gallery within your Tiptap editor, simply add the `GalleryExtension` to your extensions list.
 
 > **Note:** This extension is built with pure Vanilla JavaScript, which means it is **100% framework-agnostic**. Whether you use Tiptap in React, Vue, Svelte, or Vanilla JS, the installation and command usage remain exactly the same!
 
@@ -169,7 +169,7 @@ import StarterKit from '@tiptap/starter-kit';
 
 // 1. Import the extension and the core CSS
 import { GalleryExtension } from 'tiptap-extension-gallery-layout';
-import 'gallery-layout/style.css'; 
+import 'gallery-layout/style.css';
 
 export default function MyEditor() {
   // The way you initialize Tiptap depends on your framework
@@ -184,12 +184,12 @@ export default function MyEditor() {
   // 3. Command to insert a gallery programmatically (Identical across all frameworks)
   const insertMyGallery = () => {
     if (!editor) return;
-    
+
     const myImages = [
       { src: '/photo1.jpg', alt: 'Mountain', title: 'Everest' },
       { src: '/photo2.jpg', alt: 'River', title: 'Amazon' }
     ];
-    
+
     editor.chain().focus().insertGallery(myImages).run();
   };
 
@@ -202,8 +202,74 @@ export default function MyEditor() {
 }
 ```
 
+### Built-in Interactive Toolbar ✨
+The best part about the Tiptap extension is its **built-in NodeView Toolbar**. 
+
+Once a gallery is inserted, simply click on it inside the editor. A beautiful floating toolbar and settings panel will appear, allowing you and your users to:
+- **Change Layouts**: Switch between `scroll` and `grid` layouts instantly.
+- **Adjust Sizes**: Pick from preset sizes (`extra-small`, `small`, `medium`, `large`, `extra-large`), or set a **Custom width**.
+- **Alignment**: Automatically appears when using Custom Width, allowing you to align the gallery container to the `left`, `center`, or `right` of the article.
+- **Edit Titles**: Add or change the title directly for each image.
+- **Toggle Features**: Turn captions and the lightbox on or off on the fly.
+- **Caption Position**: Choose from 12 different positions (e.g., `top-left`, `overlay-bottom-center`).
+- **Caption Size**: Adjust the font size of the captions.
+- **Layout-Specific Options**:
+  - **Snap Scroll**: (For `scroll` layout) Enable or disable smooth CSS scroll-snapping so images always perfectly align to the center/edge when swiping.
+  - **Columns**: (For `grid` layout) Force a specific number of columns instead of using the automatic responsive grid.
+- **Styling Overrides**: Set custom CSS aspect ratios (e.g. `16/9`), image gaps, and border radius.
+- **Hover Pointer**: Force the mouse cursor to a pointer when hovering over images to indicate clickability (useful if lightbox is on).
+- **Delete Images**: Remove individual images easily.
+
+You don't need to build any custom UI to manage the gallery's appearance; it's completely handled by the extension.
+
 
 ## API
+
+### 1. `GalleryImage` (Array of Images)
+Every image object passed to the gallery must follow this structure:
+
+| Property | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `src` | `string` | - | **Yes** | URL of the image. |
+| `alt` | `string` | - | **Yes** | Accessibility description for screen readers. |
+| `title` | `string` | `undefined` | No | Text displayed as the caption (if `captions: true`). |
+
+### 2. `GalleryOptions` (Core Configuration)
+The `createGallery(container, options)` function accepts the following options:
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `images` | `GalleryImage[]` | - | **(Required)** Array of image objects to display. |
+| `layout` | `"scroll" \| "grid"` | `"scroll"` | The core arrangement behavior of the gallery. |
+| `size` | `"extra-small" \| "small" \| "medium" \| "large" \| "extra-large" \| string` | `"medium"` | Visual size scale of the gallery. |
+| `captions` | `boolean` | `false` | If `true`, renders the image `title` as a visible caption. |
+| `captionPosition` | `"top-left" \| "top-center" \| "top-right" \| "bottom-left" \| "bottom-center" \| "bottom-right" \| "overlay-top-left" \| "overlay-top-center" \| "overlay-top-right" \| "overlay-bottom-left" \| "overlay-bottom-center" \| "overlay-bottom-right"` | `"bottom-center"` | Position of the caption relative to the image. |
+| `lightbox` | `boolean` | `false` | Enables a built-in click-to-zoom fullscreen lightbox. |
+| `lazyLoad` | `boolean` | `true` | Automatically adds `loading="lazy"` to all images. |
+| `align` | `"left" \| "center" \| "right"` | `undefined` | Alignment of the entire gallery container. |
+| `snap` | `boolean` | `true` | Enables CSS scroll-snapping (only applies to `scroll` layout). |
+| `gap` | `string` | `undefined` | Custom CSS gap overrides (e.g. `16px`). |
+| `radius` | `boolean \| string` | `undefined` | Custom CSS border-radius overrides. |
+| `aspectRatio` | `string` | `undefined` | Custom aspect ratio overrides (e.g. `16/9`). |
+| `columns` | `number \| object` | `undefined` | Fixed column count overrides (only applies to `grid` layout). |
+| `pointer` | `boolean` | `false` | Forces a pointer cursor over images. |
+
+### 3. Tiptap Extension Options
+If you use the Tiptap extension, you can pass default configurations when registering the extension. These act as the fallback values for all gallery nodes in your editor.
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultLayout` | `"scroll" \| "grid"` | `"scroll"` | The layout applied to newly inserted galleries. |
+| `defaultSize` | `"extra-small" \| "small" \| "medium" \| "large" \| "extra-large"` | `"medium"` | The size applied to newly inserted galleries. |
+| `defaultAlign` | `"left" \| "center" \| "right"` | `"left"` | Default alignment for the gallery container. |
+| `defaultCaptions` | `boolean` | `true` | Default toggle state for captions. |
+| `defaultLightbox` | `boolean` | `false` | Default toggle state for the lightbox. |
+| `defaultGap` | `string` | `"16px"` | Default CSS gap between images. |
+| `defaultRadius` | `string` | `"4px"` | Default CSS border-radius for images. |
+| `defaultCaptionSize` | `string` | `"14px"` | Default CSS font size for captions. |
+| `defaultAspectRatio` | `string` | `"auto"` | Default CSS aspect ratio. |
+| `HTMLAttributes` | `object` | `{}` | Custom HTML attributes to add to the rendered node. |
+
 
 ## Contributing
 
