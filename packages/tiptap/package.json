@@ -1,0 +1,31 @@
+{
+  "name": "tiptap-extension-gallery-layout",
+  "version": "1.0.0",
+  "description": "Tiptap extension for gallery-layout",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "gallery-layout": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tiptap/core": "^2.0.0"
+  },
+  "devDependencies": {
+    "@tiptap/core": "^2.27.2",
+    "tsdown": "^0.22.14",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build": "tsdown"
+  }
+}

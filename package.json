@@ -1,47 +1,10 @@
 {
-  "name": "gallery-layout",
-  "version": "1.0.0",
-  "description": "Beautiful gallery layouts for your blogs",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./style.css": "./dist/style.css"
-  },
+  "name": "gallery-layout-monorepo",
+  "private": true,
   "scripts": {
-    "dev": "vite --config playground/vite.config.ts",
-    "build": "tsdown",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "typecheck": "tsc --noEmit"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.18.0",
-      "onFail": "download"
-    }
-  },
-  "devDependencies": {
-    "@tsdown/css": "^0.22.14",
-    "jsdom": "^30.0.1",
-    "tsdown": "^0.22.14",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.1",
-    "vitest": "^4.1.10"
-  },
-  "engines": {
-    "node": ">=22.18.0"
+    "dev": "pnpm --filter playground dev",
+    "build": "pnpm -r build",
+    "test:run": "pnpm -r test:run",
+    "typecheck": "pnpm -r typecheck"
   }
 }

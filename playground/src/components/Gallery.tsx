@@ -8,13 +8,14 @@ export default function Gallery(options: GalleryOptions) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      createGallery(containerRef.current, options);
+    const container = containerRef.current;
+    if (container) {
+      createGallery(container, options);
     }
     
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
+      if (container) {
+        container.innerHTML = "";
       }
       // Clean up any open lightboxes appended to body during hot-reloads
       document.querySelectorAll(".gallery-layout__lightbox").forEach(el => el.remove());

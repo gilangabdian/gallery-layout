@@ -3,29 +3,67 @@ import { openLightbox } from "./lightbox";
 
 export function createGallery(container: HTMLElement, options: GalleryOptions): void {
   container.innerHTML = "";
+  
+  // CLEANUP: Prevent DOM State Leak when options are toggled off during hot-reloads
+  delete container.dataset.layout;
+  delete container.dataset.align;
+  delete container.dataset.size;
+  delete container.dataset.snap;
+  delete container.dataset.captionPosition;
+  delete container.dataset.pointer;
+  
+  container.style.removeProperty("--gallery-custom-size");
+  container.style.removeProperty("--gallery-gap");
+  container.style.removeProperty("--gallery-aspect-ratio");
+  container.style.removeProperty("--gallery-caption-size");
+  container.style.removeProperty("--gallery-radius");
+  container.style.removeProperty("--gallery-cols-desktop");
+  container.style.removeProperty("--gallery-cols-tablet");
+  container.style.removeProperty("--gallery-cols-mobile");
+
   container.classList.add("gallery-layout");
 
   const layout = options.layout ?? "scroll";
   container.dataset.layout = layout;
 
+  if (options.align) {
+    container.dataset.align = options.align;
+  }
+
+  // 1. Apply Size Dataset for ALL Layouts
+  const presetSizes = ["extra-small", "small", "medium", "large", "extra-large"];
+  if (options.size && presetSizes.includes(options.size)) {
+    container.dataset.size = options.size;
+  } else if (options.size) {
+    container.dataset.size = "custom";
+    container.style.setProperty("--gallery-custom-size", options.size);
+  } else {
+    container.dataset.size = "medium";
+  }
+
+  // 2. Layout-specific processing
   if (layout === "scroll") {
     const scrollOptions = options as Extract<GalleryOptions, { layout?: "scroll" }>;
-    const size = scrollOptions.size ?? "medium";
-    container.dataset.size = size;
     
-    if (scrollOptions.snap === false || scrollOptions.snap === undefined) {
+    if (scrollOptions.snap === false) {
       container.dataset.snap = "false";
     }
   } else if (layout === "grid") {
     const gridOptions = options as Extract<GalleryOptions, { layout: "grid" }>;
-    if (typeof gridOptions.columns === "number") {
-      container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.toString());
-      container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.toString());
-      container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.toString());
-    } else if (gridOptions.columns) {
-      if (gridOptions.columns.desktop) container.style.setProperty("--gallery-cols-desktop", gridOptions.columns.desktop.toString());
-      if (gridOptions.columns.tablet) container.style.setProperty("--gallery-cols-tablet", gridOptions.columns.tablet.toString());
-      if (gridOptions.columns.mobile) container.style.setProperty("--gallery-cols-mobile", gridOptions.columns.mobile.toString());
+    
+    // Only set inline styles if the user explicitly defined columns.
+    // If undefined, the CSS data-size mapping will handle the column count automatically!
+    const finalCols = gridOptions.columns;
+    if (finalCols !== undefined) {
+      if (typeof finalCols === "number") {
+        container.style.setProperty("--gallery-cols-desktop", finalCols.toString());
+        container.style.setProperty("--gallery-cols-tablet", finalCols.toString());
+        container.style.setProperty("--gallery-cols-mobile", finalCols.toString());
+      } else if (finalCols) {
+        if (finalCols.desktop) container.style.setProperty("--gallery-cols-desktop", finalCols.desktop.toString());
+        if (finalCols.tablet) container.style.setProperty("--gallery-cols-tablet", finalCols.tablet.toString());
+        if (finalCols.mobile) container.style.setProperty("--gallery-cols-mobile", finalCols.mobile.toString());
+      }
     }
   }
   
@@ -65,7 +103,9 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     const img = document.createElement("img");
     img.src = image.src;
     img.alt = image.alt;
-    img.loading = "lazy";
+    if (options.lazyLoad !== false) {
+      img.loading = "lazy";
+    }
 
     if (options.lightbox) {
       img.setAttribute("tabindex", "0");
