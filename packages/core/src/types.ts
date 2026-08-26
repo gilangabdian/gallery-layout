@@ -4,7 +4,13 @@ export interface GalleryImage {
   title?: string;
 }
 
-export type GallerySize = "small" | "medium" | "large";
+export type GallerySize =
+  | "extra-small"
+  | "small"
+  | "medium"
+  | "large"
+  | "extra-large"
+  | (string & {});
 
 export interface GridResponsiveSettings {
   mobile?: number;
@@ -26,7 +32,6 @@ export interface BaseGalleryOptions {
     | "bottom-left"
     | "bottom-center"
     | "bottom-right"
-    | "overlay"
     | "overlay-top-left"
     | "overlay-top-center"
     | "overlay-top-right"
@@ -34,6 +39,8 @@ export interface BaseGalleryOptions {
     | "overlay-bottom-center"
     | "overlay-bottom-right";
   captionSize?: string;
+  lazyLoad?: boolean;
+  align?: "left" | "center" | "right";
 }
 
 export interface ScrollGalleryOptions extends BaseGalleryOptions {
@@ -45,6 +52,7 @@ export interface ScrollGalleryOptions extends BaseGalleryOptions {
 
 export interface GridGalleryOptions extends BaseGalleryOptions {
   layout: "grid";
+  size?: GallerySize;
   columns?: number | GridResponsiveSettings;
   aspectRatio?: string;
 }
