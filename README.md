@@ -30,11 +30,124 @@ This core library is suitable for you if you don't use Tiptap's rich text featur
 
 ### Vanilla Javascript
 
+To use the core library, you need a container element, and then you just pass your images to the `createGallery` function.
+
+**Important:** Don't forget to import the CSS file!
+
+```html
+<!-- index.html -->
+<div id="my-gallery"></div>
+```
+
+```javascript
+// main.js
+import { createGallery } from 'gallery-layout';
+import 'gallery-layout/style.css'; // Required for styling!
+
+const container = document.getElementById('my-gallery');
+
+const images = [
+  { src: '/photo1.jpg', alt: 'Beautiful scenery', title: 'Kyoto Trip' },
+  { src: '/photo2.jpg', alt: 'City night', title: 'Tokyo Vibes' },
+];
+
+createGallery(container, {
+  layout: 'grid', // 'grid' or 'scroll'
+  size: 'medium', // 'small', 'medium', 'large'
+  images: images,
+  captions: true, // Show titles under images
+  lightbox: true  // Enable click to zoom
+});
+```
+
 ### React & Next.js
+
+Using it in React requires a `useRef` and a `useEffect` since this library interacts directly with the DOM.
+
+```tsx
+import { useEffect, useRef } from 'react';
+import { createGallery } from 'gallery-layout';
+import 'gallery-layout/style.css';
+
+export default function MyGallery() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    createGallery(containerRef.current, {
+      layout: 'scroll',
+      size: 'large',
+      images: [
+        { src: '/photo1.jpg', alt: 'Photo 1' },
+        { src: '/photo2.jpg', alt: 'Photo 2' },
+      ],
+    });
+  }, []);
+
+  return <div ref={containerRef}></div>;
+}
+```
 
 ### Vue
 
+Using it in Vue requires a template `ref` and the `onMounted` lifecycle hook.
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue';
+import { createGallery } from 'gallery-layout';
+import 'gallery-layout/style.css';
+
+const galleryContainer = ref(null);
+
+onMounted(() => {
+  if (galleryContainer.value) {
+    createGallery(galleryContainer.value, {
+      layout: 'scroll',
+      size: 'large',
+      images: [
+        { src: '/photo1.jpg', alt: 'Photo 1' },
+        { src: '/photo2.jpg', alt: 'Photo 2' },
+      ],
+    });
+  }
+});
+</script>
+
+<template>
+  <div ref="galleryContainer"></div>
+</template>
+```
+
 ### Svelte
+
+Using it in Svelte requires the `bind:this` directive and the `onMount` lifecycle hook.
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  import { createGallery } from 'gallery-layout';
+  import 'gallery-layout/style.css';
+
+  let galleryContainer;
+
+  onMount(() => {
+    if (galleryContainer) {
+      createGallery(galleryContainer, {
+        layout: 'scroll',
+        size: 'large',
+        images: [
+          { src: '/photo1.jpg', alt: 'Photo 1' },
+          { src: '/photo2.jpg', alt: 'Photo 2' },
+        ],
+      });
+    }
+  });
+</script>
+
+<div bind:this={galleryContainer}></div>
+```
 
 
 ## Tiptap Extension Usage
