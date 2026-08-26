@@ -30,7 +30,18 @@ export default function TiptapEditor() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
-    extensions: [StarterKit, Underline, GalleryExtension],
+    extensions: [
+      StarterKit, 
+      Underline, 
+      GalleryExtension.configure({
+        onUpload: async (files: File[]) => {
+          // Fake upload delay for demo purposes
+          await new Promise(resolve => setTimeout(resolve, 800));
+          // Use ObjectURLs which are much lighter than Base64 (perfect for Playground)
+          return files.map(file => URL.createObjectURL(file));
+        }
+      })
+    ],
     content: `
       <h2>First time in Japan</h2>
       <p>Hi! I just got back from a vacation in Japan🎌. It was my first time there, and I was so happy to finally visit; I spent a lot of time exploring various beautiful spots. Of course, I made sure to capture the moments in photos. Here is a collection of my photos from visiting various places in Japan (I'm actually a bit embarrassed to share them with you because many of my photos are bad😔):</p>

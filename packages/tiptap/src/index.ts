@@ -11,6 +11,7 @@ export interface GalleryExtensionOptions {
   defaultLightbox?: boolean;
   defaultCaptions?: boolean;
   HTMLAttributes: Record<string, any>;
+  onUpload?: (files: File[]) => Promise<string[]>;
 }
 
 declare module "@tiptap/core" {
@@ -350,6 +351,84 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
             background: rgba(255, 255, 255, 0.1);
             color: white;
           }
+          .gallery-multi-alt-modal {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #171717;
+            border: 1px solid #262626;
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            z-index: 60;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+          }
+          .gallery-multi-alt-modal::-webkit-scrollbar {
+            width: 4px;
+          }
+          .gallery-multi-alt-modal::-webkit-scrollbar-thumb {
+            background-color: #525252;
+            border-radius: 4px;
+          }
+          .gallery-alt-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+          }
+          .gallery-alt-item img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: #262626;
+            flex-shrink: 0;
+          }
+          .gallery-alt-item input {
+            flex-grow: 1;
+            background: #262626;
+            border: 1px solid #404040;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+            min-width: 0;
+          }
+          .gallery-alt-item input:focus {
+            border-color: #737373;
+          }
+          .gallery-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 4px;
+          }
+          .gallery-modal-btn {
+            background: #262626;
+            border: 1px solid #404040;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+          }
+          .gallery-modal-btn:hover {
+            background: #404040;
+          }
+          .gallery-modal-btn.primary {
+            background: white;
+            color: black;
+            border-color: white;
+          }
+          .gallery-modal-btn.primary:hover {
+            background: #e5e5e5;
+          }
         `;
         container.appendChild(style);
 
@@ -402,7 +481,11 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         btnSettings.className = "gallery-toolbar-btn";
         btnSettings.textContent = "⚙️";
 
-        const sizeGroup = [div1, btnXS, btnS, btnM, btnL, btnXL, div2];
+        const btnAddImage = document.createElement("button");
+        btnAddImage.className = "gallery-toolbar-btn";
+        btnAddImage.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Image`;
+
+        const sizeGroup = [div1, btnXS, btnS, btnM, btnL, btnXL, div2, btnAddImage];
         mainToolbar.append(btnScroll, btnGrid, ...sizeGroup, btnSettings);
 
         // Settings Panel
@@ -440,6 +523,152 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
         };
         document.addEventListener("mousedown", closePanelOutside);
+
+        // Add Image Feature
+        const altModal = document.createElement("div");
+        altModal.className = "gallery-multi-alt-modal";
+        toolbarWrapper.appendChild(altModal);
+
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.multiple = true;
+        fileInput.style.display = "none";
+        toolbarWrapper.appendChild(fileInput);
+
+        btnAddImage.addEventListener("click", (e) => {
+          e.preventDefault();
+          fileInput.value = ""; // Reset
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", async (e) => {
+          const files = Array.from((e.target as HTMLInputElement).files || []);
+          if (!files.length) return;
+
+          let imageUrls: string[] = [];
+
+          if (this.options.onUpload) {
+            try {
+              btnAddImage.style.opacity = "0.5";
+              btnAddImage.style.pointerEvents = "none";
+              imageUrls = await this.options.onUpload(files);
+            } catch (err) {
+              console.error("[Gallery Layout] onUpload failed:", err);
+              btnAddImage.style.opacity = "1";
+              btnAddImage.style.pointerEvents = "auto";
+              return;
+            } finally {
+              btnAddImage.style.opacity = "1";
+              btnAddImage.style.pointerEvents = "auto";
+            }
+          } else {
+            console.warn(
+              "[Gallery Layout] Warning: You are using local images without an 'onUpload' handler. " +
+              "The images are converted to Base64, which is discouraged in production because it can heavily degrade editor performance and bloat your database. " +
+              "Please provide an 'onUpload' function in your GalleryExtension config."
+            );
+            imageUrls = await Promise.all(
+              files.map((file) => {
+                return new Promise<string>((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onload = () => resolve(reader.result as string);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(file);
+                });
+              })
+            );
+          }
+
+          // Build Alt Text Modal
+          altModal.innerHTML = "";
+          const inputs: HTMLInputElement[] = [];
+
+          const titleEl = document.createElement("div");
+          titleEl.textContent = `Add Alt Text for ${files.length} image(s)`;
+          titleEl.style.color = "white";
+          titleEl.style.fontSize = "13px";
+          titleEl.style.fontWeight = "600";
+          titleEl.style.marginBottom = "4px";
+          altModal.appendChild(titleEl);
+
+          imageUrls.forEach((url) => {
+            const row = document.createElement("div");
+            row.className = "gallery-alt-item";
+            
+            const img = document.createElement("img");
+            img.src = url;
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Enter alt text (required)...";
+            inputs.push(input);
+
+            row.appendChild(img);
+            row.appendChild(input);
+            altModal.appendChild(row);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "gallery-modal-actions";
+
+          const btnCancel = document.createElement("button");
+          btnCancel.className = "gallery-modal-btn";
+          btnCancel.textContent = "Cancel";
+          
+          const btnSave = document.createElement("button");
+          btnSave.className = "gallery-modal-btn primary";
+          btnSave.textContent = "Add Images";
+
+          btnCancel.addEventListener("click", (e) => {
+            e.preventDefault();
+            altModal.style.display = "none";
+          });
+
+          btnSave.addEventListener("click", (e) => {
+            e.preventDefault();
+            
+            // Validate all inputs
+            let hasError = false;
+            inputs.forEach(inp => {
+              if (inp.value.trim() === "") {
+                inp.style.borderColor = "#ef4444";
+                hasError = true;
+              } else {
+                inp.style.borderColor = "#404040";
+              }
+            });
+
+            if (hasError) return;
+
+            const newImagesToAdd = imageUrls.map((url, idx) => ({
+              src: url,
+              alt: inputs[idx].value.trim(),
+              title: "",
+            }));
+
+            // Prevent errors if node is destroyed while waiting for upload
+            if (typeof getPos !== "function" || getPos() === undefined) {
+              altModal.style.display = "none";
+              return;
+            }
+
+            const newImages = [...node.attrs.images, ...newImagesToAdd];
+            editor.chain().updateAttributes(this.name, { images: newImages }).run();
+            altModal.style.display = "none";
+          });
+
+          actions.appendChild(btnCancel);
+          actions.appendChild(btnSave);
+          altModal.appendChild(actions);
+
+          // Show modal
+          altModal.style.display = "flex";
+          // Close settings panel if open
+          isSettingsOpen = false;
+          settingsPanel.classList.remove("open");
+          btnSettings.classList.remove("active");
+        });
 
         // Helper to create setting row
         const createSettingRow = (labelText: string, el: HTMLElement) => {
@@ -815,7 +1044,17 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
               ro.observe(item);
               resizeObservers.push(ro);
 
-              const figcaption = item.querySelector("figcaption");
+              let figcaption = item.querySelector("figcaption");
+              
+              if (!figcaption && attrs.captions !== false) {
+                figcaption = document.createElement("figcaption");
+                if (attrs.captionPosition?.startsWith("top")) {
+                  item.insertBefore(figcaption, img);
+                } else {
+                  item.appendChild(figcaption);
+                }
+              }
+
               if (figcaption) {
                 figcaption.setAttribute("contenteditable", "true");
                 figcaption.style.outline = "none";

@@ -5,7 +5,7 @@
 
 Gallery Layout is a library for creating beautiful photo galleries. It is zero-dependency, lightweight, and framework-agnostic.
 
-I purposely created the gallery layout to make it easier if you want to design a blog and on the blog you want a collection of beautiful images. It also supports projects that use <a href="https://tiptap.dev">Tiptap</a>.
+I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout. It also supports projects that use <a href="https://tiptap.dev">Tiptap</a>.
 
 ## Demo
 For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.vercel.app).
@@ -19,7 +19,7 @@ for core library usage see [Core Library Usage](#core-library-usage)
 
 <br>
 
-Use the installation via the Tiptap extension if you want to use it within the Tiptap library:
+Use the installation via the Tiptap extension if you want to use it within the <a href="https://tiptap.dev">Tiptap</a> library:
 ```bash
 pnpm add tiptap-extension-gallery-layout
 ```
@@ -151,7 +151,7 @@ Using it in Svelte requires the `bind:this` directive and the `onMount` lifecycl
 
 
 ## Tiptap Extension Usage
-Tiptap extensions are for you if you use Tiptap rich text:
+Tiptap extensions are for you if you use <a href="https://tiptap.dev">Tiptap rich text</a>. You don't actually have to use the Tiptap rich text extension, but I recommend it if your project is already using <a href="https://tiptap.dev">Tiptap</a>, as there are several advantages to doing so—you can check out those benefits [here](#built-in-interactive-toolbar):
 
 ### Quick Start
 
@@ -202,8 +202,8 @@ export default function MyEditor() {
 }
 ```
 
-### Built-in Interactive Toolbar ✨
-The best part about the Tiptap extension is its **built-in NodeView Toolbar**. 
+### Built-in Interactive Toolbar
+The best part about the Tiptap extension is its **built-in NodeView Toolbar**.
 
 Once a gallery is inserted, simply click on it inside the editor. A beautiful floating toolbar and settings panel will appear, allowing you and your users to:
 - **Change Layouts**: Switch between `scroll` and `grid` layouts instantly.
@@ -269,6 +269,7 @@ If you use the Tiptap extension, you can pass default configurations when regist
 | `defaultCaptionSize` | `string` | `"14px"` | Default CSS font size for captions. |
 | `defaultAspectRatio` | `string` | `"auto"` | Default CSS aspect ratio. |
 | `HTMLAttributes` | `object` | `{}` | Custom HTML attributes to add to the rendered node. |
+| `onUpload` | `(files: File[]) => Promise<string[]>` | `undefined` | Callback for handling image uploads. If provided, overrides the default Base64 fallback. |
 
 
 ## Contributing
