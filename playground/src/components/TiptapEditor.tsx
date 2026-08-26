@@ -26,21 +26,27 @@ const ToolbarButton = ({ onClick, isActive, icon: Icon, label }: ToolbarButtonPr
 );
 
 export default function TiptapEditor() {
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [StarterKit, Underline, GalleryExtension],
     content: `
-      <h2>Hi!</h2>
+      <h2>First time in Japan</h2>
       <p>Hi! I just got back from a vacation in Japan🎌. It was my first time there, and I was so happy to finally visit; I spent a lot of time exploring various beautiful spots. Of course, I made sure to capture the moments in photos. Here is a collection of my photos from visiting various places in Japan (I'm actually a bit embarrassed to share them with you because many of my photos are bad😔):</p>
+      
+      <div data-type="gallery-layout" data-layout="grid" data-size="small" data-aspect-ratio="1/1" data-captions="true" data-lightbox="true" data-images='[{"src":"/_next/image?url=%2Fphotos%2Fbambo.jpg&w=1200&q=75","alt":"Bamboo Forest","title":"Bamboo Forest, Arashiyama"},{"src":"/_next/image?url=%2Fphotos%2Fdotonbori.jpg&w=1200&q=75","alt":"Dotonbori at Night","title":"Dotonbori at Night, Osaka"},{"src":"/_next/image?url=%2Fphotos%2Fgirl-with-umbrella.jpg&w=1200&q=75","alt":"Rainy Stroll","title":"Rainy Stroll in Japan"},{"src":"/_next/image?url=%2Fphotos%2Fkiyomizu-dera.jpg&w=1200&q=75","alt":"Kiyomizu-dera Temple","title":"Kiyomizu-dera Temple, Kyoto"},{"src":"/_next/image?url=%2Fphotos%2Fmasaki-kimoro.jpg&w=1200&q=75","alt":"Masaki Kimoro Street","title":"Masaki Kimoro Street View"},{"src":"/_next/image?url=%2Fphotos%2Fmount-fuji.jpg&w=1200&q=75","alt":"Mount Fuji","title":"Majestic Mount Fuji"},{"src":"/_next/image?url=%2Fphotos%2Fnara-park.jpg&w=1200&q=75","alt":"Nara Park Deer","title":"Friendly Deer at Nara Park"},{"src":"/_next/image?url=%2Fphotos%2Fnight-vibes-japan.jpg&w=1200&q=75","alt":"Tokyo Night Vibes","title":"Tokyo Night Vibes"},{"src":"/_next/image?url=%2Fphotos%2Fsensoji-temple.jpg&w=1200&q=75","alt":"Senso-ji Temple","title":"Senso-ji Temple, Asakusa"},{"src":"/_next/image?url=%2Fphotos%2Fshibuya.jpg&w=1200&q=75","alt":"Shibuya Crossing","title":"Shibuya Crossing"},{"src":"/_next/image?url=%2Fphotos%2Fshinjuku.jpg&w=1200&q=75","alt":"Neon Lights of Shinjuku","title":"Neon Lights of Shinjuku"},{"src":"/_next/image?url=%2Fphotos%2Funiversal-studio-japan.jpg&w=1200&q=75","alt":"Universal Studios Japan","title":"Universal Studios Japan (USJ)"}]'></div>
+
+      <p>That’s probably all I wanted to share. I hope you like the photo I’ve included here.</p>
+      <p>Thank you!</p>
     `,
     editorProps: {
       attributes: {
         class: "prose prose-invert max-w-none focus:outline-none min-h-[300px]",
       },
     },
-    editable: true,
+    immediatelyRender: false,
+    editable: false,
   });
 
   // Effect to sync editable state
@@ -62,7 +68,7 @@ export default function TiptapEditor() {
       title: file.name.split(".")[0], // Use filename as default title
     }));
 
-    editor.chain().focus().insertGallery(images).run();
+    editor.chain().focus().insertGallery(images).updateAttributes("gallery", { captions: true }).run();
 
     // Reset input
     if (fileInputRef.current) {
@@ -79,7 +85,7 @@ export default function TiptapEditor() {
         }`}>
         {/* Toolbar (Only visible when editing) */}
         {isEditing && (
-          <div className="flex items-center gap-1 border-b border-neutral-800 bg-neutral-900/80 backdrop-blur-sm p-2 sticky top-16 z-50 rounded-t-xl">
+          <div className="flex flex-wrap items-center gap-1 border-b border-neutral-800 bg-neutral-900/80 backdrop-blur-sm p-2 sticky top-[72px] z-40 rounded-t-xl">
             <ToolbarButton
               onClick={() => editor.chain().focus().toggleBold().run()}
               isActive={editor.isActive("bold")}

@@ -24,11 +24,15 @@ type CaptionPosType =
 
 type AlignType = "left" | "center" | "right";
 
+const optimizeImage = (src: string) => `/_next/image?url=${encodeURIComponent(src)}&w=1200&q=75`;
+
 const defaultImages = [
-  { src: "/photos/photo-1.png", alt: "Tokyo street in snowfall", title: "Winter in Tokyo, 2024" },
-  { src: "/photos/photo-2.png", alt: "Tokyo street", title: "Neon Nights" },
-  { src: "/photos/photo-3.png", alt: "Building in Tokyo", title: "Urban Architecture" },
-  { src: "/photos/photo-4.png", alt: "Tokyo night street with signs", title: "City Lights" },
+  { src: optimizeImage("/photos/photo-1.jpg"), alt: "Night", title: "Car, 2024" },
+  { src: optimizeImage("/photos/photo-2.jpg"), alt: "Wait", title: "Wait" },
+  { src: optimizeImage("/photos/photo-3.jpg"), alt: "Laptop", title: "Work with laptop" },
+  { src: optimizeImage("/photos/photo-4.jpg"), alt: "Owl", title: "Owl" },
+  { src: optimizeImage("/photos/photo-5.jpg"), alt: "Green garden", title: "Green garden" },
+  { src: optimizeImage("/photos/photo-6.jpg"), alt: "Forest", title: "Forest" },
 ];
 
 export default function Home() {
@@ -45,11 +49,11 @@ export default function Home() {
   const [aspectRatio, setAspectRatio] = useState<string>("");
 
   const [lightbox, setLightbox] = useState<boolean>(true);
-  const [captions, setCaptions] = useState<boolean>(true);
+  const [captions, setCaptions] = useState(true);
   const [pointer, setPointer] = useState<boolean>(true);
   const [snapping, setSnapping] = useState<boolean>(true);
 
-  const [captionPosition, setCaptionPosition] = useState<CaptionPosType>("overlay-bottom-left");
+  const [captionPosition, setCaptionPosition] = useState<CaptionPosType>("bottom-center");
   const [captionSize, setCaptionSize] = useState<string>("14px");
   const [align, setAlign] = useState<AlignType>("left");
 
@@ -545,7 +549,13 @@ export default function Home() {
         <section className="space-y-8">
           <header className="border-b border-neutral-800 pb-4">
             <h2 className="text-3xl font-semibold text-white tracking-tight">Tiptap Integration</h2>
-            <p className="text-neutral-400 mt-2">Example of usage with Tiptap.</p>
+            <p className="text-neutral-400 mt-2">
+              Example of usage with Tiptap. Actually, those photos are from{" "}
+              <a href="https://unsplash.com/" className="underline hover:text-white transition-colors">
+                Unsplash
+              </a>
+              .
+            </p>
           </header>
 
           <TiptapEditor />

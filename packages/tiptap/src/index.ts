@@ -163,7 +163,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
       let toolbarWrapper: HTMLDivElement | null = null;
       let closePanelOutside: ((e: MouseEvent) => void) | null = null;
 
-      if (editor.isEditable) {
+      {
         // Inject styles for the toolbar and settings panel
         const style = document.createElement("style");
         style.innerHTML = `
@@ -215,7 +215,6 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           .gallery-toolbar-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
 
           /* Delete Button on Images */
-          .tiptap-gallery-nodeview .gallery-image-wrapper { position: relative; display: block; width: 100%; height: 100%; }
           .ProseMirror-selectednode .gallery-item-delete-btn { display: flex; }
           .gallery-item-delete-btn {
             display: none;
@@ -237,6 +236,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
             box-shadow: 0 2px 4px rgba(0,0,0,0.5);
           }
           .gallery-item-delete-btn:hover { background: #dc2626; transform: scale(1.1); }
+          .gallery-layout[data-caption-position="overlay-top-right"] .gallery-item-delete-btn { left: 8px; right: auto; }
 
           .gallery-settings-panel {
             display: none; /* hidden by default */
@@ -284,6 +284,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
         toolbarWrapper = document.createElement("div");
         toolbarWrapper.className = "gallery-toolbar-wrapper";
+        toolbarWrapper.style.display = editor.isEditable ? "" : "none";
         container.insertBefore(toolbarWrapper, galleryWrapper);
 
         // Main Toolbar
@@ -633,15 +634,98 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           lazyLoad: false, // MUST BE FALSE inside Tiptap to prevent the 0-height lazy-load rendering cancellation bug!
         };
         createGallery(galleryWrapper, options);
+
+        if (editor.isEditable) {
+          const items = galleryWrapper.querySelectorAll(".gallery-layout__item");
+          items.forEach((item, index) => {
+            const img = item.querySelector("img");
+            if (img) {
+              (item as HTMLElement).style.position = "relative";
+
+              const delBtn = document.createElement("button");
+              delBtn.innerHTML = "&times;";
+              delBtn.className = "gallery-item-delete-btn";
+              delBtn.title = "Delete image";
+              delBtn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const newImages = [...attrs.images];
+                newImages.splice(index, 1);
+                if (newImages.length === 0) {
+                  if (typeof getPos === "function") {
+                    editor.commands.deleteRange({ from: getPos(), to: getPos() + node.nodeSize });
+                  }
+                } else {
+                  if (typeof getPos === "function") {
+                    editor.chain().updateAttributes(node.type.name, { images: newImages }).run();
+                  }
+                }
+              };
+              item.appendChild(delBtn);
+
+              const figcaption = item.querySelector("figcaption");
+              if (figcaption) {
+                figcaption.setAttribute("contenteditable", "true");
+                figcaption.style.outline = "none";
+                figcaption.style.cursor = "text";
+                figcaption.dataset.placeholder = "Enter caption...";
+                if (!figcaption.textContent?.trim()) {
+                  figcaption.style.minHeight = "1em";
+                }
+                
+                figcaption.addEventListener("keydown", (e) => {
+                  e.stopPropagation();
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    figcaption.blur();
+                  }
+                });
+
+                figcaption.addEventListener("blur", () => {
+                  const newText = figcaption.textContent?.trim() || "";
+                  if (newText !== (attrs.images[index].title || "")) {
+                    const newImages = [...attrs.images];
+                    newImages[index].title = newText;
+                    if (typeof getPos === "function") {
+                      editor.chain().updateAttributes(node.type.name, { images: newImages }).run();
+                    }
+                  }
+                });
+
+              }
+            }
+          });
+        }
       };
 
       renderGallery(node.attrs);
+
+      let isEditableState = editor.isEditable;
+      let observer: MutationObserver | null = null;
+      
+      if (editor.view && editor.view.dom) {
+        observer = new MutationObserver(() => {
+          if (editor.isEditable !== isEditableState) {
+            isEditableState = editor.isEditable;
+            if (toolbarWrapper) {
+              toolbarWrapper.style.display = isEditableState ? "" : "none";
+            }
+            renderGallery(node.attrs);
+          }
+        });
+        observer.observe(editor.view.dom, { attributes: true, attributeFilter: ["contenteditable"] });
+      }
 
       return {
         dom: container,
         // CRITICAL FIX: Prevent Tiptap from stealing focus when interacting with our Settings Panel
         stopEvent: (event) => {
           if (toolbarWrapper && toolbarWrapper.contains(event.target as HTMLElement)) {
+            return true;
+          }
+          // Prevent Tiptap from stealing focus or capturing Backspace/Enter in the editable caption
+          const target = event.target as HTMLElement;
+          if (target && target.closest && target.closest("figcaption[contenteditable='true']")) {
             return true;
           }
           return false;
@@ -663,6 +747,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         destroy: () => {
           if (closePanelOutside) {
             document.removeEventListener("mousedown", closePanelOutside);
+          }
+          if (observer) {
+            observer.disconnect();
           }
         },
       };

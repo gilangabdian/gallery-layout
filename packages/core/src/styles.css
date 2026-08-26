@@ -348,9 +348,15 @@
 }
 
 /* Make image block-level inside the grid layout so it fills height if needed */
+.gallery-layout[data-layout="grid"] .gallery-layout__item {
+  height: 100%;
+}
+
 .gallery-layout[data-layout="grid"] .gallery-layout__item img {
   display: block;
-  height: 100%;
+  min-height: 0;
+  flex-grow: 1;
+  height: auto;
 }
 
 /* =========================================
