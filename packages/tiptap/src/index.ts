@@ -214,6 +214,11 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .gallery-toolbar-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
 
+          /* Prevent Lightbox opening on first click */
+          .tiptap-gallery-nodeview:not(.ProseMirror-selectednode) .gallery-layout__item img {
+            pointer-events: none;
+          }
+
           /* Delete Button on Images */
           .ProseMirror-selectednode .gallery-item-delete-btn { display: flex; }
           .gallery-item-delete-btn {

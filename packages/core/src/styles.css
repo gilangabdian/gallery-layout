@@ -322,7 +322,6 @@
 .gallery-layout[data-layout="grid"] .gallery-layout__track {
   display: grid;
   grid-template-columns: repeat(var(--gallery-cols-desktop, 4), 1fr);
-  grid-auto-rows: 1fr;
   /* Reset scroll logic for grid */
   overflow-x: visible;
   scroll-snap-type: none;
@@ -350,13 +349,6 @@
 /* Make image block-level inside the grid layout so it fills height if needed */
 .gallery-layout[data-layout="grid"] .gallery-layout__item {
   height: 100%;
-}
-
-.gallery-layout[data-layout="grid"] .gallery-layout__item img {
-  display: block;
-  min-height: 0;
-  flex-grow: 1;
-  height: auto;
 }
 
 /* =========================================
