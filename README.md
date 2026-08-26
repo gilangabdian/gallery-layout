@@ -151,7 +151,7 @@ Using it in Svelte requires the `bind:this` directive and the `onMount` lifecycl
 
 
 ## Tiptap Extension Usage
-Tiptap extensions are for you if you use <a href="https://tiptap.dev">Tiptap rich text</a>. You don't actually have to use the Tiptap rich text extension, but I recommend it if your project is already using <a href="https://tiptap.dev">Tiptap</a>, as there are several advantages to doing so—you can check out those benefits [here](#built-in-interactive-toolbar):
+Tiptap extensions are for you if you use <a href="https://tiptap.dev">Tiptap rich text</a> in your project. I recommend using it if your project is already using <a href="https://tiptap.dev">Tiptap</a>, as there are several advantages to using it. You can check out those benefits [here](#built-in-interactive-toolbar).
 
 ### Quick Start
 
@@ -176,7 +176,18 @@ export default function MyEditor() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      GalleryExtension, // 2. Add it to your extensions array! Works the same in Vue/Svelte.
+      // 2. Add it to your extensions array! Works the same in Vue/Svelte.
+      GalleryExtension.configure({
+        // Handle image uploads securely to avoid Base64 performance issues
+        onUpload: async (files) => {
+          // Example: Upload to your own server/S3 and return the URL array
+          // const urls = await myServerUploadService(files);
+          // return urls;
+
+          // For prototyping, you can use ObjectURLs:
+          return files.map(file => URL.createObjectURL(file));
+        }
+      }),
     ],
     content: '<p>Write your amazing story here...</p>',
   });
@@ -206,6 +217,9 @@ export default function MyEditor() {
 The best part about the Tiptap extension is its **built-in NodeView Toolbar**.
 
 Once a gallery is inserted, simply click on it inside the editor. A beautiful floating toolbar and settings panel will appear, allowing you and your users to:
+- **Add Images**: Add new images to an existing gallery on the fly via the `+ Image` button. This feature includes a custom modal ensuring every new image has proper **Alt Text** for accessibility.
+  - *How Image Upload Works*: By default, if a user clicks `+ Image`, the library converts the selected files into **Base64** strings. However, Base64 is highly discouraged in production as it bloats database size and degrades editor performance.
+  - *Best Practice (The `onUpload` API)*: To securely upload images to your own server (e.g., AWS S3, Cloudinary), you should provide an `onUpload` callback in the extension options. When provided, the library hands the files over to your function and waits for you to return the final image URLs!
 - **Change Layouts**: Switch between `scroll` and `grid` layouts instantly.
 - **Adjust Sizes**: Pick from preset sizes (`extra-small`, `small`, `medium`, `large`, `extra-large`), or set a **Custom width**.
 - **Alignment**: Automatically appears when using Custom Width, allowing you to align the gallery container to the `left`, `center`, or `right` of the article.
