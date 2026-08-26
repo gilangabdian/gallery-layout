@@ -284,6 +284,71 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           }
           .settings-input:focus, .settings-select:focus { border-color: rgba(255, 255, 255, 0.5); }
           .settings-checkbox { cursor: pointer; }
+          .gallery-custom-dropdown {
+            position: relative;
+            flex: 1 1 120px;
+            max-width: 100%;
+          }
+          .gallery-custom-dropdown-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .gallery-custom-dropdown-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+          }
+          .gallery-custom-dropdown-btn svg {
+            width: 14px;
+            height: 14px;
+            color: rgba(255, 255, 255, 0.5);
+          }
+          .gallery-custom-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            margin-top: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #171717;
+            border: 1px solid #262626;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            display: none;
+          }
+          .gallery-custom-dropdown-menu::-webkit-scrollbar {
+            width: 4px;
+          }
+          .gallery-custom-dropdown-menu::-webkit-scrollbar-thumb {
+            background-color: #525252;
+            border-radius: 4px;
+          }
+          .gallery-custom-dropdown-item {
+            width: 100%;
+            text-align: left;
+            padding: 6px 10px;
+            font-size: 12px;
+            background: none;
+            border: none;
+            color: #a3a3a3;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .gallery-custom-dropdown-item:hover, .gallery-custom-dropdown-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+          }
         `;
         container.appendChild(style);
 
@@ -291,6 +356,15 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         toolbarWrapper.className = "gallery-toolbar-wrapper";
         toolbarWrapper.style.display = editor.isEditable ? "" : "none";
         container.insertBefore(toolbarWrapper, galleryWrapper);
+
+        // Global click listener to close custom dropdowns
+        document.addEventListener("mousedown", (e) => {
+          const target = e.target as HTMLElement;
+          if (toolbarWrapper && !target.closest(".gallery-custom-dropdown")) {
+            const allMenus = toolbarWrapper.querySelectorAll(".gallery-custom-dropdown-menu");
+            allMenus.forEach((m) => ((m as HTMLElement).style.display = "none"));
+          }
+        });
 
         // Main Toolbar
         const mainToolbar = document.createElement("div");
@@ -403,19 +477,85 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         chkCaptions.type = "checkbox";
         chkCaptions.className = "settings-checkbox";
 
+        // Helper for Custom Dropdown
+        const createCustomDropdown = (
+          options: { value: string; label: string }[],
+          initialValue: string,
+          onChange: (val: string) => void
+        ) => {
+          const container = document.createElement("div");
+          container.className = "gallery-custom-dropdown";
+
+          const btn = document.createElement("button");
+          btn.className = "gallery-custom-dropdown-btn";
+
+          const label = document.createElement("span");
+          label.textContent = options.find((o) => o.value === initialValue)?.label || initialValue;
+
+          const icon = document.createElement("div");
+          icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+          icon.style.display = "flex";
+
+          btn.appendChild(label);
+          btn.appendChild(icon);
+
+          const menu = document.createElement("div");
+          menu.className = "gallery-custom-dropdown-menu";
+
+          const items: HTMLButtonElement[] = [];
+          options.forEach((opt) => {
+            const item = document.createElement("button");
+            item.className = "gallery-custom-dropdown-item";
+            if (opt.value === initialValue) item.classList.add("active");
+            item.textContent = opt.label;
+
+            item.addEventListener("click", (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              items.forEach((i) => i.classList.remove("active"));
+              item.classList.add("active");
+              label.textContent = opt.label;
+              menu.style.display = "none";
+              onChange(opt.value);
+            });
+            items.push(item);
+            menu.appendChild(item);
+          });
+
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = menu.style.display === "block";
+            const allMenus = toolbarWrapper?.querySelectorAll(".gallery-custom-dropdown-menu");
+            if (allMenus) allMenus.forEach((m) => ((m as HTMLElement).style.display = "none"));
+            menu.style.display = isOpen ? "none" : "block";
+          });
+
+          container.appendChild(btn);
+          container.appendChild(menu);
+
+          return {
+            element: container,
+            setValue: (val: string) => {
+              label.textContent = options.find((o) => o.value === val)?.label || val;
+              items.forEach((i) => i.classList.remove("active"));
+              const activeOpt = options.find((o) => o.value === val);
+              if (activeOpt) {
+                const activeIndex = options.indexOf(activeOpt);
+                if (items[activeIndex]) items[activeIndex].classList.add("active");
+              }
+            },
+          };
+        };
+
         // Align Setup
-        const selAlign = document.createElement("select");
-        selAlign.className = "settings-select";
         const alignOpts = [
-          { v: "left", l: "Left" },
-          { v: "center", l: "Center" },
-          { v: "right", l: "Right" },
+          { value: "left", label: "Left" },
+          { value: "center", label: "Center" },
+          { value: "right", label: "Right" },
         ];
-        alignOpts.forEach((o) => {
-          const opt = document.createElement("option");
-          opt.value = o.v;
-          opt.textContent = o.l;
-          selAlign.appendChild(opt);
+        const customAlign = createCustomDropdown(alignOpts, node.attrs.align || "left", (val) => {
+          updateAttr("align", val || undefined);
         });
 
         // Pointer Setup
@@ -428,9 +568,6 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         const chkSnap = document.createElement("input");
         chkSnap.type = "checkbox";
         chkSnap.className = "settings-checkbox";
-
-        const selCaptionPos = document.createElement("select");
-        selCaptionPos.className = "settings-select";
 
         const captionPositions = [
           { label: "Default (Bottom Center)", value: "" },
@@ -447,15 +584,16 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           { label: "Overlay Bottom Center", value: "overlay-bottom-center" },
           { label: "Overlay Bottom Right", value: "overlay-bottom-right" },
         ];
-        captionPositions.forEach((p) => {
-          const opt = document.createElement("option");
-          opt.value = p.value;
-          opt.textContent = p.label;
-          selCaptionPos.appendChild(opt);
-        });
+        const customCaptionPos = createCustomDropdown(
+          captionPositions,
+          node.attrs.captionPosition || "",
+          (val) => {
+            updateAttr("captionPosition", val || undefined);
+          }
+        );
 
         const rowCustomWidth = createSettingRow("Custom Width", inpCustomWidth);
-        const rowAlign = createSettingRow("Align", selAlign);
+        const rowAlign = createSettingRow("Align", customAlign.element);
         const rowColumns = createSettingRow("Columns", inpColumns);
         const rowSnap = createSettingRow("Scroll Snap", chkSnap);
 
@@ -469,7 +607,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           rowSnap,
           createSettingRow("Captions (On/Off)", chkCaptions),
           createSettingRow("Caption Size", inpCaptionSize),
-          createSettingRow("Caption Position", selCaptionPos),
+          createSettingRow("Caption Position", customCaptionPos.element),
           createSettingRow("Hover Pointer", chkPointer),
           createSettingRow("Enable Lightbox", chkLightbox),
         );
@@ -543,8 +681,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         chkPointer.addEventListener("change", () => updateAttr("pointer", chkPointer.checked));
         chkLightbox.addEventListener("change", () => updateAttr("lightbox", chkLightbox.checked));
         chkSnap.addEventListener("change", () => updateAttr("snap", chkSnap.checked));
-        selCaptionPos.addEventListener("change", () => updateAttr("captionPosition", selCaptionPos.value || undefined));
-        selAlign.addEventListener("change", () => updateAttr("align", selAlign.value || undefined));
+        chkSnap.addEventListener("change", () => updateAttr("snap", chkSnap.checked));
 
         // Sync Function: Tiptap Attrs -> DOM State
         syncDOM = (attrs: Record<string, any>) => {
@@ -607,12 +744,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           chkLightbox.checked = !!attrs.lightbox;
           chkSnap.checked = attrs.snap !== false; // snap is implicitly true by default in core
 
-          if (document.activeElement !== selCaptionPos) {
-            selCaptionPos.value = attrs.captionPosition || "";
-          }
-          if (document.activeElement !== selAlign) {
-            selAlign.value = attrs.align || "left";
-          }
+          customCaptionPos.setValue(attrs.captionPosition || "");
+          customAlign.setValue(attrs.align || "left");
         };
 
         syncDOM(node.attrs);
