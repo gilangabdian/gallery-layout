@@ -1,6 +1,6 @@
 # Gallery Layout
 <p align="center">
-<img src="./playground/public/icon.svg" alt="Gallery Layout Logo" width="120" />
+<img src="./playground/public/icon.svg" alt="Gallery Layout Logo" width="180" />
 </p>
 
 Gallery Layout is a library for creating beautiful photo galleries. It is zero-dependency, lightweight, and framework-agnostic.
@@ -79,8 +79,8 @@ export default function MyGallery() {
       layout: 'scroll',
       size: 'large',
       images: [
-        { src: '/photo1.jpg', alt: 'Photo 1' },
-        { src: '/photo2.jpg', alt: 'Photo 2' },
+        { src: '/photo1.jpg', alt: 'Photo 1', title:'title one' },
+        { src: '/photo2.jpg', alt: 'Photo 2', title:'title two' },
       ],
     });
   }, []);
@@ -107,8 +107,8 @@ onMounted(() => {
       layout: 'scroll',
       size: 'large',
       images: [
-        { src: '/photo1.jpg', alt: 'Photo 1' },
-        { src: '/photo2.jpg', alt: 'Photo 2' },
+        { src: '/photo1.jpg', alt: 'Photo 1', title:'title one' },
+        { src: '/photo2.jpg', alt: 'Photo 2', title:'title two' },
       ],
     });
   }
@@ -138,8 +138,8 @@ Using it in Svelte requires the `bind:this` directive and the `onMount` lifecycl
         layout: 'scroll',
         size: 'large',
         images: [
-          { src: '/photo1.jpg', alt: 'Photo 1' },
-          { src: '/photo2.jpg', alt: 'Photo 2' },
+          { src: '/photo1.jpg', alt: 'Photo 1', title:'title one' },
+          { src: '/photo2.jpg', alt: 'Photo 2', title:'title two' },
         ],
       });
     }
@@ -154,6 +154,53 @@ Using it in Svelte requires the `bind:this` directive and the `onMount` lifecycl
 Tiptap extensions are for you if you use Tiptap rich text:
 
 ### Quick Start
+
+To use the Gallery within your Tiptap editor, simply add the `GalleryExtension` to your extensions list. 
+
+> **Note:** This extension is built with pure Vanilla JavaScript, which means it is **100% framework-agnostic**. Whether you use Tiptap in React, Vue, Svelte, or Vanilla JS, the installation and command usage remain exactly the same!
+
+**Important:** You must also import the CSS from the core library for the gallery to render correctly!
+
+#### Example (using React)
+
+```tsx
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+
+// 1. Import the extension and the core CSS
+import { GalleryExtension } from 'tiptap-extension-gallery-layout';
+import 'gallery-layout/style.css'; 
+
+export default function MyEditor() {
+  // The way you initialize Tiptap depends on your framework
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      GalleryExtension, // 2. Add it to your extensions array! Works the same in Vue/Svelte.
+    ],
+    content: '<p>Write your amazing story here...</p>',
+  });
+
+  // 3. Command to insert a gallery programmatically (Identical across all frameworks)
+  const insertMyGallery = () => {
+    if (!editor) return;
+    
+    const myImages = [
+      { src: '/photo1.jpg', alt: 'Mountain', title: 'Everest' },
+      { src: '/photo2.jpg', alt: 'River', title: 'Amazon' }
+    ];
+    
+    editor.chain().focus().insertGallery(myImages).run();
+  };
+
+  return (
+    <div>
+      <button onClick={insertMyGallery}>Insert Gallery</button>
+      <EditorContent editor={editor} />
+    </div>
+  );
+}
+```
 
 
 ## API
