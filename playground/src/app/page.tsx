@@ -144,7 +144,10 @@ export default function Home() {
       {/* Navbar / Header */}
       <nav className="w-full border-b border-neutral-900 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="font-semibold text-lg tracking-tight text-white">Gallery Layout</div>
+          <div className="flex items-center gap-2.5">
+            <img src="/icon.svg" alt="Gallery Layout Logo" className="w-7 h-7 object-contain" />
+            <span className="font-semibold text-lg tracking-tight text-white">Gallery Layout</span>
+          </div>
           <Link
             href="https://github.com/gilangabdian/gallery-layout"
             target="_blank"

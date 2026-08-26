@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background squircle -->
+  <rect width="512" height="512" rx="112" fill="#0a0a0a"/>
+  
+  <!-- The Image Frame -->
+  <rect x="96" y="96" width="320" height="208" rx="24" fill="#ffffff"/>
+  
+  <!-- Caption / Title Line -->
+  <rect x="96" y="344" width="200" height="24" rx="12" fill="#d4d4d4"/>
+  
+  <!-- Subtitle / Paragraph Line -->
+  <rect x="96" y="392" width="320" height="24" rx="12" fill="#737373"/>
+</svg>
