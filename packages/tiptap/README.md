@@ -29,6 +29,7 @@ npm install tiptap-extension-gallery-layout gallery-layout @tiptap/core
 ```
 
 > **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
+> **Compatibility:** This extension requires **Tiptap v2.0.0** or higher. It is not compatible with Tiptap v1.
 
 ## Usage
 
@@ -159,6 +160,10 @@ You are welcome to submit Pull Requests. For instance, if you have an idea you w
 #### Project Structure
 
 This project uses a monorepo structure; all project code logic resides in the `/packages` folder. Inside, you will find a `core/` folder containing the core library logic and a `tiptap/` folder containing the Tiptap integration logic
+
+#### Compatibility Rules
+
+When changing logic or adding new features to the Tiptap integration, you must ensure that your changes remain fully compatible with **Tiptap v2.0.0**. Do not introduce APIs or methods that are only available in experimental/newer versions unless absolutely necessary, to prevent breaking changes for existing users.
 
 #### Testing
 

@@ -18,7 +18,7 @@ Gallery Layout is a library for creating beautiful photo galleries. It can be us
 - The **Tiptap Extension** requires a dependency: specifically, it needs `gallery-layout` as the styling engine resides there, and requires `@tiptap/core` installed to make it work
 
 
-I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout.
+I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout
 
 ## Demo
 
@@ -43,6 +43,7 @@ For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.v
   ```
 
   > **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
+  > **Compatibility:** This extension requires **Tiptap v2.0.0** or higher. It is not compatible with Tiptap v1.
 
   for `Tiptap Extension` usage, see [Tiptap Extension Usage](#tiptap-extension-usage)
 
@@ -333,6 +334,10 @@ You are welcome to submit Pull Requests. For instance, if you have an idea you w
 #### Project Structure
 
 This project uses a monorepo structure; all project code logic resides in the `/packages` folder. Inside, you will find a `core/` folder containing the core library logic and a `tiptap/` folder containing the Tiptap integration logic
+
+#### Compatibility Rules
+
+When changing logic or adding new features to the **Tiptap Extension**, you must ensure that your changes remain fully compatible with **Tiptap v2.0.0**. Do not introduce APIs or methods that are only available in experimental/newer versions unless absolutely necessary, to prevent breaking changes for existing users
 
 #### Testing
 
