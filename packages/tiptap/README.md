@@ -29,6 +29,7 @@ npm install tiptap-extension-gallery-layout gallery-layout @tiptap/core
 ```
 
 > **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
+
 > **Compatibility:** This extension requires **Tiptap v2.0.0** or higher. It is not compatible with Tiptap v1.
 
 ## Usage
