@@ -13,9 +13,8 @@
   </a>
 </p>
 
-Gallery Layout is a library for creating beautiful photo galleries. It is zero-dependency, lightweight, and framework-agnostic.
+Tiptap Extension Gallery Layout is a library for creating beautiful photo galleries inside <a href="https://tiptap.dev">Tiptap</a> rich text editor.
 
-I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout.
 
 ## Demo
 
@@ -23,11 +22,13 @@ For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.v
 
 ## Installation
 
-To use the Gallery within your Tiptap editor, you need to install both the extension and the core library:
+To use the Gallery within your Tiptap editor, you need to install the extension and several other libraries that are required for this project to work properly. You can install them by running the following command:
 
 ```bash
 npm install tiptap-extension-gallery-layout gallery-layout @tiptap/core
 ```
+
+> **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
 
 ## Usage
 

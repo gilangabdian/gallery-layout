@@ -11,9 +11,14 @@
 | `tiptap-extension-gallery-layout` | [![NPM version](https://img.shields.io/npm/v/tiptap-extension-gallery-layout?color=yellow)](https://www.npmjs.com/package/tiptap-extension-gallery-layout) | [![NPM Downloads](https://img.shields.io/npm/dm/tiptap-extension-gallery-layout?color=orange)](https://www.npmjs.com/package/tiptap-extension-gallery-layout) |
 
 
-Gallery Layout is a library for creating beautiful photo galleries. It is zero-dependency, lightweight, and framework-agnostic
+Gallery Layout is a library for creating beautiful photo galleries. It can be used freely or depending on <a href="https://tiptap.dev">Tiptap</a>. I refer to the standalone usage as the **Core Library** and the Tiptap-dependent usage as the **Tiptap Extension**
 
-I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout. It also supports projects that use <a href="https://tiptap.dev">Tiptap</a>
+
+- The **Core Library** is zero-dependency, lightweight, and framework-agnostic.
+- The **Tiptap Extension** requires a dependency: specifically, it needs `gallery-layout` as the styling engine resides there, and requires `@tiptap/core` installed to make it work
+
+
+I got the inspiration for this project from reading <a href="https://antfu.me/posts/hello-tokyo">antfu's blog</a>. It featured a beautiful gallery layout, so I wanted to create a project that people could use without having to build it from scratch. Currently, there are only 2 layout styles, each with its own settings, namely scroll layout and grid layout.
 
 ## Demo
 
@@ -21,23 +26,25 @@ For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.v
 
 ## Installation
 
-Use the installation via the core library if you want to use it freely:
+- Use the installation via the `Core Library` if you want to use it with Vanilla Javascript or with your preferred framework
 
-```bash
-pnpm add gallery-layout
-```
+  ```bash
+  pnpm add gallery-layout
+  ```
 
-for core library usage see [Core Library Usage](#core-library-usage)
+    for `Core Library` usage see [Core Library Usage](#core-library-usage)
 
 <br>
 
-Use the installation via the Tiptap extension if you want to use it within the <a href="https://tiptap.dev">Tiptap</a> library:
+- Use the installation via the `Tiptap Extension` if you want to use it within the <a href="https://tiptap.dev">Tiptap</a> rich text:
 
-```bash
-pnpm add tiptap-extension-gallery-layout
-```
+  ```bash
+  pnpm add tiptap-extension-gallery-layout gallery-layout @tiptap/core
+  ```
 
-for tiptap extension usage, see [Tiptap Extension Usage](#tiptap-extension-usage)
+  > **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
+
+  for `Tiptap Extension` usage, see [Tiptap Extension Usage](#tiptap-extension-usage)
 
 ## Core Library Usage
 
