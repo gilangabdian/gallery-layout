@@ -157,7 +157,7 @@ Tiptap extensions are for you if you use <a href="https://tiptap.dev">Tiptap ric
 
 To use the Gallery within your Tiptap editor, simply add the `GalleryExtension` to your extensions list
 
-> **Note:** This extension is built with pure Vanilla JavaScript, which means it is **100% framework-agnostic**. Whether you use Tiptap in React, Vue, Svelte, or Vanilla JS, the installation and command usage remain exactly the same!
+> **Note:** This extension is built with pure Vanilla JavaScript, which means it is **100% framework-agnostic**. Whether you use Tiptap in React, Vue, Svelte, or Vanilla JS, the installation and command usage remain exactly the same
 
 **Important:** You must also import the CSS from the core library for the gallery to render correctly!
 
@@ -287,7 +287,8 @@ If you use the Tiptap extension, you can pass default configurations when regist
 
 
 ## Contributing
-Thank you for your interest in contributing to this project. All your contributions are very valuable and will make this project better, more developed and reliable. I truly appreciate your ideas and effort.
+Thank you for your interest in contributing to this project. All your contributions are very valuable and will make this project better, more developed and reliable. I truly appreciate your ideas and effort 😄🎉
+
 You can contribute in the following ways:
 
 ### Reporting bugs
@@ -299,6 +300,7 @@ You can report bugs via issues. Please keep the following in mind when reporting
 
 ### Pull Requests
 You are welcome to submit Pull Requests. For instance, if you have an idea you would like to see implemented in the project, you can submit a PR. You can also submit a PR to fix typos or address incomplete explanations in this `README.md`. Before submitting a PR, please note the following:
+
 #### Project Structure
 This project uses a monorepo structure; all project code logic resides in the `/packages` folder. Inside, you will find a `core/` folder containing the core library logic and a `tiptap/` folder containing the Tiptap integration logic
 
@@ -306,53 +308,68 @@ This project uses a monorepo structure; all project code logic resides in the `/
 This project uses Vitest for testing. After editing or adding a feature, I highly recommend updating existing unit tests or creating new ones related to your changes to ensure no errors arise during usage.
 The `test` folders located within `core/` and `tiptap/` are where the respective test files for each library are stored.
 To run the test, run this command in the root folder
+
 ```bash
 pnpm test:run
 ```
 
 #### Linting
 We use Prettier to format all code. To lint all your code, you can run in the root folder:
+
 ```bash
 pnpm lint
 ```
+
 If you encounter errors, you can run the Prettier auto-fix using:
+
 ```bash
 pnpm lint-fix
 ```
+
 > **Good to know**: Not all rules can be auto-fixed, some require manual changes
 
 ### Development Setup
 1. Fork this repository
-2. Clone your fork repository
+1. Clone your fork repository
 
-```bash
-git clone https://github.com/YOUR_USERNAME/gallery-layout.git
-```
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/gallery-layout.git
+    ```
 
-3. Create a new branch by running
-```bash
-git checkout -b your-branch-name
-```
-4. Install dependencies in the root folder
-```bash
-pnpm install
-```
-5. To run the demo playground, run `pnpm dev` in the root folder, it automatically runs `pnpm dev` in `/playground` folder too.
-> **Note**: Leave this terminal running and open a new terminal tab for the next steps
-6. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
-7. Run linting in the root folder to make sure there are no linting errors
-```bash
-pnpm lint
-```
-8. Once you are satisfied with your changes, commit them to the branch you created:
-```bash
-git add .
-git commit -m "DESCRIBE_YOUR_CHANGES_HERE"
-```
-9. Push to the remote and create a PR:
-```bash
-git push origin HEAD
-```
+1. Create a new branch by running
+
+    ```bash
+    git checkout -b your-branch-name
+    ```
+1. Install dependencies in the root folder
+
+    ```bash
+    pnpm install
+    ```
+1. To run the demo playground, run `pnpm dev` in the root folder, it automatically runs `pnpm dev` in `/playground` folder too.
+
+    > **Note**: Leave this terminal running and open a new terminal tab for the next steps
+
+1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
+
+1. Run linting in the root folder to make sure there are no linting errors
+
+    ```bash
+    pnpm lint
+    ```
+
+1. Once you are satisfied with your changes, commit them to the branch you created:
+
+    ```bash
+    git add .
+    git commit -m "DESCRIBE_YOUR_CHANGES_HERE"
+    ```
+
+1. Push to the remote and create a PR:
+
+    ```bash
+    git push origin HEAD
+    ```
 
 On your GitHub page, click the "Compare & Pull Request" button (usually available immediately), target the project's `main` branch, and click "Create Pull Request"
 
