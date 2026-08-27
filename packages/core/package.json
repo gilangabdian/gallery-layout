@@ -1,6 +1,6 @@
 {
   "name": "gallery-layout",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Beautiful gallery layouts for your blogs",
   "type": "module",
   "files": [
@@ -23,9 +23,19 @@
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "gallery",
+    "layout",
+    "image-gallery",
+    "tiptap",
+    "tiptap-extension",
+    "rich-text",
+    "editorial-layout"
+  ],
+  "homepage": "https://gallery-layout.vercel.app",
+  "repository": "https://github.com/gilangabdian/gallery-layout.git",
+  "author": "Gilang Abdian",
+  "license": "MIT",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",

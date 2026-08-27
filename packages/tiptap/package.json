@@ -1,8 +1,21 @@
 {
   "name": "tiptap-extension-gallery-layout",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiptap extension for gallery-layout",
   "type": "module",
+  "keywords": [
+    "gallery",
+    "layout",
+    "image-gallery",
+    "tiptap",
+    "tiptap-extension",
+    "rich-text",
+    "editorial-layout"
+  ],
+  "homepage": "https://gallery-layout.vercel.app",
+  "repository": "https://github.com/gilangabdian/gallery-layout.git",
+  "author": "Gilang Abdian",
+  "license": "MIT",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "exports": {
