@@ -101,7 +101,7 @@ describe('createGallery', () => {
       captionSize: '16px',
       radius: '10px',
     })
-    
+
     expect(container.dataset.size).toBe('custom')
     expect(container.style.getPropertyValue('--gallery-custom-size')).toBe('500px')
     expect(container.style.getPropertyValue('--gallery-gap')).toBe('24px')

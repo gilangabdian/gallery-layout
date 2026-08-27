@@ -55,11 +55,15 @@ describe('openLightbox', () => {
   })
 
   it('should render caption below image for bottom positions', () => {
-    openLightbox(sampleImage, { ...defaultOptions, captions: true, captionPosition: 'bottom-center' })
+    openLightbox(sampleImage, {
+      ...defaultOptions,
+      captions: true,
+      captionPosition: 'bottom-center',
+    })
 
     const overlay = document.querySelector('.gallery-layout__lightbox') as HTMLElement
     const innerWrapper = overlay.querySelector('.gallery-layout__lightbox-inner')
-    
+
     // bottom position should render image before caption
     expect(innerWrapper?.firstElementChild?.tagName.toLowerCase()).toBe('img')
     expect(innerWrapper?.lastElementChild?.tagName.toLowerCase()).toBe('figcaption')
@@ -70,14 +74,14 @@ describe('openLightbox', () => {
     document.body.style.overflow = 'auto'
 
     openLightbox(sampleImage, defaultOptions)
-    
+
     // Should be locked
     expect(document.body.style.overflow).toBe('hidden')
   })
 
   it('should restore scroll and remove overlay when close button is clicked', () => {
     document.body.style.overflow = 'auto'
-    
+
     openLightbox(sampleImage, defaultOptions)
     expect(document.body.style.overflow).toBe('hidden')
     expect(document.querySelector('.gallery-layout__lightbox')).not.toBeNull()
@@ -92,9 +96,9 @@ describe('openLightbox', () => {
 
   it('should restore scroll and remove overlay when overlay background is clicked', () => {
     document.body.style.overflow = 'auto'
-    
+
     openLightbox(sampleImage, defaultOptions)
-    
+
     const overlay = document.querySelector('.gallery-layout__lightbox') as HTMLDivElement
     overlay.click()
 

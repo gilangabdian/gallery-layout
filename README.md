@@ -349,6 +349,7 @@ pnpm lint-fix
 ### Type Checking
 
 We use TypeScript for the entire codebase; therefore, you need to ensure the code is free of type errors by running this command in the root folder
+
 ```bash
 pnpm typecheck
 ```
