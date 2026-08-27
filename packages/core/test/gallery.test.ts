@@ -72,4 +72,68 @@ describe('createGallery', () => {
     createGallery(container, { images: sampleImages, pointer: true })
     expect(container.dataset.pointer).toBe('true')
   })
+
+  it('should apply grid layout and responsive columns', () => {
+    // Number configuration
+    createGallery(container, { images: sampleImages, layout: 'grid', columns: 4 })
+    expect(container.dataset.layout).toBe('grid')
+    expect(container.style.getPropertyValue('--gallery-cols-desktop')).toBe('4')
+    expect(container.style.getPropertyValue('--gallery-cols-tablet')).toBe('4')
+    expect(container.style.getPropertyValue('--gallery-cols-mobile')).toBe('4')
+
+    // Object configuration
+    createGallery(container, {
+      images: sampleImages,
+      layout: 'grid',
+      columns: { desktop: 3, mobile: 1 },
+    })
+    expect(container.style.getPropertyValue('--gallery-cols-desktop')).toBe('3')
+    expect(container.style.getPropertyValue('--gallery-cols-tablet')).toBe('')
+    expect(container.style.getPropertyValue('--gallery-cols-mobile')).toBe('1')
+  })
+
+  it('should apply custom size and CSS configuration', () => {
+    createGallery(container, {
+      images: sampleImages,
+      size: '500px',
+      gap: '24px',
+      aspectRatio: '16/9',
+      captionSize: '16px',
+      radius: '10px',
+    })
+    
+    expect(container.dataset.size).toBe('custom')
+    expect(container.style.getPropertyValue('--gallery-custom-size')).toBe('500px')
+    expect(container.style.getPropertyValue('--gallery-gap')).toBe('24px')
+    expect(container.style.getPropertyValue('--gallery-aspect-ratio')).toBe('16/9')
+    expect(container.style.getPropertyValue('--gallery-caption-size')).toBe('16px')
+    expect(container.style.getPropertyValue('--gallery-radius')).toBe('10px')
+  })
+
+  it('should prevent DOM state leak on options toggle', () => {
+    // Initial setup with many properties
+    createGallery(container, {
+      images: sampleImages,
+      layout: 'scroll',
+      align: 'center',
+      snap: false,
+      pointer: true,
+      captionPosition: 'top-center',
+    })
+
+    expect(container.dataset.layout).toBe('scroll')
+    expect(container.dataset.align).toBe('center')
+    expect(container.dataset.snap).toBe('false')
+    expect(container.dataset.pointer).toBe('true')
+
+    // Re-render with default options
+    createGallery(container, { images: sampleImages })
+
+    // Previous state should be wiped clean
+    expect(container.dataset.layout).toBe('scroll')
+    expect(container.dataset.align).toBeUndefined()
+    expect(container.dataset.snap).toBeUndefined()
+    expect(container.dataset.pointer).toBeUndefined()
+    expect(container.dataset.captionPosition).toBeUndefined()
+  })
 })

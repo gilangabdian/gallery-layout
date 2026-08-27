@@ -55,13 +55,19 @@ export function openLightbox(image: GalleryImage, options: GalleryOptions): void
 
   // Close logic
   const closeLightbox = () => {
-    document.body.removeChild(overlay)
+    if (document.body.contains(overlay)) {
+      document.body.removeChild(overlay)
+    }
     document.body.style.overflow = originalOverflow
     document.removeEventListener('keydown', onKeyDown)
   }
 
   // Event listeners
-  closeBtn.addEventListener('click', closeLightbox)
+  // Event listeners
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation()
+    closeLightbox()
+  })
   overlay.addEventListener('click', () => {
     closeLightbox()
   })
