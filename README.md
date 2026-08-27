@@ -332,7 +332,7 @@ pnpm test:run
 
 #### Linting
 
-We use Prettier to format all code. To lint all your code, you can run in the root folder:
+We use <a href="https://prettier.io/">Prettier</a> to format all code. To lint all your code, you can run in the root folder:
 
 ```bash
 pnpm lint
@@ -344,7 +344,7 @@ If you encounter errors, you can run the Prettier auto-fix using:
 pnpm lint-fix
 ```
 
-> **Good to know**: Not all rules can be auto-fixed, some require manual changes
+> **Note**: Not all rules can be auto-fixed, some require manual changes
 
 ### Development Setup
 
