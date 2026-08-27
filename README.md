@@ -346,7 +346,7 @@ pnpm lint-fix
 
 > **Note**: Not all rules can be auto-fixed, some require manual changes
 
-### Type Checking
+#### Type Checking
 
 We use TypeScript for the entire codebase; therefore, you need to ensure the code is free of type errors by running this command in the root folder
 
