@@ -346,6 +346,13 @@ pnpm lint-fix
 
 > **Note**: Not all rules can be auto-fixed, some require manual changes
 
+### Type Checking
+
+We use TypeScript for the entire codebase; therefore, you need to ensure the code is free of type errors by running this command in the root folder
+```bash
+pnpm typecheck
+```
+
 ### Development Setup
 
 1. Fork this repository
@@ -377,6 +384,12 @@ pnpm lint-fix
 
    ```bash
    pnpm lint
+   ```
+
+1. Run type checking in the root folder to make sure there are no type errors
+
+   ```bash
+   pnpm typecheck
    ```
 
 1. Once you are satisfied with your changes, commit them to the branch you created:
