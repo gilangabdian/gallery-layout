@@ -205,7 +205,17 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      jsdom:
+        specifier: ^30.0.1
+        version: 30.0.1
+      prettier:
+        specifier: ^3.9.6
+        version: 3.9.6
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@20.19.43)(jsdom@30.0.1)(vite@8.2.1(@types/node@20.19.43)(jiti@2.7.0))
 
   packages/core:
     devDependencies:
@@ -237,6 +247,9 @@ importers:
       '@tiptap/core':
         specifier: ^2.27.2
         version: 2.27.2(@tiptap/pm@2.27.2)
+      '@tiptap/starter-kit':
+        specifier: ^2.27.2
+        version: 2.27.2
       tsdown:
         specifier: ^0.22.14
         version: 0.22.14(@tsdown/css@0.22.14)(typescript@5.9.3)
@@ -248,13 +261,13 @@ importers:
     dependencies:
       '@tiptap/extension-underline':
         specifier: ^3.30.3
-        version: 3.30.3(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
+        version: 3.30.3
       '@tiptap/pm':
         specifier: ^2.0.0
         version: 2.27.2
       '@tiptap/react':
         specifier: ^2.0.0
-        version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 2.27.2(@tiptap/pm@2.27.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tiptap/starter-kit':
         specifier: ^2.0.0
         version: 2.27.2
@@ -2839,6 +2852,11 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
@@ -4038,9 +4056,8 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
 
-  '@tiptap/extension-bubble-menu@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)':
+  '@tiptap/extension-bubble-menu@2.27.2(@tiptap/pm@2.27.2)':
     dependencies:
-      '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
       '@tiptap/pm': 2.27.2
       tippy.js: 6.3.7
 
@@ -4066,9 +4083,8 @@ snapshots:
       '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
       '@tiptap/pm': 2.27.2
 
-  '@tiptap/extension-floating-menu@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)':
+  '@tiptap/extension-floating-menu@2.27.2(@tiptap/pm@2.27.2)':
     dependencies:
-      '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
       '@tiptap/pm': 2.27.2
       tippy.js: 6.3.7
 
@@ -4123,9 +4139,7 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
 
-  '@tiptap/extension-underline@3.30.3(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))':
-    dependencies:
-      '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
+  '@tiptap/extension-underline@3.30.3': {}
 
   '@tiptap/pm@2.27.2':
     dependencies:
@@ -4148,11 +4162,10 @@ snapshots:
       prosemirror-transform: 1.12.0
       prosemirror-view: 1.42.2
 
-  '@tiptap/react@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@tiptap/react@2.27.2(@tiptap/pm@2.27.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@tiptap/core': 2.27.2(@tiptap/pm@2.27.2)
-      '@tiptap/extension-bubble-menu': 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
-      '@tiptap/extension-floating-menu': 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
+      '@tiptap/extension-bubble-menu': 2.27.2(@tiptap/pm@2.27.2)
+      '@tiptap/extension-floating-menu': 2.27.2(@tiptap/pm@2.27.2)
       '@tiptap/pm': 2.27.2
       '@types/use-sync-external-store': 0.0.6
       fast-deep-equal: 3.1.3
@@ -4189,7 +4202,7 @@ snapshots:
       lightningcss: 1.33.0
       postcss-load-config: 6.0.1(jiti@2.7.0)(postcss@8.5.26)
       rolldown: 1.2.4
-      tsdown: 0.22.14(@tsdown/css@0.22.14)(typescript@7.0.2)
+      tsdown: 0.22.14(@tsdown/css@0.22.14)(typescript@5.9.3)
     optionalDependencies:
       postcss: 8.5.26
     transitivePeerDependencies:
@@ -5881,6 +5894,8 @@ snapshots:
       source-map-js: 1.2.1
 
   prelude-ls@1.2.1: {}
+
+  prettier@3.9.6: {}
 
   prop-types@15.8.1:
     dependencies:

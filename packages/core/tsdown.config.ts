@@ -1,13 +1,13 @@
-import { defineConfig } from "tsdown";
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: ["src/index.ts"],
-  format: ["esm"],
+  entry: ['src/index.ts'],
+  format: ['esm'],
   dts: true,
-  platform: "browser",
+  platform: 'browser',
   clean: true,
   sourcemap: true,
   css: {
-    inject: false
-  }
-});
+    inject: false,
+  },
+})

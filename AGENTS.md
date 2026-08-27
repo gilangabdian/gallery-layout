@@ -18,12 +18,12 @@ The library is intended to eventually support integrations such as Tiptap, React
 
 Keep the library:
 
-* small
-* framework-agnostic
-* accessible
-* composable
-* easy to customize
-* focused on editorial image presentation
+- small
+- framework-agnostic
+- accessible
+- composable
+- easy to customize
+- focused on editorial image presentation
 
 Do not add functionality merely because it could be useful.
 
@@ -48,44 +48,44 @@ The MVP focuses on one primary gallery experience:
 
 The MVP should support:
 
-* multiple images
-* horizontal scrolling
-* responsive behavior
-* image sizes (`small`, `medium`, `large`)
-* configurable gaps
-* optional captions/titles
-* configurable caption position
-* image click interaction
-* an optional built-in lightbox
-* keyboard-accessible interaction
-* touch-friendly interaction
-* lazy-loaded images
-* semantic HTML
-* TypeScript types
-* CSS customization through CSS variables
-* unit tests
+- multiple images
+- horizontal scrolling
+- responsive behavior
+- image sizes (`small`, `medium`, `large`)
+- configurable gaps
+- optional captions/titles
+- configurable caption position
+- image click interaction
+- an optional built-in lightbox
+- keyboard-accessible interaction
+- touch-friendly interaction
+- lazy-loaded images
+- semantic HTML
+- TypeScript types
+- CSS customization through CSS variables
+- unit tests
 
 The MVP should NOT include:
 
-* Tiptap integration
-* React integration
-* Vue integration
-* Svelte integration
-* image uploading
-* image storage
-* image processing
-* image editing
-* authentication
-* CMS functionality
-* backend functionality
-* analytics
-* drag-and-drop image management
-* masonry layout
-* complex editorial layouts
-* slideshow functionality
-* image comparison
-* video support
-* server-side rendering-specific logic
+- Tiptap integration
+- React integration
+- Vue integration
+- Svelte integration
+- image uploading
+- image storage
+- image processing
+- image editing
+- authentication
+- CMS functionality
+- backend functionality
+- analytics
+- drag-and-drop image management
+- masonry layout
+- complex editorial layouts
+- slideshow functionality
+- image comparison
+- video support
+- server-side rendering-specific logic
 
 These may be considered in future versions, but do not implement them unless explicitly requested.
 
@@ -132,14 +132,14 @@ Do not make React a requirement for the core package.
 
 Use:
 
-* TypeScript
-* native browser DOM APIs
-* CSS
-* pnpm
-* tsdown
-* Vite
-* Vitest
-* jsdom
+- TypeScript
+- native browser DOM APIs
+- CSS
+- pnpm
+- tsdown
+- Vite
+- Vitest
+- jsdom
 
 Do not introduce another framework or build system without a clear reason.
 
@@ -255,9 +255,9 @@ Example:
 
 ```ts
 interface GalleryImage {
-  src: string;
-  alt: string;
-  title?: string;
+  src: string
+  alt: string
+  title?: string
 }
 ```
 
@@ -292,11 +292,11 @@ Interactive images must be keyboard accessible.
 
 The lightbox must support:
 
-* keyboard opening
-* keyboard closing
-* logical focus management
-* Escape to close
-* previous/next keyboard navigation when applicable
+- keyboard opening
+- keyboard closing
+- logical focus management
+- Escape to close
+- previous/next keyboard navigation when applicable
 
 Do not rely exclusively on hover interactions.
 
@@ -306,9 +306,11 @@ Use semantic elements such as:
 
 ```html
 <figure>
-<img>
-<figcaption>
-<button>
+  <img />
+  <figcaption>
+    <button></button>
+  </figcaption>
+</figure>
 ```
 
 whenever appropriate.
@@ -339,7 +341,7 @@ Do not use `<div>` everywhere when a semantic element communicates the purpose b
 Images should use lazy loading where appropriate:
 
 ```html
-<img loading="lazy">
+<img loading="lazy" />
 ```
 
 Do not introduce custom image-loading systems during the MVP.
@@ -354,13 +356,13 @@ The library is responsible for **displaying images**, not storing them.
 
 Do not implement:
 
-* uploads
-* S3 integration
-* Cloudinary integration
-* Supabase Storage
-* image transformations
-* image optimization services
-* authentication
+- uploads
+- S3 integration
+- Cloudinary integration
+- Supabase Storage
+- image transformations
+- image optimization services
+- authentication
 
 The consumer provides the image URL.
 
@@ -404,12 +406,12 @@ Do not use `!important` unless there is a documented and unavoidable reason.
 
 The visual direction is:
 
-* editorial
-* minimal
-* photographic
-* calm
-* suitable for long-form writing
-* typography-conscious
+- editorial
+- minimal
+- photographic
+- calm
+- suitable for long-form writing
+- typography-conscious
 
 Do not add decorative UI merely for visual novelty.
 
@@ -438,10 +440,10 @@ Do not recreate browser behavior unnecessarily.
 
 The gallery should work naturally with:
 
-* mouse
-* trackpad
-* touch
-* keyboard
+- mouse
+- trackpad
+- touch
+- keyboard
 
 ---
 
@@ -450,9 +452,9 @@ The gallery should work naturally with:
 The MVP supports:
 
 ```ts
-"small"
-"medium"
-"large"
+'small'
+'medium'
+'large'
 ```
 
 These represent visual presentation sizes, not fixed image dimensions.
@@ -470,9 +472,9 @@ Captions/titles are optional.
 Possible positions include:
 
 ```ts
-"top"
-"bottom"
-"overlay"
+'top'
+'bottom'
+'overlay'
 ```
 
 Do not force captions to always be displayed.
@@ -482,7 +484,7 @@ The consumer must be able to disable them entirely.
 Captions should use semantic:
 
 ```html
-<figcaption>
+<figcaption></figcaption>
 ```
 
 markup.
@@ -545,12 +547,12 @@ Prefer standard browser APIs when they are sufficient.
 
 Examples:
 
-* DOM APIs
-* CSS scrolling
-* IntersectionObserver
-* ResizeObserver
-* native events
-* HTML semantics
+- DOM APIs
+- CSS scrolling
+- IntersectionObserver
+- ResizeObserver
+- native events
+- HTML semantics
 
 Do not create custom abstractions around browser functionality unless they provide meaningful value.
 
@@ -571,13 +573,13 @@ unless there is a specific, documented reason.
 Prefer narrow types:
 
 ```ts
-type GallerySize = "small" | "medium" | "large";
+type GallerySize = 'small' | 'medium' | 'large'
 ```
 
 instead of:
 
 ```ts
-type GallerySize = string;
+type GallerySize = string
 ```
 
 Public types must be intentionally designed because consumers will depend on them.
@@ -592,13 +594,13 @@ Every meaningful behavior should have a test.
 
 At minimum, test:
 
-* gallery creation
-* rendering all images
-* image attributes
-* title/caption behavior
-* option defaults
-* enabled/disabled features
-* invalid input where applicable
+- gallery creation
+- rendering all images
+- image attributes
+- title/caption behavior
+- option defaults
+- enabled/disabled features
+- invalid input where applicable
 
 Tests should focus on observable behavior rather than implementation details.
 
@@ -630,11 +632,11 @@ The published package should contain only files necessary for consumers.
 
 Do not publish:
 
-* playground files
-* tests
-* development screenshots
-* internal documentation
-* source assets unrelated to package usage
+- playground files
+- tests
+- development screenshots
+- internal documentation
+- source assets unrelated to package usage
 
 unless explicitly needed.
 
@@ -648,12 +650,12 @@ Use Vite.
 
 The playground exists to answer questions such as:
 
-* Does the gallery look correct?
-* Does horizontal scrolling feel natural?
-* Does the gallery work on mobile widths?
-* Do captions align correctly?
-* Does keyboard interaction work?
-* Does the lightbox feel correct?
+- Does the gallery look correct?
+- Does horizontal scrolling feel natural?
+- Does the gallery work on mobile widths?
+- Do captions align correctly?
+- Does keyboard interaction work?
+- Does the lightbox feel correct?
 
 Do not use the playground as the library implementation itself.
 
@@ -693,13 +695,13 @@ Do not expand the MVP automatically.
 
 For example, if asked to improve horizontal scrolling, do not also implement:
 
-* masonry
-* drag-and-drop
-* Tiptap
-* React
-* image uploading
-* fullscreen
-* slideshow
+- masonry
+- drag-and-drop
+- Tiptap
+- React
+- image uploading
+- fullscreen
+- slideshow
 
 unless explicitly requested.
 
@@ -783,12 +785,12 @@ Prefer simple browser-native behavior.
 
 Avoid:
 
-* unnecessary re-renders
-* excessive event listeners
-* large dependencies
-* continuous polling
-* unnecessary observers
-* expensive DOM rebuilds
+- unnecessary re-renders
+- excessive event listeners
+- large dependencies
+- continuous polling
+- unnecessary observers
+- expensive DOM rebuilds
 
 Do not optimize prematurely.
 
@@ -900,9 +902,10 @@ fix things
 When a new feature, MVP milestone, or significant bug fix is completed and verified, AI agents must proactively suggest creating a new Git tag and GitHub release.
 
 AI agents must:
+
 1. **Enforce Semantic Versioning (SemVer):** Check previous tags (e.g., via `git tag` or `package.json` version) to determine the next logical version number.
-   * `v1.x.0` for new features (minor)
-   * `v1.0.x` for bug fixes (patch)
+   - `v1.x.0` for new features (minor)
+   - `v1.0.x` for bug fixes (patch)
 2. **Teach the User (Annotated Tags):** Always provide the exact, copy-pasteable Git commands to create an **annotated tag** (do not use lightweight tags).
    Example:
    ```bash
@@ -917,16 +920,16 @@ AI agents must:
 
 When working on this repository, AI agents must:
 
-* inspect existing code before modifying it
-* preserve the established architecture
-* avoid unnecessary dependencies
-* avoid unnecessary abstractions
-* avoid introducing frameworks into the core
-* keep the MVP scope small
-* update tests when behavior changes
-* update documentation when public APIs change
-* prefer simple browser-native solutions
-* explain significant architectural changes before implementing them when the requested change could alter the public API
+- inspect existing code before modifying it
+- preserve the established architecture
+- avoid unnecessary dependencies
+- avoid unnecessary abstractions
+- avoid introducing frameworks into the core
+- keep the MVP scope small
+- update tests when behavior changes
+- update documentation when public APIs change
+- prefer simple browser-native solutions
+- explain significant architectural changes before implementing them when the requested change could alter the public API
 
 Do not rewrite large portions of the project without a clear reason.
 
@@ -948,15 +951,15 @@ focused MVP > premature features
 
 A feature is considered complete only when:
 
-* the implementation works
-* TypeScript passes
-* tests pass
-* the package builds
-* the playground works
-* accessibility has been considered
-* public API behavior is documented when applicable
-* no unnecessary dependency was introduced
-* the feature stays within the current project scope
+- the implementation works
+- TypeScript passes
+- tests pass
+- the package builds
+- the playground works
+- accessibility has been considered
+- public API behavior is documented when applicable
+- no unnecessary dependency was introduced
+- the feature stays within the current project scope
 
 ---
 

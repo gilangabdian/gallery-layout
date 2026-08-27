@@ -22,10 +22,13 @@
   },
   "devDependencies": {
     "@tiptap/core": "^2.27.2",
+    "@tiptap/starter-kit": "^2.27.2",
     "tsdown": "^0.22.14",
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "vitest",
+    "test:run": "vitest run"
   }
 }

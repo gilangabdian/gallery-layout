@@ -1,4 +1,4 @@
-import "./styles.css";
+import './styles.css'
 
-export { createGallery } from "./gallery";
-export type { GalleryImage, GalleryOptions, GallerySize } from "./types";
+export { createGallery } from './gallery'
+export type { GalleryImage, GalleryOptions, GallerySize } from './types'

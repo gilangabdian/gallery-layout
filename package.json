@@ -5,6 +5,13 @@
     "dev": "pnpm --filter playground dev",
     "build": "pnpm -r build",
     "test:run": "pnpm -r test:run",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "lint": "prettier --check .",
+    "lint-fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1",
+    "prettier": "^3.9.6",
+    "vitest": "^4.1.10"
   }
 }

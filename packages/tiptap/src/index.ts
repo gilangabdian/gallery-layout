@@ -1,173 +1,181 @@
-import { Node, mergeAttributes } from "@tiptap/core";
-import { createGallery, type GalleryOptions, type GalleryImage } from "gallery-layout";
+import { Node, mergeAttributes } from '@tiptap/core'
+import { createGallery, type GalleryOptions, type GalleryImage } from 'gallery-layout'
 
 export interface GalleryExtensionOptions {
-  defaultLayout: "scroll" | "grid";
-  defaultSize: "small" | "medium" | "large";
-  defaultGap?: string;
-  defaultRadius?: string;
-  defaultCaptionSize?: string;
-  defaultAspectRatio?: string;
-  defaultLightbox?: boolean;
-  defaultCaptions?: boolean;
-  HTMLAttributes: Record<string, any>;
-  onUpload?: (files: File[]) => Promise<string[]>;
+  defaultLayout: 'scroll' | 'grid'
+  defaultSize: 'small' | 'medium' | 'large'
+  defaultGap?: string
+  defaultRadius?: string
+  defaultCaptionSize?: string
+  defaultAspectRatio?: string
+  defaultLightbox?: boolean
+  defaultCaptions?: boolean
+  HTMLAttributes: Record<string, any>
+  onUpload?: (files: File[]) => Promise<string[]>
 }
 
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     galleryLayout: {
-      insertGallery: (images: GalleryImage[]) => ReturnType;
-      setGalleryLayout: (layout: "scroll" | "grid") => ReturnType;
-      setGallerySize: (size: "small" | "medium" | "large") => ReturnType;
-    };
+      insertGallery: (images: GalleryImage[]) => ReturnType
+      setGalleryLayout: (layout: 'scroll' | 'grid') => ReturnType
+      setGallerySize: (size: 'small' | 'medium' | 'large') => ReturnType
+    }
   }
 }
 
 export const GalleryExtension = Node.create<GalleryExtensionOptions>({
-  name: "galleryLayout",
-  group: "block",
+  name: 'galleryLayout',
+  group: 'block',
   atom: true, // It is an atom block because it's managed by gallery-layout internally
 
   addOptions() {
     return {
-      defaultLayout: "scroll",
-      defaultSize: "medium",
-      defaultAlign: "left",
-      defaultGap: "16px",
-      defaultRadius: "4px",
-      defaultCaptionSize: "14px",
-      defaultAspectRatio: "auto",
+      defaultLayout: 'scroll',
+      defaultSize: 'medium',
+      defaultAlign: 'left',
+      defaultGap: '16px',
+      defaultRadius: '4px',
+      defaultCaptionSize: '14px',
+      defaultAspectRatio: 'auto',
       defaultLightbox: false,
       defaultCaptions: true,
       HTMLAttributes: {},
-    };
+    }
   },
 
   addAttributes() {
     return {
       images: {
         default: [],
-        parseHTML: (element) => JSON.parse(element.getAttribute("data-images") || "[]"),
+        parseHTML: (element) => JSON.parse(element.getAttribute('data-images') || '[]'),
         renderHTML: (attributes) => {
-          return { "data-images": JSON.stringify(attributes.images) };
+          return { 'data-images': JSON.stringify(attributes.images) }
         },
       },
       layout: {
         default: this.options.defaultLayout,
-        parseHTML: (element) => element.getAttribute("data-layout"),
+        parseHTML: (element) => element.getAttribute('data-layout'),
         renderHTML: (attributes) => {
-          return { "data-layout": attributes.layout };
+          return { 'data-layout': attributes.layout }
         },
       },
       size: {
         default: this.options.defaultSize,
-        parseHTML: (element) => element.getAttribute("data-size"),
+        parseHTML: (element) => element.getAttribute('data-size'),
         renderHTML: (attributes) => {
-          return { "data-size": attributes.size };
+          return { 'data-size': attributes.size }
         },
       },
       captions: {
         default: this.options.defaultCaptions,
-        parseHTML: (element) => element.getAttribute("data-captions") === "true",
+        parseHTML: (element) => element.getAttribute('data-captions') === 'true',
         renderHTML: (attributes) =>
-          attributes.captions !== undefined ? { "data-captions": String(attributes.captions) } : {},
+          attributes.captions !== undefined ? { 'data-captions': String(attributes.captions) } : {},
       },
       captionPosition: {
         default: undefined,
-        parseHTML: (element) => element.getAttribute("data-caption-position"),
+        parseHTML: (element) => element.getAttribute('data-caption-position'),
         renderHTML: (attributes) =>
-          attributes.captionPosition ? { "data-caption-position": attributes.captionPosition } : {},
+          attributes.captionPosition ? { 'data-caption-position': attributes.captionPosition } : {},
       },
       captionSize: {
         default: this.options.defaultCaptionSize,
-        parseHTML: (element) => element.getAttribute("data-caption-size"),
+        parseHTML: (element) => element.getAttribute('data-caption-size'),
         renderHTML: (attributes) => {
-          if (attributes.captionSize === this.options.defaultCaptionSize) return {};
-          return attributes.captionSize ? { "data-caption-size": attributes.captionSize } : {};
+          if (attributes.captionSize === this.options.defaultCaptionSize) return {}
+          return attributes.captionSize ? { 'data-caption-size': attributes.captionSize } : {}
         },
       },
       pointer: {
         default: undefined,
-        parseHTML: (element) => element.getAttribute("data-pointer") === "true",
+        parseHTML: (element) => element.getAttribute('data-pointer') === 'true',
         renderHTML: (attributes) =>
-          attributes.pointer !== undefined ? { "data-pointer": String(attributes.pointer) } : {},
+          attributes.pointer !== undefined ? { 'data-pointer': String(attributes.pointer) } : {},
       },
       lightbox: {
         default: this.options.defaultLightbox,
-        parseHTML: (element) => element.getAttribute("data-lightbox") === "true",
+        parseHTML: (element) => element.getAttribute('data-lightbox') === 'true',
         renderHTML: (attributes) =>
-          attributes.lightbox !== undefined ? { "data-lightbox": String(attributes.lightbox) } : {},
+          attributes.lightbox !== undefined ? { 'data-lightbox': String(attributes.lightbox) } : {},
       },
       gap: {
         default: this.options.defaultGap,
-        parseHTML: (element) => element.getAttribute("data-gap"),
+        parseHTML: (element) => element.getAttribute('data-gap'),
         renderHTML: (attributes) => {
-          if (attributes.gap === this.options.defaultGap) return {};
-          return attributes.gap ? { "data-gap": attributes.gap } : {};
+          if (attributes.gap === this.options.defaultGap) return {}
+          return attributes.gap ? { 'data-gap': attributes.gap } : {}
         },
       },
       radius: {
         default: this.options.defaultRadius,
-        parseHTML: (element) => element.getAttribute("data-radius"),
+        parseHTML: (element) => element.getAttribute('data-radius'),
         renderHTML: (attributes) => {
-          if (attributes.radius === this.options.defaultRadius) return {};
-          return attributes.radius ? { "data-radius": attributes.radius } : {};
+          if (attributes.radius === this.options.defaultRadius) return {}
+          return attributes.radius ? { 'data-radius': attributes.radius } : {}
         },
       },
       aspectRatio: {
         default: this.options.defaultAspectRatio,
-        parseHTML: (element) => element.getAttribute("data-aspect-ratio"),
+        parseHTML: (element) => element.getAttribute('data-aspect-ratio'),
         renderHTML: (attributes) => {
-          if (attributes.aspectRatio === this.options.defaultAspectRatio) return {};
-          return attributes.aspectRatio ? { "data-aspect-ratio": attributes.aspectRatio } : {};
+          if (attributes.aspectRatio === this.options.defaultAspectRatio) return {}
+          return attributes.aspectRatio ? { 'data-aspect-ratio': attributes.aspectRatio } : {}
         },
       },
       columns: {
         default: undefined,
         parseHTML: (element) =>
-          element.getAttribute("data-columns") ? parseInt(element.getAttribute("data-columns")!) : undefined,
+          element.getAttribute('data-columns')
+            ? parseInt(element.getAttribute('data-columns')!)
+            : undefined,
         renderHTML: (attributes) =>
-          attributes.columns !== undefined ? { "data-columns": String(attributes.columns) } : {},
+          attributes.columns !== undefined ? { 'data-columns': String(attributes.columns) } : {},
       },
       snap: {
         default: undefined,
-        parseHTML: (element) => element.getAttribute("data-snap") === "true",
-        renderHTML: (attributes) => (attributes.snap !== undefined ? { "data-snap": String(attributes.snap) } : {}),
+        parseHTML: (element) => element.getAttribute('data-snap') === 'true',
+        renderHTML: (attributes) =>
+          attributes.snap !== undefined ? { 'data-snap': String(attributes.snap) } : {},
       },
       align: {
-        default: "left",
-        parseHTML: (element) => element.getAttribute("data-align"),
-        renderHTML: (attributes) => (attributes.align ? { "data-align": attributes.align } : {}),
+        default: 'left',
+        parseHTML: (element) => element.getAttribute('data-align'),
+        renderHTML: (attributes) => (attributes.align ? { 'data-align': attributes.align } : {}),
       },
-    };
+    }
   },
 
   parseHTML() {
-    return [{ tag: 'div[data-type="gallery-layout"]' }];
+    return [{ tag: 'div[data-type="gallery-layout"]' }]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["div", mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { "data-type": "gallery-layout" })];
+    return [
+      'div',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+        'data-type': 'gallery-layout',
+      }),
+    ]
   },
 
   addNodeView() {
     return ({ node, HTMLAttributes, getPos, editor }) => {
-      const container = document.createElement("div");
-      container.classList.add("tiptap-gallery-nodeview");
-      container.style.position = "relative";
+      const container = document.createElement('div')
+      container.classList.add('tiptap-gallery-nodeview')
+      container.style.position = 'relative'
 
-      const galleryWrapper = document.createElement("div");
-      container.appendChild(galleryWrapper);
+      const galleryWrapper = document.createElement('div')
+      container.appendChild(galleryWrapper)
 
-      let syncDOM: ((attrs: Record<string, any>) => void) | null = null;
-      let toolbarWrapper: HTMLDivElement | null = null;
-      let closePanelOutside: ((e: MouseEvent) => void) | null = null;
-      const resizeObservers: ResizeObserver[] = [];
+      let syncDOM: ((attrs: Record<string, any>) => void) | null = null
+      let toolbarWrapper: HTMLDivElement | null = null
+      let closePanelOutside: ((e: MouseEvent) => void) | null = null
+      const resizeObservers: ResizeObserver[] = []
 
       {
         // Inject styles for the toolbar and settings panel
-        const style = document.createElement("style");
+        const style = document.createElement('style')
         style.innerHTML = `
           .tiptap-gallery-nodeview .gallery-toolbar-wrapper {
             position: relative;
@@ -429,283 +437,287 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           .gallery-modal-btn.primary:hover {
             background: #e5e5e5;
           }
-        `;
-        container.appendChild(style);
+        `
+        container.appendChild(style)
 
-        toolbarWrapper = document.createElement("div");
-        toolbarWrapper.className = "gallery-toolbar-wrapper";
-        toolbarWrapper.style.display = editor.isEditable ? "" : "none";
-        container.insertBefore(toolbarWrapper, galleryWrapper);
+        toolbarWrapper = document.createElement('div')
+        toolbarWrapper.className = 'gallery-toolbar-wrapper'
+        toolbarWrapper.style.display = editor.isEditable ? '' : 'none'
+        container.insertBefore(toolbarWrapper, galleryWrapper)
 
         // Global click listener to close custom dropdowns
-        document.addEventListener("mousedown", (e) => {
-          const target = e.target as HTMLElement;
-          if (toolbarWrapper && !target.closest(".gallery-custom-dropdown")) {
-            const allMenus = toolbarWrapper.querySelectorAll(".gallery-custom-dropdown-menu");
-            allMenus.forEach((m) => ((m as HTMLElement).style.display = "none"));
+        document.addEventListener('mousedown', (e) => {
+          const target = e.target as HTMLElement
+          if (toolbarWrapper && !target.closest('.gallery-custom-dropdown')) {
+            const allMenus = toolbarWrapper.querySelectorAll('.gallery-custom-dropdown-menu')
+            allMenus.forEach((m) => ((m as HTMLElement).style.display = 'none'))
           }
-        });
+        })
 
         // Main Toolbar
-        const mainToolbar = document.createElement("div");
-        mainToolbar.className = "gallery-toolbar-main";
-        toolbarWrapper.appendChild(mainToolbar);
+        const mainToolbar = document.createElement('div')
+        mainToolbar.className = 'gallery-toolbar-main'
+        toolbarWrapper.appendChild(mainToolbar)
 
         // Create main buttons
-        const btnScroll = document.createElement("button");
-        btnScroll.className = "gallery-toolbar-btn";
-        btnScroll.textContent = "Scroll";
-        const btnGrid = document.createElement("button");
-        btnGrid.className = "gallery-toolbar-btn";
-        btnGrid.textContent = "Grid";
-        const div1 = document.createElement("div");
-        div1.className = "gallery-toolbar-divider";
-        const btnXS = document.createElement("button");
-        btnXS.className = "gallery-toolbar-btn";
-        btnXS.textContent = "XS";
-        const btnS = document.createElement("button");
-        btnS.className = "gallery-toolbar-btn";
-        btnS.textContent = "S";
-        const btnM = document.createElement("button");
-        btnM.className = "gallery-toolbar-btn";
-        btnM.textContent = "M";
-        const btnL = document.createElement("button");
-        btnL.className = "gallery-toolbar-btn";
-        btnL.textContent = "L";
-        const btnXL = document.createElement("button");
-        btnXL.className = "gallery-toolbar-btn";
-        btnXL.textContent = "XL";
-        const div2 = document.createElement("div");
-        div2.className = "gallery-toolbar-divider";
-        const btnSettings = document.createElement("button");
-        btnSettings.className = "gallery-toolbar-btn";
-        btnSettings.textContent = "⚙️";
+        const btnScroll = document.createElement('button')
+        btnScroll.className = 'gallery-toolbar-btn'
+        btnScroll.textContent = 'Scroll'
+        const btnGrid = document.createElement('button')
+        btnGrid.className = 'gallery-toolbar-btn'
+        btnGrid.textContent = 'Grid'
+        const div1 = document.createElement('div')
+        div1.className = 'gallery-toolbar-divider'
+        const btnXS = document.createElement('button')
+        btnXS.className = 'gallery-toolbar-btn'
+        btnXS.textContent = 'XS'
+        const btnS = document.createElement('button')
+        btnS.className = 'gallery-toolbar-btn'
+        btnS.textContent = 'S'
+        const btnM = document.createElement('button')
+        btnM.className = 'gallery-toolbar-btn'
+        btnM.textContent = 'M'
+        const btnL = document.createElement('button')
+        btnL.className = 'gallery-toolbar-btn'
+        btnL.textContent = 'L'
+        const btnXL = document.createElement('button')
+        btnXL.className = 'gallery-toolbar-btn'
+        btnXL.textContent = 'XL'
+        const div2 = document.createElement('div')
+        div2.className = 'gallery-toolbar-divider'
+        const btnSettings = document.createElement('button')
+        btnSettings.className = 'gallery-toolbar-btn'
+        btnSettings.textContent = '⚙️'
 
-        const btnAddImage = document.createElement("button");
-        btnAddImage.className = "gallery-toolbar-btn";
-        btnAddImage.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Image`;
+        const btnAddImage = document.createElement('button')
+        btnAddImage.className = 'gallery-toolbar-btn'
+        btnAddImage.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Image`
 
-        const sizeGroup = [div1, btnXS, btnS, btnM, btnL, btnXL, div2, btnAddImage];
-        mainToolbar.append(btnScroll, btnGrid, ...sizeGroup, btnSettings);
+        const sizeGroup = [div1, btnXS, btnS, btnM, btnL, btnXL, div2, btnAddImage]
+        mainToolbar.append(btnScroll, btnGrid, ...sizeGroup, btnSettings)
 
         // Settings Panel
-        const settingsPanel = document.createElement("div");
-        settingsPanel.className = "gallery-settings-panel";
-        toolbarWrapper.appendChild(settingsPanel);
+        const settingsPanel = document.createElement('div')
+        settingsPanel.className = 'gallery-settings-panel'
+        toolbarWrapper.appendChild(settingsPanel)
 
         // Toggle panel logic
-        let isSettingsOpen = false;
-        btnSettings.addEventListener("click", (e) => {
-          e.preventDefault();
-          isSettingsOpen = !isSettingsOpen;
-          
+        let isSettingsOpen = false
+        btnSettings.addEventListener('click', (e) => {
+          e.preventDefault()
+          isSettingsOpen = !isSettingsOpen
+
           if (isSettingsOpen) {
-            const rect = btnSettings.getBoundingClientRect();
+            const rect = btnSettings.getBoundingClientRect()
             if (rect.top < 200) {
-              settingsPanel.style.bottom = "auto";
-              settingsPanel.style.top = "calc(100% + 8px)";
+              settingsPanel.style.bottom = 'auto'
+              settingsPanel.style.top = 'calc(100% + 8px)'
             } else {
-              settingsPanel.style.top = "auto";
-              settingsPanel.style.bottom = "calc(100% + 8px)";
+              settingsPanel.style.top = 'auto'
+              settingsPanel.style.bottom = 'calc(100% + 8px)'
             }
           }
 
-          settingsPanel.classList.toggle("open", isSettingsOpen);
-          btnSettings.classList.toggle("active", isSettingsOpen);
-        });
+          settingsPanel.classList.toggle('open', isSettingsOpen)
+          btnSettings.classList.toggle('active', isSettingsOpen)
+        })
 
         // Click outside to close
         closePanelOutside = (e: MouseEvent) => {
-          if (isSettingsOpen && toolbarWrapper && !toolbarWrapper.contains(e.target as HTMLElement)) {
-            isSettingsOpen = false;
-            settingsPanel.classList.remove("open");
-            btnSettings.classList.remove("active");
+          if (
+            isSettingsOpen &&
+            toolbarWrapper &&
+            !toolbarWrapper.contains(e.target as HTMLElement)
+          ) {
+            isSettingsOpen = false
+            settingsPanel.classList.remove('open')
+            btnSettings.classList.remove('active')
           }
-        };
-        document.addEventListener("mousedown", closePanelOutside);
+        }
+        document.addEventListener('mousedown', closePanelOutside)
 
         // Add Image Feature
-        const altModal = document.createElement("div");
-        altModal.className = "gallery-multi-alt-modal";
-        toolbarWrapper.appendChild(altModal);
+        const altModal = document.createElement('div')
+        altModal.className = 'gallery-multi-alt-modal'
+        toolbarWrapper.appendChild(altModal)
 
-        const fileInput = document.createElement("input");
-        fileInput.type = "file";
-        fileInput.accept = "image/*";
-        fileInput.multiple = true;
-        fileInput.style.display = "none";
-        toolbarWrapper.appendChild(fileInput);
+        const fileInput = document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = 'image/*'
+        fileInput.multiple = true
+        fileInput.style.display = 'none'
+        toolbarWrapper.appendChild(fileInput)
 
-        btnAddImage.addEventListener("click", (e) => {
-          e.preventDefault();
-          fileInput.value = ""; // Reset
-          fileInput.click();
-        });
+        btnAddImage.addEventListener('click', (e) => {
+          e.preventDefault()
+          fileInput.value = '' // Reset
+          fileInput.click()
+        })
 
-        fileInput.addEventListener("change", async (e) => {
-          const files = Array.from((e.target as HTMLInputElement).files || []);
-          if (!files.length) return;
+        fileInput.addEventListener('change', async (e) => {
+          const files = Array.from((e.target as HTMLInputElement).files || [])
+          if (!files.length) return
 
-          let imageUrls: string[] = [];
+          let imageUrls: string[] = []
 
           if (this.options.onUpload) {
             try {
-              btnAddImage.style.opacity = "0.5";
-              btnAddImage.style.pointerEvents = "none";
-              imageUrls = await this.options.onUpload(files);
+              btnAddImage.style.opacity = '0.5'
+              btnAddImage.style.pointerEvents = 'none'
+              imageUrls = await this.options.onUpload(files)
             } catch (err) {
-              console.error("[Gallery Layout] onUpload failed:", err);
-              btnAddImage.style.opacity = "1";
-              btnAddImage.style.pointerEvents = "auto";
-              return;
+              console.error('[Gallery Layout] onUpload failed:', err)
+              btnAddImage.style.opacity = '1'
+              btnAddImage.style.pointerEvents = 'auto'
+              return
             } finally {
-              btnAddImage.style.opacity = "1";
-              btnAddImage.style.pointerEvents = "auto";
+              btnAddImage.style.opacity = '1'
+              btnAddImage.style.pointerEvents = 'auto'
             }
           } else {
             console.warn(
               "[Gallery Layout] Warning: You are using local images without an 'onUpload' handler. " +
-              "The images are converted to Base64, which is discouraged in production because it can heavily degrade editor performance and bloat your database. " +
-              "Please provide an 'onUpload' function in your GalleryExtension config."
-            );
+                'The images are converted to Base64, which is discouraged in production because it can heavily degrade editor performance and bloat your database. ' +
+                "Please provide an 'onUpload' function in your GalleryExtension config."
+            )
             imageUrls = await Promise.all(
               files.map((file) => {
                 return new Promise<string>((resolve, reject) => {
-                  const reader = new FileReader();
-                  reader.onload = () => resolve(reader.result as string);
-                  reader.onerror = reject;
-                  reader.readAsDataURL(file);
-                });
+                  const reader = new FileReader()
+                  reader.onload = () => resolve(reader.result as string)
+                  reader.onerror = reject
+                  reader.readAsDataURL(file)
+                })
               })
-            );
+            )
           }
 
           // Build Alt Text Modal
-          altModal.innerHTML = "";
-          const inputs: HTMLInputElement[] = [];
+          altModal.innerHTML = ''
+          const inputs: HTMLInputElement[] = []
 
-          const titleEl = document.createElement("div");
-          titleEl.textContent = `Add Alt Text for ${files.length} image(s)`;
-          titleEl.style.color = "white";
-          titleEl.style.fontSize = "13px";
-          titleEl.style.fontWeight = "600";
-          titleEl.style.marginBottom = "4px";
-          altModal.appendChild(titleEl);
+          const titleEl = document.createElement('div')
+          titleEl.textContent = `Add Alt Text for ${files.length} image(s)`
+          titleEl.style.color = 'white'
+          titleEl.style.fontSize = '13px'
+          titleEl.style.fontWeight = '600'
+          titleEl.style.marginBottom = '4px'
+          altModal.appendChild(titleEl)
 
           imageUrls.forEach((url) => {
-            const row = document.createElement("div");
-            row.className = "gallery-alt-item";
-            
-            const img = document.createElement("img");
-            img.src = url;
+            const row = document.createElement('div')
+            row.className = 'gallery-alt-item'
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.placeholder = "Enter alt text (required)...";
-            inputs.push(input);
+            const img = document.createElement('img')
+            img.src = url
 
-            row.appendChild(img);
-            row.appendChild(input);
-            altModal.appendChild(row);
-          });
+            const input = document.createElement('input')
+            input.type = 'text'
+            input.placeholder = 'Enter alt text (required)...'
+            inputs.push(input)
 
-          const actions = document.createElement("div");
-          actions.className = "gallery-modal-actions";
+            row.appendChild(img)
+            row.appendChild(input)
+            altModal.appendChild(row)
+          })
 
-          const btnCancel = document.createElement("button");
-          btnCancel.className = "gallery-modal-btn";
-          btnCancel.textContent = "Cancel";
-          
-          const btnSave = document.createElement("button");
-          btnSave.className = "gallery-modal-btn primary";
-          btnSave.textContent = "Add Images";
+          const actions = document.createElement('div')
+          actions.className = 'gallery-modal-actions'
 
-          btnCancel.addEventListener("click", (e) => {
-            e.preventDefault();
-            altModal.style.display = "none";
-          });
+          const btnCancel = document.createElement('button')
+          btnCancel.className = 'gallery-modal-btn'
+          btnCancel.textContent = 'Cancel'
 
-          btnSave.addEventListener("click", (e) => {
-            e.preventDefault();
-            
+          const btnSave = document.createElement('button')
+          btnSave.className = 'gallery-modal-btn primary'
+          btnSave.textContent = 'Add Images'
+
+          btnCancel.addEventListener('click', (e) => {
+            e.preventDefault()
+            altModal.style.display = 'none'
+          })
+
+          btnSave.addEventListener('click', (e) => {
+            e.preventDefault()
+
             // Validate all inputs
-            let hasError = false;
-            inputs.forEach(inp => {
-              if (inp.value.trim() === "") {
-                inp.style.borderColor = "#ef4444";
-                hasError = true;
+            let hasError = false
+            inputs.forEach((inp) => {
+              if (inp.value.trim() === '') {
+                inp.style.borderColor = '#ef4444'
+                hasError = true
               } else {
-                inp.style.borderColor = "#404040";
+                inp.style.borderColor = '#404040'
               }
-            });
+            })
 
-            if (hasError) return;
+            if (hasError) return
 
             const newImagesToAdd = imageUrls.map((url, idx) => ({
               src: url,
               alt: inputs[idx].value.trim(),
-              title: "",
-            }));
+              title: '',
+            }))
 
             // Prevent errors if node is destroyed while waiting for upload
-            if (typeof getPos !== "function" || getPos() === undefined) {
-              altModal.style.display = "none";
-              return;
+            if (typeof getPos !== 'function' || getPos() === undefined) {
+              altModal.style.display = 'none'
+              return
             }
 
-            const newImages = [...node.attrs.images, ...newImagesToAdd];
-            editor.chain().updateAttributes(this.name, { images: newImages }).run();
-            altModal.style.display = "none";
-          });
+            const newImages = [...node.attrs.images, ...newImagesToAdd]
+            editor.chain().updateAttributes(this.name, { images: newImages }).run()
+            altModal.style.display = 'none'
+          })
 
-          actions.appendChild(btnCancel);
-          actions.appendChild(btnSave);
-          altModal.appendChild(actions);
+          actions.appendChild(btnCancel)
+          actions.appendChild(btnSave)
+          altModal.appendChild(actions)
 
           // Show modal
-          altModal.style.display = "flex";
+          altModal.style.display = 'flex'
           // Close settings panel if open
-          isSettingsOpen = false;
-          settingsPanel.classList.remove("open");
-          btnSettings.classList.remove("active");
-        });
+          isSettingsOpen = false
+          settingsPanel.classList.remove('open')
+          btnSettings.classList.remove('active')
+        })
 
         // Helper to create setting row
         const createSettingRow = (labelText: string, el: HTMLElement) => {
-          const row = document.createElement("div");
-          row.className = "settings-row";
-          const label = document.createElement("div");
-          label.className = "settings-label";
-          label.textContent = labelText;
-          row.append(label, el);
-          return row;
-        };
+          const row = document.createElement('div')
+          row.className = 'settings-row'
+          const label = document.createElement('div')
+          label.className = 'settings-label'
+          label.textContent = labelText
+          row.append(label, el)
+          return row
+        }
 
         // Settings Controls (Inputs)
-        const inpGap = document.createElement("input");
-        inpGap.className = "settings-input";
-        inpGap.placeholder = "e.g. 16px";
-        const inpRadius = document.createElement("input");
-        inpRadius.className = "settings-input";
-        inpRadius.placeholder = "e.g. 8px";
-        const inpRatio = document.createElement("input");
-        inpRatio.className = "settings-input";
-        inpRatio.placeholder = "e.g. 1/1";
-        const inpCustomWidth = document.createElement("input");
-        inpCustomWidth.className = "settings-input";
-        inpCustomWidth.placeholder = "e.g. 360px";
-        const inpColumns = document.createElement("input");
-        inpColumns.className = "settings-input";
-        inpColumns.placeholder = "e.g. 3 (number only)";
-        inpColumns.type = "number";
-        const inpCaptionSize = document.createElement("input");
-        inpCaptionSize.className = "settings-input";
-        inpCaptionSize.placeholder = "e.g. 12px";
+        const inpGap = document.createElement('input')
+        inpGap.className = 'settings-input'
+        inpGap.placeholder = 'e.g. 16px'
+        const inpRadius = document.createElement('input')
+        inpRadius.className = 'settings-input'
+        inpRadius.placeholder = 'e.g. 8px'
+        const inpRatio = document.createElement('input')
+        inpRatio.className = 'settings-input'
+        inpRatio.placeholder = 'e.g. 1/1'
+        const inpCustomWidth = document.createElement('input')
+        inpCustomWidth.className = 'settings-input'
+        inpCustomWidth.placeholder = 'e.g. 360px'
+        const inpColumns = document.createElement('input')
+        inpColumns.className = 'settings-input'
+        inpColumns.placeholder = 'e.g. 3 (number only)'
+        inpColumns.type = 'number'
+        const inpCaptionSize = document.createElement('input')
+        inpCaptionSize.className = 'settings-input'
+        inpCaptionSize.placeholder = 'e.g. 12px'
 
         // Captions Setup
-        const chkCaptions = document.createElement("input");
-        chkCaptions.type = "checkbox";
-        chkCaptions.className = "settings-checkbox";
+        const chkCaptions = document.createElement('input')
+        chkCaptions.type = 'checkbox'
+        chkCaptions.className = 'settings-checkbox'
 
         // Helper for Custom Dropdown
         const createCustomDropdown = (
@@ -713,281 +725,289 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           initialValue: string,
           onChange: (val: string) => void
         ) => {
-          const container = document.createElement("div");
-          container.className = "gallery-custom-dropdown";
+          const container = document.createElement('div')
+          container.className = 'gallery-custom-dropdown'
 
-          const btn = document.createElement("button");
-          btn.className = "gallery-custom-dropdown-btn";
+          const btn = document.createElement('button')
+          btn.className = 'gallery-custom-dropdown-btn'
 
-          const label = document.createElement("span");
-          label.textContent = options.find((o) => o.value === initialValue)?.label || initialValue;
+          const label = document.createElement('span')
+          label.textContent = options.find((o) => o.value === initialValue)?.label || initialValue
 
-          const icon = document.createElement("div");
-          icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
-          icon.style.display = "flex";
+          const icon = document.createElement('div')
+          icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`
+          icon.style.display = 'flex'
 
-          btn.appendChild(label);
-          btn.appendChild(icon);
+          btn.appendChild(label)
+          btn.appendChild(icon)
 
-          const menu = document.createElement("div");
-          menu.className = "gallery-custom-dropdown-menu";
+          const menu = document.createElement('div')
+          menu.className = 'gallery-custom-dropdown-menu'
 
-          const items: HTMLButtonElement[] = [];
+          const items: HTMLButtonElement[] = []
           options.forEach((opt) => {
-            const item = document.createElement("button");
-            item.className = "gallery-custom-dropdown-item";
-            if (opt.value === initialValue) item.classList.add("active");
-            item.textContent = opt.label;
+            const item = document.createElement('button')
+            item.className = 'gallery-custom-dropdown-item'
+            if (opt.value === initialValue) item.classList.add('active')
+            item.textContent = opt.label
 
-            item.addEventListener("click", (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              items.forEach((i) => i.classList.remove("active"));
-              item.classList.add("active");
-              label.textContent = opt.label;
-              menu.style.display = "none";
-              onChange(opt.value);
-            });
-            items.push(item);
-            menu.appendChild(item);
-          });
+            item.addEventListener('click', (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              items.forEach((i) => i.classList.remove('active'))
+              item.classList.add('active')
+              label.textContent = opt.label
+              menu.style.display = 'none'
+              onChange(opt.value)
+            })
+            items.push(item)
+            menu.appendChild(item)
+          })
 
-          btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const isOpen = menu.style.display === "block";
-            const allMenus = toolbarWrapper?.querySelectorAll(".gallery-custom-dropdown-menu");
-            if (allMenus) allMenus.forEach((m) => ((m as HTMLElement).style.display = "none"));
-            menu.style.display = isOpen ? "none" : "block";
-          });
+          btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            const isOpen = menu.style.display === 'block'
+            const allMenus = toolbarWrapper?.querySelectorAll('.gallery-custom-dropdown-menu')
+            if (allMenus) allMenus.forEach((m) => ((m as HTMLElement).style.display = 'none'))
+            menu.style.display = isOpen ? 'none' : 'block'
+          })
 
-          container.appendChild(btn);
-          container.appendChild(menu);
+          container.appendChild(btn)
+          container.appendChild(menu)
 
           return {
             element: container,
             setValue: (val: string) => {
-              label.textContent = options.find((o) => o.value === val)?.label || val;
-              items.forEach((i) => i.classList.remove("active"));
-              const activeOpt = options.find((o) => o.value === val);
+              label.textContent = options.find((o) => o.value === val)?.label || val
+              items.forEach((i) => i.classList.remove('active'))
+              const activeOpt = options.find((o) => o.value === val)
               if (activeOpt) {
-                const activeIndex = options.indexOf(activeOpt);
-                if (items[activeIndex]) items[activeIndex].classList.add("active");
+                const activeIndex = options.indexOf(activeOpt)
+                if (items[activeIndex]) items[activeIndex].classList.add('active')
               }
             },
-          };
-        };
+          }
+        }
 
         // Align Setup
         const alignOpts = [
-          { value: "left", label: "Left" },
-          { value: "center", label: "Center" },
-          { value: "right", label: "Right" },
-        ];
-        const customAlign = createCustomDropdown(alignOpts, node.attrs.align || "left", (val) => {
-          updateAttr("align", val || undefined);
-        });
+          { value: 'left', label: 'Left' },
+          { value: 'center', label: 'Center' },
+          { value: 'right', label: 'Right' },
+        ]
+        const customAlign = createCustomDropdown(alignOpts, node.attrs.align || 'left', (val) => {
+          updateAttr('align', val || undefined)
+        })
 
         // Pointer Setup
-        const chkPointer = document.createElement("input");
-        chkPointer.type = "checkbox";
-        chkPointer.className = "settings-checkbox";
-        const chkLightbox = document.createElement("input");
-        chkLightbox.type = "checkbox";
-        chkLightbox.className = "settings-checkbox";
-        const chkSnap = document.createElement("input");
-        chkSnap.type = "checkbox";
-        chkSnap.className = "settings-checkbox";
+        const chkPointer = document.createElement('input')
+        chkPointer.type = 'checkbox'
+        chkPointer.className = 'settings-checkbox'
+        const chkLightbox = document.createElement('input')
+        chkLightbox.type = 'checkbox'
+        chkLightbox.className = 'settings-checkbox'
+        const chkSnap = document.createElement('input')
+        chkSnap.type = 'checkbox'
+        chkSnap.className = 'settings-checkbox'
 
         const captionPositions = [
-          { label: "Default (Bottom Center)", value: "" },
-          { label: "Top Left", value: "top-left" },
-          { label: "Top Center", value: "top-center" },
-          { label: "Top Right", value: "top-right" },
-          { label: "Bottom Left", value: "bottom-left" },
-          { label: "Bottom Center", value: "bottom-center" },
-          { label: "Bottom Right", value: "bottom-right" },
-          { label: "Overlay Top Left", value: "overlay-top-left" },
-          { label: "Overlay Top Center", value: "overlay-top-center" },
-          { label: "Overlay Top Right", value: "overlay-top-right" },
-          { label: "Overlay Bottom Left", value: "overlay-bottom-left" },
-          { label: "Overlay Bottom Center", value: "overlay-bottom-center" },
-          { label: "Overlay Bottom Right", value: "overlay-bottom-right" },
-        ];
+          { label: 'Default (Bottom Center)', value: '' },
+          { label: 'Top Left', value: 'top-left' },
+          { label: 'Top Center', value: 'top-center' },
+          { label: 'Top Right', value: 'top-right' },
+          { label: 'Bottom Left', value: 'bottom-left' },
+          { label: 'Bottom Center', value: 'bottom-center' },
+          { label: 'Bottom Right', value: 'bottom-right' },
+          { label: 'Overlay Top Left', value: 'overlay-top-left' },
+          { label: 'Overlay Top Center', value: 'overlay-top-center' },
+          { label: 'Overlay Top Right', value: 'overlay-top-right' },
+          { label: 'Overlay Bottom Left', value: 'overlay-bottom-left' },
+          { label: 'Overlay Bottom Center', value: 'overlay-bottom-center' },
+          { label: 'Overlay Bottom Right', value: 'overlay-bottom-right' },
+        ]
         const customCaptionPos = createCustomDropdown(
           captionPositions,
-          node.attrs.captionPosition || "",
+          node.attrs.captionPosition || '',
           (val) => {
-            updateAttr("captionPosition", val || undefined);
+            updateAttr('captionPosition', val || undefined)
           }
-        );
+        )
 
-        const rowCustomWidth = createSettingRow("Custom Width", inpCustomWidth);
-        const rowAlign = createSettingRow("Align", customAlign.element);
-        const rowColumns = createSettingRow("Columns", inpColumns);
-        const rowSnap = createSettingRow("Scroll Snap", chkSnap);
+        const rowCustomWidth = createSettingRow('Custom Width', inpCustomWidth)
+        const rowAlign = createSettingRow('Align', customAlign.element)
+        const rowColumns = createSettingRow('Columns', inpColumns)
+        const rowSnap = createSettingRow('Scroll Snap', chkSnap)
 
         settingsPanel.append(
           rowCustomWidth,
           rowAlign,
-          createSettingRow("Gap", inpGap),
-          createSettingRow("Radius", inpRadius),
-          createSettingRow("Aspect Ratio", inpRatio),
+          createSettingRow('Gap', inpGap),
+          createSettingRow('Radius', inpRadius),
+          createSettingRow('Aspect Ratio', inpRatio),
           rowColumns,
           rowSnap,
-          createSettingRow("Captions (On/Off)", chkCaptions),
-          createSettingRow("Caption Size", inpCaptionSize),
-          createSettingRow("Caption Position", customCaptionPos.element),
-          createSettingRow("Hover Pointer", chkPointer),
-          createSettingRow("Enable Lightbox", chkLightbox),
-        );
+          createSettingRow('Captions (On/Off)', chkCaptions),
+          createSettingRow('Caption Size', inpCaptionSize),
+          createSettingRow('Caption Position', customCaptionPos.element),
+          createSettingRow('Hover Pointer', chkPointer),
+          createSettingRow('Enable Lightbox', chkLightbox)
+        )
 
         // Event Listeners for State Updates
         const updateAttr = (key: string, value: any) => {
-          if (typeof getPos === "function") {
+          if (typeof getPos === 'function') {
             editor
               .chain()
               .updateAttributes(this.name, { [key]: value })
-              .run();
+              .run()
           }
-        };
+        }
 
-        btnScroll.addEventListener("click", (e) => {
-          e.preventDefault();
-          updateAttr("layout", "scroll");
-        });
-        btnGrid.addEventListener("click", (e) => {
-          e.preventDefault();
-          updateAttr("layout", "grid");
-        });
-        btnXS.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (btnXS.classList.contains("is-disabled")) return;
-          updateAttr("size", "extra-small");
-        });
-        btnS.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (btnS.classList.contains("is-disabled")) return;
-          updateAttr("size", "small");
-        });
-        btnM.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (btnM.classList.contains("is-disabled")) return;
-          updateAttr("size", "medium");
-        });
-        btnL.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (btnL.classList.contains("is-disabled")) return;
-          updateAttr("size", "large");
-        });
-        btnXL.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (btnXL.classList.contains("is-disabled")) return;
-          updateAttr("size", "extra-large");
-        });
+        btnScroll.addEventListener('click', (e) => {
+          e.preventDefault()
+          updateAttr('layout', 'scroll')
+        })
+        btnGrid.addEventListener('click', (e) => {
+          e.preventDefault()
+          updateAttr('layout', 'grid')
+        })
+        btnXS.addEventListener('click', (e) => {
+          e.preventDefault()
+          if (btnXS.classList.contains('is-disabled')) return
+          updateAttr('size', 'extra-small')
+        })
+        btnS.addEventListener('click', (e) => {
+          e.preventDefault()
+          if (btnS.classList.contains('is-disabled')) return
+          updateAttr('size', 'small')
+        })
+        btnM.addEventListener('click', (e) => {
+          e.preventDefault()
+          if (btnM.classList.contains('is-disabled')) return
+          updateAttr('size', 'medium')
+        })
+        btnL.addEventListener('click', (e) => {
+          e.preventDefault()
+          if (btnL.classList.contains('is-disabled')) return
+          updateAttr('size', 'large')
+        })
+        btnXL.addEventListener('click', (e) => {
+          e.preventDefault()
+          if (btnXL.classList.contains('is-disabled')) return
+          updateAttr('size', 'extra-large')
+        })
 
-        let timeouts: Record<string, any> = {};
+        let timeouts: Record<string, any> = {}
         const debounceUpdate = (key: string, val: any) => {
-          clearTimeout(timeouts[key]);
-          timeouts[key] = setTimeout(() => updateAttr(key, val), 400);
-        };
+          clearTimeout(timeouts[key])
+          timeouts[key] = setTimeout(() => updateAttr(key, val), 400)
+        }
 
-        inpCustomWidth.addEventListener("input", () => {
-          if (inpCustomWidth.classList.contains("is-disabled")) return;
-          debounceUpdate("size", inpCustomWidth.value || undefined);
-        });
-        inpGap.addEventListener("input", () => debounceUpdate("gap", inpGap.value || undefined));
-        inpRadius.addEventListener("input", () => debounceUpdate("radius", inpRadius.value || undefined));
-        inpRatio.addEventListener("input", () => debounceUpdate("aspectRatio", inpRatio.value || undefined));
-        inpColumns.addEventListener("input", () => {
-          const parsed = parseInt(inpColumns.value);
-          debounceUpdate("columns", isNaN(parsed) ? undefined : parsed);
-        });
-        inpCaptionSize.addEventListener("input", () =>
-          debounceUpdate("captionSize", inpCaptionSize.value || undefined),
-        );
+        inpCustomWidth.addEventListener('input', () => {
+          if (inpCustomWidth.classList.contains('is-disabled')) return
+          debounceUpdate('size', inpCustomWidth.value || undefined)
+        })
+        inpGap.addEventListener('input', () => debounceUpdate('gap', inpGap.value || undefined))
+        inpRadius.addEventListener('input', () =>
+          debounceUpdate('radius', inpRadius.value || undefined)
+        )
+        inpRatio.addEventListener('input', () =>
+          debounceUpdate('aspectRatio', inpRatio.value || undefined)
+        )
+        inpColumns.addEventListener('input', () => {
+          const parsed = parseInt(inpColumns.value)
+          debounceUpdate('columns', isNaN(parsed) ? undefined : parsed)
+        })
+        inpCaptionSize.addEventListener('input', () =>
+          debounceUpdate('captionSize', inpCaptionSize.value || undefined)
+        )
 
-        chkCaptions.addEventListener("change", () => updateAttr("captions", chkCaptions.checked));
-        chkPointer.addEventListener("change", () => updateAttr("pointer", chkPointer.checked));
-        chkLightbox.addEventListener("change", () => updateAttr("lightbox", chkLightbox.checked));
-        chkSnap.addEventListener("change", () => updateAttr("snap", chkSnap.checked));
-        chkSnap.addEventListener("change", () => updateAttr("snap", chkSnap.checked));
+        chkCaptions.addEventListener('change', () => updateAttr('captions', chkCaptions.checked))
+        chkPointer.addEventListener('change', () => updateAttr('pointer', chkPointer.checked))
+        chkLightbox.addEventListener('change', () => updateAttr('lightbox', chkLightbox.checked))
+        chkSnap.addEventListener('change', () => updateAttr('snap', chkSnap.checked))
+        chkSnap.addEventListener('change', () => updateAttr('snap', chkSnap.checked))
 
         // Sync Function: Tiptap Attrs -> DOM State
         syncDOM = (attrs: Record<string, any>) => {
-          btnScroll.classList.toggle("active", attrs.layout === "scroll" || !attrs.layout);
-          btnGrid.classList.toggle("active", attrs.layout === "grid");
-          
-          const currentSize = attrs.size || "medium";
-          const isGrid = attrs.layout === "grid";
+          btnScroll.classList.toggle('active', attrs.layout === 'scroll' || !attrs.layout)
+          btnGrid.classList.toggle('active', attrs.layout === 'grid')
+
+          const currentSize = attrs.size || 'medium'
+          const isGrid = attrs.layout === 'grid'
 
           // Disabled state for Size buttons if Custom Columns is active
-          const hasCustomColumns = isGrid && attrs.columns !== undefined && attrs.columns !== "";
-          const sizeButtons = [btnXS, btnS, btnM, btnL, btnXL, inpCustomWidth];
-          sizeButtons.forEach(btn => {
+          const hasCustomColumns = isGrid && attrs.columns !== undefined && attrs.columns !== ''
+          const sizeButtons = [btnXS, btnS, btnM, btnL, btnXL, inpCustomWidth]
+          sizeButtons.forEach((btn) => {
             if (hasCustomColumns) {
-              btn.classList.add("is-disabled");
-              btn.style.pointerEvents = ""; // Let the element receive hover events
-              btn.title = "Size is disabled because Custom Columns is in use. Clear the Custom Columns field to re-enable it.";
+              btn.classList.add('is-disabled')
+              btn.style.pointerEvents = '' // Let the element receive hover events
+              btn.title =
+                'Size is disabled because Custom Columns is in use. Clear the Custom Columns field to re-enable it.'
             } else {
-              btn.classList.remove("is-disabled");
-              btn.style.pointerEvents = "";
-              btn.title = "";
+              btn.classList.remove('is-disabled')
+              btn.style.pointerEvents = ''
+              btn.title = ''
             }
-          });
-          inpCustomWidth.readOnly = hasCustomColumns;
+          })
+          inpCustomWidth.readOnly = hasCustomColumns
 
-          btnXS.classList.toggle("active", currentSize === "extra-small");
-          btnS.classList.toggle("active", currentSize === "small");
-          btnM.classList.toggle("active", currentSize === "medium");
-          btnL.classList.toggle("active", currentSize === "large");
-          btnXL.classList.toggle("active", currentSize === "extra-large");
+          btnXS.classList.toggle('active', currentSize === 'extra-small')
+          btnS.classList.toggle('active', currentSize === 'small')
+          btnM.classList.toggle('active', currentSize === 'medium')
+          btnL.classList.toggle('active', currentSize === 'large')
+          btnXL.classList.toggle('active', currentSize === 'extra-large')
 
           // Dynamic UI toggling based on Layout
-          const isCustomSize = !["extra-small", "small", "medium", "large", "extra-large"].includes(currentSize);
-          rowAlign.style.display = (isGrid && isCustomSize) ? "flex" : "none";
-          rowColumns.style.display = isGrid ? "flex" : "none";
-          rowSnap.style.display = !isGrid ? "flex" : "none";
+          const isCustomSize = !['extra-small', 'small', 'medium', 'large', 'extra-large'].includes(
+            currentSize
+          )
+          rowAlign.style.display = isGrid && isCustomSize ? 'flex' : 'none'
+          rowColumns.style.display = isGrid ? 'flex' : 'none'
+          rowSnap.style.display = !isGrid ? 'flex' : 'none'
 
           // Placeholder logic for Custom Width
           const presets: Record<string, string> = {
-            "extra-small": "e.g. 140px",
-            "small": "e.g. 220px",
-            "medium": "e.g. 360px",
-            "large": "e.g. 520px",
-            "extra-large": "e.g. 720px",
-          };
-          inpCustomWidth.placeholder = presets[currentSize] || "e.g. 360px";
+            'extra-small': 'e.g. 140px',
+            small: 'e.g. 220px',
+            medium: 'e.g. 360px',
+            large: 'e.g. 520px',
+            'extra-large': 'e.g. 720px',
+          }
+          inpCustomWidth.placeholder = presets[currentSize] || 'e.g. 360px'
 
           // Only update input values if they are NOT currently focused.
           if (document.activeElement !== inpCustomWidth) {
-            inpCustomWidth.value = presets[currentSize] ? "" : currentSize;
+            inpCustomWidth.value = presets[currentSize] ? '' : currentSize
           }
-          if (document.activeElement !== inpGap) inpGap.value = attrs.gap || "";
-          if (document.activeElement !== inpRadius) inpRadius.value = attrs.radius || "";
-          if (document.activeElement !== inpRatio) inpRatio.value = attrs.aspectRatio || "";
-          if (document.activeElement !== inpColumns) inpColumns.value = attrs.columns || "";
-          if (document.activeElement !== inpCaptionSize) inpCaptionSize.value = attrs.captionSize || "";
+          if (document.activeElement !== inpGap) inpGap.value = attrs.gap || ''
+          if (document.activeElement !== inpRadius) inpRadius.value = attrs.radius || ''
+          if (document.activeElement !== inpRatio) inpRatio.value = attrs.aspectRatio || ''
+          if (document.activeElement !== inpColumns) inpColumns.value = attrs.columns || ''
+          if (document.activeElement !== inpCaptionSize)
+            inpCaptionSize.value = attrs.captionSize || ''
 
-          chkCaptions.checked = !!attrs.captions;
-          chkPointer.checked = !!attrs.pointer;
-          chkLightbox.checked = !!attrs.lightbox;
-          chkSnap.checked = attrs.snap !== false; // snap is implicitly true by default in core
+          chkCaptions.checked = !!attrs.captions
+          chkPointer.checked = !!attrs.pointer
+          chkLightbox.checked = !!attrs.lightbox
+          chkSnap.checked = attrs.snap !== false // snap is implicitly true by default in core
 
-          customCaptionPos.setValue(attrs.captionPosition || "");
-          customAlign.setValue(attrs.align || "left");
-        };
+          customCaptionPos.setValue(attrs.captionPosition || '')
+          customAlign.setValue(attrs.align || 'left')
+        }
 
-        syncDOM(node.attrs);
+        syncDOM(node.attrs)
       }
 
       // Helper to render gallery
       const renderGallery = (attrs: Record<string, any>) => {
         // Disconnect existing observers before re-rendering to prevent memory leaks
-        resizeObservers.forEach((obs) => obs.disconnect());
-        resizeObservers.length = 0;
+        resizeObservers.forEach((obs) => obs.disconnect())
+        resizeObservers.length = 0
 
-        galleryWrapper.innerHTML = "";
+        galleryWrapper.innerHTML = ''
         const options: GalleryOptions = {
           images: attrs.images,
           layout: attrs.layout,
@@ -1004,107 +1024,109 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           snap: attrs.snap,
           align: attrs.align,
           lazyLoad: false, // MUST BE FALSE inside Tiptap to prevent the 0-height lazy-load rendering cancellation bug!
-        };
-        createGallery(galleryWrapper, options);
+        }
+        createGallery(galleryWrapper, options)
 
         if (editor.isEditable) {
-          const items = galleryWrapper.querySelectorAll(".gallery-layout__item");
+          const items = galleryWrapper.querySelectorAll('.gallery-layout__item')
           items.forEach((item, index) => {
-            const img = item.querySelector("img");
+            const img = item.querySelector('img')
             if (img) {
-              (item as HTMLElement).style.position = "relative";
+              ;(item as HTMLElement).style.position = 'relative'
 
-              const delBtn = document.createElement("button");
-              delBtn.innerHTML = "&times;";
-              delBtn.className = "gallery-item-delete-btn";
-              delBtn.title = "Delete image";
+              const delBtn = document.createElement('button')
+              delBtn.innerHTML = '&times;'
+              delBtn.className = 'gallery-item-delete-btn'
+              delBtn.title = 'Delete image'
               delBtn.onclick = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const newImages = [...attrs.images];
-                newImages.splice(index, 1);
+                e.preventDefault()
+                e.stopPropagation()
+                const newImages = [...attrs.images]
+                newImages.splice(index, 1)
                 if (newImages.length === 0) {
-                  if (typeof getPos === "function") {
-                    editor.commands.deleteRange({ from: getPos(), to: getPos() + node.nodeSize });
+                  if (typeof getPos === 'function') {
+                    editor.commands.deleteRange({ from: getPos(), to: getPos() + node.nodeSize })
                   }
                 } else {
-                  if (typeof getPos === "function") {
-                    editor.chain().updateAttributes(node.type.name, { images: newImages }).run();
+                  if (typeof getPos === 'function') {
+                    editor.chain().updateAttributes(node.type.name, { images: newImages }).run()
                   }
                 }
-              };
-              item.appendChild(delBtn);
+              }
+              item.appendChild(delBtn)
 
               // Dynamically position the delete button exactly at the top-right of the image
               const ro = new ResizeObserver(() => {
                 if (img) {
-                  delBtn.style.top = `${img.offsetTop + 4}px`;
+                  delBtn.style.top = `${img.offsetTop + 4}px`
                 }
-              });
-              ro.observe(item);
-              resizeObservers.push(ro);
+              })
+              ro.observe(item)
+              resizeObservers.push(ro)
 
-              let figcaption = item.querySelector("figcaption");
-              
+              let figcaption = item.querySelector('figcaption')
+
               if (!figcaption && attrs.captions !== false) {
-                figcaption = document.createElement("figcaption");
-                if (attrs.captionPosition?.startsWith("top")) {
-                  item.insertBefore(figcaption, img);
+                figcaption = document.createElement('figcaption')
+                if (attrs.captionPosition?.startsWith('top')) {
+                  item.insertBefore(figcaption, img)
                 } else {
-                  item.appendChild(figcaption);
+                  item.appendChild(figcaption)
                 }
               }
 
               if (figcaption) {
-                figcaption.setAttribute("contenteditable", "true");
-                figcaption.style.outline = "none";
-                figcaption.style.cursor = "text";
-                figcaption.dataset.placeholder = "Enter caption...";
+                figcaption.setAttribute('contenteditable', 'true')
+                figcaption.style.outline = 'none'
+                figcaption.style.cursor = 'text'
+                figcaption.dataset.placeholder = 'Enter caption...'
                 if (!figcaption.textContent?.trim()) {
-                  figcaption.style.minHeight = "1em";
+                  figcaption.style.minHeight = '1em'
                 }
-                
-                figcaption.addEventListener("keydown", (e) => {
-                  e.stopPropagation();
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    figcaption.blur();
-                  }
-                });
 
-                figcaption.addEventListener("blur", () => {
-                  const newText = figcaption.textContent?.trim() || "";
-                  if (newText !== (attrs.images[index].title || "")) {
-                    const newImages = [...attrs.images];
-                    newImages[index].title = newText;
-                    if (typeof getPos === "function") {
-                      editor.chain().updateAttributes(node.type.name, { images: newImages }).run();
+                figcaption.addEventListener('keydown', (e) => {
+                  e.stopPropagation()
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    figcaption.blur()
+                  }
+                })
+
+                figcaption.addEventListener('blur', () => {
+                  const newText = figcaption.textContent?.trim() || ''
+                  if (newText !== (attrs.images[index].title || '')) {
+                    const newImages = [...attrs.images]
+                    newImages[index].title = newText
+                    if (typeof getPos === 'function') {
+                      editor.chain().updateAttributes(node.type.name, { images: newImages }).run()
                     }
                   }
-                });
-
+                })
               }
             }
-          });
+          })
         }
-      };
+      }
 
-      renderGallery(node.attrs);
+      renderGallery(node.attrs)
 
-      let isEditableState = editor.isEditable;
-      let observer: MutationObserver | null = null;
-      
+      let isEditableState = editor.isEditable
+      let observer: MutationObserver | null = null
+
       if (editor.view && editor.view.dom) {
         observer = new MutationObserver(() => {
           if (editor.isEditable !== isEditableState) {
-            isEditableState = editor.isEditable;
+            isEditableState = editor.isEditable
             if (toolbarWrapper) {
-              toolbarWrapper.style.display = isEditableState ? "" : "none";
+              toolbarWrapper.style.display = isEditableState ? '' : 'none'
             }
-            renderGallery(node.attrs);
+            renderGallery(node.attrs)
           }
-        });
-        observer.observe(editor.view.dom, { attributes: true, attributeFilter: ["contenteditable"] });
+        })
+        observer.observe(editor.view.dom, {
+          attributes: true,
+          attributeFilter: ['contenteditable'],
+        })
       }
 
       return {
@@ -1112,41 +1134,41 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         // CRITICAL FIX: Prevent Tiptap from stealing focus when interacting with our Settings Panel
         stopEvent: (event) => {
           if (toolbarWrapper && toolbarWrapper.contains(event.target as HTMLElement)) {
-            return true;
+            return true
           }
           // Prevent Tiptap from stealing focus or capturing Backspace/Enter in the editable caption
-          const target = event.target as HTMLElement;
+          const target = event.target as HTMLElement
           if (target && target.closest && target.closest("figcaption[contenteditable='true']")) {
-            return true;
+            return true
           }
-          return false;
+          return false
         },
         update: (updatedNode) => {
           if (updatedNode.type.name !== this.name) {
-            return false;
+            return false
           }
 
-          node = updatedNode;
-          renderGallery(node.attrs);
+          node = updatedNode
+          renderGallery(node.attrs)
 
           if (syncDOM) {
-            syncDOM(node.attrs);
+            syncDOM(node.attrs)
           }
 
-          return true;
+          return true
         },
         destroy: () => {
           if (closePanelOutside) {
-            document.removeEventListener("mousedown", closePanelOutside);
+            document.removeEventListener('mousedown', closePanelOutside)
           }
           if (observer) {
-            observer.disconnect();
+            observer.disconnect()
           }
-          resizeObservers.forEach((obs) => obs.disconnect());
-          resizeObservers.length = 0;
+          resizeObservers.forEach((obs) => obs.disconnect())
+          resizeObservers.length = 0
         },
-      };
-    };
+      }
+    }
   },
 
   addCommands() {
@@ -1157,18 +1179,18 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           return commands.insertContent({
             type: this.name,
             attrs: { images },
-          });
+          })
         },
       setGalleryLayout:
-        (layout: "scroll" | "grid") =>
+        (layout: 'scroll' | 'grid') =>
         ({ commands }) => {
-          return commands.updateAttributes(this.name, { layout });
+          return commands.updateAttributes(this.name, { layout })
         },
       setGallerySize:
-        (size: "small" | "medium" | "large") =>
+        (size: 'small' | 'medium' | 'large') =>
         ({ commands }) => {
-          return commands.updateAttributes(this.name, { size });
+          return commands.updateAttributes(this.name, { size })
         },
-    };
+    }
   },
-});
+})
