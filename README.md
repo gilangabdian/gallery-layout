@@ -305,17 +305,24 @@ This project uses a monorepo structure; all project code logic resides in the `/
 #### Testing
 This project uses Vitest for testing. After editing or adding a feature, I highly recommend updating existing unit tests or creating new ones related to your changes to ensure no errors arise during usage.
 The `test` folders located within `core/` and `tiptap/` are where the respective test files for each library are stored.
-To run the test, simply `pnpm test:run` from the root folder
+To run the test, run this command in the root folder
+```bash
+pnpm test:run
+```
 
 #### Linting
-We use Prettier to format all code. To lint all your code, you can run:
+We use Prettier to format all code. To lint all your code, you can run in the root folder:
+```bash
 pnpm lint
+```
 If you encounter errors, you can run the Prettier auto-fix using:
+```bash
 pnpm lint-fix
-Note that not all rules can be auto-fixed; some require manual changes
+```
+> **Good to know**: Not all rules can be auto-fixed, some require manual changes
 
 ### Development Setup
-1. Fork this repository and create your branch from `main`
+1. Fork this repository
 2. Clone your fork repository
 
 ```bash
@@ -326,19 +333,23 @@ git clone https://github.com/YOUR_USERNAME/gallery-layout.git
 ```bash
 git checkout -b your-branch-name
 ```
-4. Install dependencies in root folder
+4. Install dependencies in the root folder
 ```bash
 pnpm install
 ```
-5. To run the demo playground, run `pnpm dev` in root folder, it automatically runs `pnpm dev` in `/playground` folder too.
-1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
-1. Run linting
-1. Once you are satisfied with your changes, commit them to the branch you created:
+5. To run the demo playground, run `pnpm dev` in the root folder, it automatically runs `pnpm dev` in `/playground` folder too.
+> **Note**: Leave this terminal running and open a new terminal tab for the next steps
+6. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
+7. Run linting in the root folder to make sure there are no linting errors
+```bash
+pnpm lint
+```
+8. Once you are satisfied with your changes, commit them to the branch you created:
 ```bash
 git add .
 git commit -m "DESCRIBE_YOUR_CHANGES_HERE"
 ```
-8. Push to the remote and create a PR:
+9. Push to the remote and create a PR:
 ```bash
 git push origin HEAD
 ```
