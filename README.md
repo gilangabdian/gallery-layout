@@ -48,7 +48,7 @@ For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-p
 
   > **Note:** `@tiptap/core` and `gallery-layout` are strictly required as Peer Dependencies for the extension to function properly
 
-  > **Compatibility:** This extension requires **Tiptap v2.0.0** or higher. It is not compatible with Tiptap v1.
+  > **Compatibility:** This extension requires **Tiptap v2.0.0** or higher. It is not compatible with Tiptap v1
 
   for `Tiptap Extension` usage, see [Tiptap Extension Usage](#tiptap-extension-usage)
 
