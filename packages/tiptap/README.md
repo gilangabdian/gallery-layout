@@ -18,7 +18,7 @@ Tiptap Extension Gallery Layout is a library for creating beautiful photo galler
 
 ## Demo
 
-For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.vercel.app)
+For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-playground.vercel.app/)
 
 ## Installation
 

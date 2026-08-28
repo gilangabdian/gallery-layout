@@ -22,7 +22,7 @@ I got the inspiration for this project from reading <a href="https://antfu.me/po
 
 ## Demo
 
-For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout.vercel.app)
+For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-playground.vercel.app/)
 
 ## Installation
 
