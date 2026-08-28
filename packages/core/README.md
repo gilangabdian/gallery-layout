@@ -18,6 +18,10 @@ Gallery Layout is a library for creating beautiful photo galleries. It is zero-d
 
 ## Demo
 
+<video width="100%" controls playsinline>
+  <source src="https://github.com/gilangabdian/gallery-layout/raw/main/playground/public/demo.mp4" type="video/mp4" />
+</video>
+
 For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-playground.vercel.app/)
 
 ## Installation
