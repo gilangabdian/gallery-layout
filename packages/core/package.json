@@ -1,6 +1,6 @@
 {
   "name": "gallery-layout",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Beautiful gallery layouts for your blogs",
   "type": "module",
   "files": [
@@ -32,7 +32,7 @@
     "rich-text",
     "editorial-layout"
   ],
-  "homepage": "https://gallery-layout.vercel.app",
+  "homepage": "https://gallery-layout-playground.vercel.app/",
   "repository": "https://github.com/gilangabdian/gallery-layout.git",
   "author": "Gilang Abdian",
   "license": "MIT",
