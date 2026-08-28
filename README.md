@@ -22,11 +22,8 @@ I got the inspiration for this project from reading <a href="https://antfu.me/po
 
 ## Demo
 
-<video width="100%" controls playsinline>
-  <source
-    src="https://raw.githubusercontent.com/gilangabdian/gallery-layout/main/playground/public/demo.mp4"
-    type="video/mp4"
-  />
+<video src="https://github.com/user-attachments/assets/3480048e-6875-41ee-8029-5c3c1e265086" controls width="100%">
+  <a href="https://github.com/user-attachments/assets/3480048e-6875-41ee-8029-5c3c1e265086">Watch the gallery layout demo</a>
 </video>
 
 For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-playground.vercel.app/)
