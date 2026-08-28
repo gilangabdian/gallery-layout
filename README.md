@@ -23,7 +23,10 @@ I got the inspiration for this project from reading <a href="https://antfu.me/po
 ## Demo
 
 <video width="100%" controls playsinline>
-  <source src="https://github.com/gilangabdian/gallery-layout/raw/main/playground/public/demo.mp4" type="video/mp4" />
+  <source
+    src="https://raw.githubusercontent.com/gilangabdian/gallery-layout/main/playground/public/demo.mp4"
+    type="video/mp4"
+  />
 </video>
 
 For a live demo, please visit the [Gallery Layout Demo](https://gallery-layout-playground.vercel.app/)
