@@ -63,7 +63,6 @@ export function openLightbox(image: GalleryImage, options: GalleryOptions): void
   }
 
   // Event listeners
-  // Event listeners
   closeBtn.addEventListener('click', (e) => {
     e.stopPropagation()
     closeLightbox()

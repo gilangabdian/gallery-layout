@@ -128,4 +128,26 @@ describe('openLightbox', () => {
     // Should still be open
     expect(document.querySelector('.gallery-layout__lightbox')).not.toBeNull()
   })
+
+  it('should focus close button after opening', () => {
+    openLightbox(sampleImage, defaultOptions)
+
+    const closeBtn = document.querySelector('.gallery-layout__lightbox-close') as HTMLButtonElement
+    expect(document.activeElement).toBe(closeBtn)
+  })
+
+  it('should not render caption when captions option is false', () => {
+    openLightbox(sampleImage, { ...defaultOptions, captions: false })
+
+    const caption = document.querySelector('.gallery-layout__lightbox-caption')
+    expect(caption).toBeNull()
+  })
+
+  it('should not render caption when image has no title', () => {
+    const imageWithoutTitle: GalleryImage = { src: 'photo.jpg', alt: 'No title photo' }
+    openLightbox(imageWithoutTitle, { ...defaultOptions, captions: true })
+
+    const caption = document.querySelector('.gallery-layout__lightbox-caption')
+    expect(caption).toBeNull()
+  })
 })

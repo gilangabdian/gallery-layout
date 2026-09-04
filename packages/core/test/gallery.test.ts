@@ -136,4 +136,100 @@ describe('createGallery', () => {
     expect(container.dataset.pointer).toBeUndefined()
     expect(container.dataset.captionPosition).toBeUndefined()
   })
+
+  it('should add gallery-layout class to container', () => {
+    createGallery(container, { images: sampleImages })
+    expect(container.classList.contains('gallery-layout')).toBe(true)
+  })
+
+  it('should default to scroll layout when no layout specified', () => {
+    createGallery(container, { images: sampleImages })
+    expect(container.dataset.layout).toBe('scroll')
+  })
+
+  it('should default to medium size when no size specified', () => {
+    createGallery(container, { images: sampleImages })
+    expect(container.dataset.size).toBe('medium')
+  })
+
+  it('should apply preset sizes correctly', () => {
+    const presets = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as const
+    for (const preset of presets) {
+      createGallery(container, { images: sampleImages, size: preset })
+      expect(container.dataset.size).toBe(preset)
+      // Preset sizes should NOT set a custom CSS variable
+      expect(container.style.getPropertyValue('--gallery-custom-size')).toBe('')
+    }
+  })
+
+  it('should set align dataset when align is provided', () => {
+    createGallery(container, { images: sampleImages, align: 'center' })
+    expect(container.dataset.align).toBe('center')
+
+    createGallery(container, { images: sampleImages, align: 'right' })
+    expect(container.dataset.align).toBe('right')
+
+    // Should not set align when not provided
+    createGallery(container, { images: sampleImages })
+    expect(container.dataset.align).toBeUndefined()
+  })
+
+  it('should enable lazy loading by default', () => {
+    createGallery(container, { images: sampleImages })
+    const imgs = container.querySelectorAll('img')
+    imgs.forEach((img) => {
+      expect(img.loading).toBe('lazy')
+    })
+  })
+
+  it('should disable lazy loading when lazyLoad is false', () => {
+    createGallery(container, { images: sampleImages, lazyLoad: false })
+    const imgs = container.querySelectorAll('img')
+    imgs.forEach((img) => {
+      expect(img.loading).not.toBe('lazy')
+    })
+  })
+
+  it('should set radius to 0px when radius is false', () => {
+    createGallery(container, { images: sampleImages, radius: false })
+    expect(container.style.getPropertyValue('--gallery-radius')).toBe('0px')
+  })
+
+  it('should open lightbox on image click', () => {
+    createGallery(container, { images: sampleImages, lightbox: true })
+
+    const img = container.querySelector('img') as HTMLImageElement
+    img.click()
+
+    const lightbox = document.querySelector('.gallery-layout__lightbox')
+    expect(lightbox).not.toBeNull()
+
+    // Clean up
+    lightbox?.remove()
+    document.body.style.overflow = ''
+  })
+
+  it('should open lightbox on Enter and Space keydown', () => {
+    createGallery(container, { images: sampleImages, lightbox: true })
+
+    const img = container.querySelector('img') as HTMLImageElement
+
+    // Test Enter key
+    img.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+    let lightbox = document.querySelector('.gallery-layout__lightbox')
+    expect(lightbox).not.toBeNull()
+
+    // Clean up for next test
+    lightbox?.remove()
+    document.body.style.overflow = ''
+
+    // Test Space key
+    img.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))
+    lightbox = document.querySelector('.gallery-layout__lightbox')
+    expect(lightbox).not.toBeNull()
+
+    // Clean up
+    lightbox?.remove()
+    document.body.style.overflow = ''
+  })
 })
