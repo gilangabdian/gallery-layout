@@ -136,7 +136,11 @@ describe('Tiptap Gallery Extension', () => {
     })
 
     // Insert a gallery — it should use the custom defaults
-    editor.chain().focus().insertGallery([{ src: '1.jpg', alt: 'Test' }]).run()
+    editor
+      .chain()
+      .focus()
+      .insertGallery([{ src: '1.jpg', alt: 'Test' }])
+      .run()
 
     const json = editor.getJSON()
     const galleryNode = json.content?.find((n) => n.type === 'galleryLayout')
@@ -189,11 +193,14 @@ describe('Tiptap Gallery Extension', () => {
       .run()
 
     // Update attributes to non-default values
-    editor.chain().updateAttributes('galleryLayout', {
-      gap: '32px',
-      radius: '16px',
-      aspectRatio: '4/3',
-    }).run()
+    editor
+      .chain()
+      .updateAttributes('galleryLayout', {
+        gap: '32px',
+        radius: '16px',
+        aspectRatio: '4/3',
+      })
+      .run()
 
     const html = editor.getHTML()
     expect(html).toContain('data-gap="32px"')
