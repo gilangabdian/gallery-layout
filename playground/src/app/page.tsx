@@ -317,36 +317,38 @@ export default function Home() {
 
                 {/* Align (Custom Select) */}
                 {showAlign && (
-                  <div className="space-y-3 relative">
+                  <div className="space-y-3">
                     <label className="flex items-center justify-between text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                       Align
                     </label>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setOpenDropdown(openDropdown === 'align' ? null : 'align')
-                      }}
-                      className="w-full flex items-center justify-between bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm rounded-lg px-3 py-2 outline-none hover:border-neutral-700 transition-all"
-                    >
-                      <span>{getLabel(align, alignOptions)}</span>
-                      <ChevronDown size={16} className="text-neutral-500" />
-                    </button>
-                    {openDropdown === 'align' && (
-                      <div className="absolute top-full mt-2 w-full bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl overflow-hidden z-50">
-                        {alignOptions.map((opt) => (
-                          <button
-                            key={opt.value}
-                            onClick={() => {
-                              setAlign(opt.value as AlignType)
-                              setOpenDropdown(null)
-                            }}
-                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-neutral-800 transition-colors ${align === opt.value ? 'text-white bg-neutral-800/50' : 'text-neutral-400'}`}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setOpenDropdown(openDropdown === 'align' ? null : 'align')
+                        }}
+                        className="w-full flex items-center justify-between gap-2 bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm rounded-lg px-3 py-2 outline-none hover:border-neutral-700 transition-all"
+                      >
+                        <span className="truncate">{getLabel(align, alignOptions)}</span>
+                        <ChevronDown size={16} className="text-neutral-500 shrink-0" />
+                      </button>
+                      {openDropdown === 'align' && (
+                        <div className="absolute top-full left-0 mt-2 w-full bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl overflow-hidden z-50">
+                          {alignOptions.map((opt) => (
+                            <button
+                              key={opt.value}
+                              onClick={() => {
+                                setAlign(opt.value as AlignType)
+                                setOpenDropdown(null)
+                              }}
+                              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-neutral-800 transition-colors ${align === opt.value ? 'text-white bg-neutral-800/50' : 'text-neutral-400'}`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -428,37 +430,41 @@ export default function Home() {
                 </div>
 
                 {/* Caption Position (Custom Select) */}
-                <div className="space-y-3 relative sm:col-span-2 md:col-span-2 lg:col-span-1">
+                <div className="space-y-3 sm:col-span-2 md:col-span-2 lg:col-span-1">
                   <label className="flex items-center justify-between text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Caption Position
                   </label>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      if (captions) setOpenDropdown(openDropdown === 'caption' ? null : 'caption')
-                    }}
-                    disabled={!captions}
-                    className="w-full flex items-center justify-between bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm rounded-lg px-3 py-2 outline-none hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                  >
-                    <span>{getLabel(captionPosition, captionPosOptions)}</span>
-                    <ChevronDown size={16} className="text-neutral-500" />
-                  </button>
-                  {openDropdown === 'caption' && (
-                    <div className="absolute top-full mt-2 w-full max-h-60 overflow-y-auto bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl z-50 custom-scrollbar">
-                      {captionPosOptions.map((opt) => (
-                        <button
-                          key={opt.value}
-                          onClick={() => {
-                            setCaptionPosition(opt.value as CaptionPosType)
-                            setOpenDropdown(null)
-                          }}
-                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-neutral-800 transition-colors ${captionPosition === opt.value ? 'text-white bg-neutral-800/50' : 'text-neutral-400'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (captions) setOpenDropdown(openDropdown === 'caption' ? null : 'caption')
+                      }}
+                      disabled={!captions}
+                      className="w-full flex items-center justify-between gap-2 bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm rounded-lg px-3 py-2 outline-none hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    >
+                      <span className="truncate">
+                        {getLabel(captionPosition, captionPosOptions)}
+                      </span>
+                      <ChevronDown size={16} className="text-neutral-500 shrink-0" />
+                    </button>
+                    {openDropdown === 'caption' && (
+                      <div className="absolute top-full left-0 mt-2 w-full max-h-60 overflow-y-auto bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl z-50 custom-scrollbar">
+                        {captionPosOptions.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => {
+                              setCaptionPosition(opt.value as CaptionPosType)
+                              setOpenDropdown(null)
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-neutral-800 transition-colors ${captionPosition === opt.value ? 'text-white bg-neutral-800/50' : 'text-neutral-400'}`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Toggle Features */}

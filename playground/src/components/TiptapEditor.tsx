@@ -108,9 +108,9 @@ export default function TiptapEditor() {
     <div className="w-full">
       {/* Editor Frame */}
       <div
-        className={`w-full rounded-xl transition-all duration-300 ${
+        className={`rounded-xl transition-colors duration-300 ${
           isEditing
-            ? 'border border-neutral-800 bg-neutral-900/50'
+            ? 'border border-neutral-800 bg-neutral-900/50 sm:-mx-6'
             : 'border border-transparent bg-transparent'
         }`}
       >
@@ -172,7 +172,7 @@ export default function TiptapEditor() {
         )}
 
         {/* The Editor Area */}
-        <div className={`w-full ${isEditing ? 'p-6' : 'p-0 py-4'}`}>
+        <div className={`w-full py-4 ${isEditing ? 'px-6' : 'px-0'}`}>
           <EditorContent editor={editor} />
         </div>
       </div>
@@ -182,7 +182,7 @@ export default function TiptapEditor() {
         {isEditing ? (
           <button
             onClick={() => setIsEditing(false)}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-medium transition-colors shadow-lg shadow-blue-900/20"
+            className="flex items-center justify-center gap-2 min-w-[148px] whitespace-nowrap px-5 py-2.5 bg-blue-600 hover:bg-blue-500 border border-transparent text-white rounded-full font-medium transition-colors shadow-lg shadow-blue-900/20"
           >
             <Save size={18} />
             Save Blog
@@ -190,7 +190,7 @@ export default function TiptapEditor() {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white rounded-full font-medium transition-colors"
+            className="flex items-center justify-center gap-2 min-w-[148px] whitespace-nowrap px-5 py-2.5 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white rounded-full font-medium transition-colors"
           >
             <Edit3 size={18} />
             Edit Blog
