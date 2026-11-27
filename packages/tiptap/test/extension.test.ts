@@ -209,4 +209,52 @@ describe('Tiptap Gallery Extension', () => {
 
     editor.destroy()
   })
+
+  it('should inherit overlay CSS variables in rendered NodeView and forward them to lightbox', () => {
+    const editorHost = document.createElement('div')
+    editorHost.style.setProperty('--gallery-overlay-bg', 'transparent')
+    editorHost.style.setProperty('--gallery-overlay-color', '#f8fafc')
+    editorHost.style.setProperty('--gallery-overlay-text-shadow', '0 1px 4px rgba(0, 0, 0, 0.8)')
+    document.body.appendChild(editorHost)
+
+    const initialHTML = `
+      <div data-type="gallery-layout" data-layout="grid" data-captions="true" data-caption-position="overlay-bottom-center" data-lightbox="true" data-images='[{"src":"img1.jpg","alt":"Image 1","title":"Kyoto Night"}]'></div>
+    `
+
+    const editor = new Editor({
+      element: editorHost,
+      extensions: [StarterKit, GalleryExtension],
+      content: initialHTML,
+      editable: false,
+    })
+
+    const galleryEl = editorHost.querySelector('.gallery-layout') as HTMLElement
+    expect(galleryEl).not.toBeNull()
+    expect(galleryEl.dataset.captionPosition).toBe('overlay-bottom-center')
+
+    const computed = getComputedStyle(galleryEl)
+    expect(computed.getPropertyValue('--gallery-overlay-bg').trim()).toBe('transparent')
+    expect(computed.getPropertyValue('--gallery-overlay-color').trim()).toBe('#f8fafc')
+    expect(computed.getPropertyValue('--gallery-overlay-text-shadow').trim()).toBe(
+      '0 1px 4px rgba(0, 0, 0, 0.8)'
+    )
+
+    const img = galleryEl.querySelector('img') as HTMLImageElement
+    expect(img).not.toBeNull()
+    img.click()
+
+    const lightbox = document.querySelector('.gallery-layout__lightbox') as HTMLElement
+    expect(lightbox).not.toBeNull()
+    expect(lightbox.dataset.captionPosition).toBe('overlay-bottom-center')
+    expect(lightbox.style.getPropertyValue('--gallery-overlay-bg')).toBe('transparent')
+    expect(lightbox.style.getPropertyValue('--gallery-overlay-color')).toBe('#f8fafc')
+    expect(lightbox.style.getPropertyValue('--gallery-overlay-text-shadow')).toBe(
+      '0 1px 4px rgba(0, 0, 0, 0.8)'
+    )
+
+    lightbox.remove()
+    document.body.style.overflow = ''
+    editor.destroy()
+    editorHost.remove()
+  })
 })

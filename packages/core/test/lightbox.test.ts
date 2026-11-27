@@ -150,4 +150,41 @@ describe('openLightbox', () => {
     const caption = document.querySelector('.gallery-layout__lightbox-caption')
     expect(caption).toBeNull()
   })
+
+  it('should forward custom overlay CSS variables from sourceContainer to lightbox', () => {
+    const source = document.createElement('div')
+    source.style.setProperty('--gallery-overlay-bg', 'transparent')
+    source.style.setProperty('--gallery-overlay-color', '#f8fafc')
+    source.style.setProperty('--gallery-overlay-text-shadow', '0 1px 4px rgba(0, 0, 0, 0.8)')
+    document.body.appendChild(source)
+
+    openLightbox(
+      sampleImage,
+      { ...defaultOptions, captions: true, captionPosition: 'overlay-bottom-center' },
+      source
+    )
+
+    const overlay = document.querySelector('.gallery-layout__lightbox') as HTMLElement
+    expect(overlay.style.getPropertyValue('--gallery-overlay-bg')).toBe('transparent')
+    expect(overlay.style.getPropertyValue('--gallery-overlay-color')).toBe('#f8fafc')
+    expect(overlay.style.getPropertyValue('--gallery-overlay-text-shadow')).toBe(
+      '0 1px 4px rgba(0, 0, 0, 0.8)'
+    )
+  })
+
+  it('should not set inline overlay CSS variables on lightbox when sourceContainer has none', () => {
+    const source = document.createElement('div')
+    document.body.appendChild(source)
+
+    openLightbox(
+      sampleImage,
+      { ...defaultOptions, captions: true, captionPosition: 'overlay-bottom-center' },
+      source
+    )
+
+    const overlay = document.querySelector('.gallery-layout__lightbox') as HTMLElement
+    expect(overlay.style.getPropertyValue('--gallery-overlay-bg')).toBe('')
+    expect(overlay.style.getPropertyValue('--gallery-overlay-color')).toBe('')
+    expect(overlay.style.getPropertyValue('--gallery-overlay-text-shadow')).toBe('')
+  })
 })

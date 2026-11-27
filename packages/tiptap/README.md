@@ -143,6 +143,19 @@ If you use the Tiptap extension, you can pass default configurations when regist
 | `HTMLAttributes`     | `object`                                                           | `{}`        | Custom HTML attributes to add to the rendered node                                       |
 | `onUpload`           | `(files: File[]) => Promise<string[]>`                             | `undefined` | Callback for handling image uploads. If provided, overrides the default Base64 fallback. |
 
+## CSS Customization
+
+Because this extension uses `gallery-layout/style.css`, you can customize overlay captions (any `captionPosition` starting with `overlay-`) directly in your app's CSS using custom properties on `:root`, `.gallery-layout`, or your editor wrapper:
+
+```css
+.gallery-layout {
+  --gallery-overlay-bg: transparent;
+  --gallery-overlay-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+```
+
+For the full list of supported CSS variables, see the [`gallery-layout` documentation](https://www.npmjs.com/package/gallery-layout#css-customization).
+
 ## Contributing
 
 Thank you for your interest in contributing to this project. All your contributions are very valuable and will make this project better, more developed and reliable. I truly appreciate your ideas and effort 😄🎉

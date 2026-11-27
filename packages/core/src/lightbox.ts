@@ -1,9 +1,29 @@
 import type { GalleryImage, GalleryOptions } from './types'
 
-export function openLightbox(image: GalleryImage, options: GalleryOptions): void {
+const LIGHTBOX_CSS_VARS = [
+  '--gallery-overlay-bg',
+  '--gallery-overlay-color',
+  '--gallery-overlay-text-shadow',
+] as const
+
+export function openLightbox(
+  image: GalleryImage,
+  options: GalleryOptions,
+  sourceContainer?: HTMLElement
+): void {
   // Create overlay container
   const overlay = document.createElement('div')
   overlay.className = 'gallery-layout__lightbox'
+
+  if (sourceContainer) {
+    const computed = getComputedStyle(sourceContainer)
+    for (const prop of LIGHTBOX_CSS_VARS) {
+      const value = computed.getPropertyValue(prop).trim()
+      if (value) {
+        overlay.style.setProperty(prop, value)
+      }
+    }
+  }
 
   if (options.captions) {
     overlay.dataset.captionPosition = options.captionPosition ?? 'bottom-center'

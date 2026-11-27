@@ -232,4 +232,25 @@ describe('createGallery', () => {
     lightbox?.remove()
     document.body.style.overflow = ''
   })
+
+  it('should propagate custom overlay CSS variables to lightbox when opened from gallery', () => {
+    container.style.setProperty('--gallery-overlay-bg', 'transparent')
+    createGallery(container, {
+      images: sampleImages,
+      captions: true,
+      captionPosition: 'overlay-bottom-center',
+      lightbox: true,
+    })
+
+    const img = container.querySelector('img') as HTMLImageElement
+    img.click()
+
+    const lightbox = document.querySelector('.gallery-layout__lightbox') as HTMLElement
+    expect(lightbox).not.toBeNull()
+    expect(lightbox.style.getPropertyValue('--gallery-overlay-bg')).toBe('transparent')
+
+    // Clean up
+    lightbox?.remove()
+    document.body.style.overflow = ''
+  })
 })

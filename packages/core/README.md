@@ -188,6 +188,30 @@ The `createGallery(container, options)` function accepts the following options:
 | `columns`         | `number \| object`                                                                                                                                                                                                                                   | `undefined`       | Fixed column count overrides (only applies to `grid` layout)  |
 | `pointer`         | `boolean`                                                                                                                                                                                                                                            | `false`           | Forces a pointer cursor over images                           |
 
+## CSS Customization
+
+You can customize the appearance of overlay captions (any `captionPosition` starting with `overlay-`, such as `overlay-top-left` or `overlay-bottom-center`) using CSS custom properties on `:root`, `.gallery-layout`, or a specific gallery container:
+
+| CSS Variable                    | Default               | Description                                                                   |
+| ------------------------------- | --------------------- | ----------------------------------------------------------------------------- |
+| `--gallery-overlay-bg`          | `rgba(0, 0, 0, 0.6)`  | Background of overlay captions (set to `transparent` to remove the backdrop) |
+| `--gallery-overlay-color`       | `white`               | Text color of overlay captions                                                |
+| `--gallery-overlay-text-shadow` | `none`                | Text shadow for overlay captions (useful when using a transparent background) |
+
+```css
+/* Remove overlay caption background */
+.gallery-layout {
+  --gallery-overlay-bg: transparent;
+  --gallery-overlay-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Or use a custom overlay color */
+.gallery-layout {
+  --gallery-overlay-bg: rgba(15, 23, 42, 0.75);
+  --gallery-overlay-color: #f8fafc;
+}
+```
+
 ## Contributing
 
 Thank you for your interest in contributing to this project. All your contributions are very valuable and will make this project better, more developed and reliable. I truly appreciate your ideas and effort 😄🎉

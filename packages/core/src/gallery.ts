@@ -114,12 +114,12 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       img.setAttribute('tabindex', '0')
       img.setAttribute('role', 'button')
       img.addEventListener('click', () => {
-        openLightbox(image, options)
+        openLightbox(image, options, container)
       })
       img.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          openLightbox(image, options)
+          openLightbox(image, options, container)
         }
       })
     }

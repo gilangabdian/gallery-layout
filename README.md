@@ -317,6 +317,29 @@ If you use the Tiptap extension, you can pass default configurations when regist
 | `HTMLAttributes`     | `object`                                                           | `{}`        | Custom HTML attributes to add to the rendered node                                       |
 | `onUpload`           | `(files: File[]) => Promise<string[]>`                             | `undefined` | Callback for handling image uploads. If provided, overrides the default Base64 fallback. |
 
+## CSS Customization
+
+You can customize the appearance of overlay captions (any `captionPosition` starting with `overlay-`, such as `overlay-top-left` or `overlay-bottom-center`) using CSS custom properties on `:root`, `.gallery-layout`, or a specific gallery container (works for both the Core Library and Tiptap Extension):
+
+| CSS Variable                    | Default               | Description                                                                   |
+| ------------------------------- | --------------------- | ----------------------------------------------------------------------------- |
+| `--gallery-overlay-bg`          | `rgba(0, 0, 0, 0.6)`  | Background of overlay captions (set to `transparent` to remove the backdrop) |
+| `--gallery-overlay-color`       | `white`               | Text color of overlay captions                                                |
+| `--gallery-overlay-text-shadow` | `none`                | Text shadow for overlay captions (useful when using a transparent background) |
+
+```css
+/* Remove overlay caption background */
+.gallery-layout {
+  --gallery-overlay-bg: transparent;
+  --gallery-overlay-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Or use a custom overlay color */
+.gallery-layout {
+  --gallery-overlay-bg: rgba(15, 23, 42, 0.75);
+  --gallery-overlay-color: #f8fafc;
+}
+```
 
 ## License
 
