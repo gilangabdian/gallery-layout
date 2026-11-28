@@ -58,9 +58,9 @@ pnpm verify
 
 1. To run the demo playground, run in the root folder:
 
-```bash
-pnpm dev
-```
+   ```bash
+   pnpm dev
+   ```
 
 1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing, Linting & Type Checking](#testing-linting--type-checking) section for details.
 
