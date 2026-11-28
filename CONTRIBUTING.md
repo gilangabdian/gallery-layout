@@ -25,38 +25,14 @@ This project uses a monorepo structure; all project code logic resides in the `/
 
 When changing logic or adding new features to the **Tiptap Extension**, you must ensure that your changes remain fully compatible with **Tiptap v2.0.0**. Do not introduce APIs or methods that are only available in experimental/newer versions unless absolutely necessary, to prevent breaking changes for existing users
 
-#### Testing
+#### Testing, Linting & Type Checking
 
-This project uses Vitest for testing. After editing or adding a feature, I highly recommend updating existing unit tests or creating new ones related to your changes to ensure no errors arise during usage.
-The `test` folders located within `core/` and `tiptap/` are where the respective test files for each library are stored.
-To run the test, run this command in the root folder
+This project uses [Vitest](https://vitest.dev/), [Prettier](https://prettier.io/), and TypeScript.
 
-```bash
-pnpm test:run
-```
-
-#### Linting
-
-We use <a href="https://prettier.io/">Prettier</a> to format all code. To lint all your code, you can run in the root folder:
+Run all checks at once from the root folder before opening a PR:
 
 ```bash
-pnpm lint
-```
-
-If you encounter errors, you can run the Prettier auto-fix using:
-
-```bash
-pnpm lint-fix
-```
-
-> **Note**: Not all rules can be auto-fixed, some require manual changes. A pre-commit hook (Husky + `lint-staged`) also runs Prettier and type checking automatically on `git commit`.
-
-#### Type Checking
-
-We use TypeScript for the entire codebase; therefore, you need to ensure the code is free of type errors by running this command in the root folder
-
-```bash
-pnpm typecheck
+pnpm verify
 ```
 
 ### Development Setup
@@ -80,16 +56,18 @@ pnpm typecheck
    pnpm install
    ```
 
-1. To run the demo playground, run `pnpm dev` in the root folder, it automatically runs `pnpm dev` in `/playground` folder too.
+1. To run the demo playground, run in the root folder:
 
-   > **Note**: Leave this terminal running and open a new terminal tab for the next steps
+```bash
+pnpm dev
+```
 
-1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
+1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing, Linting & Type Checking](#testing-linting--type-checking) section for details.
 
-1. Before opening a PR, run `pnpm verify` in the root folder, it automatically runs formatting (`pnpm lint`), type checking (`pnpm typecheck`), and tests (`pnpm test:run`) for you:
+1. Before opening a PR, run `pnpm verify` in the root folder:
 
    ```bash
-   pnpm verify
+   pnpm verify # build -> lint -> typecheck -> test
    ```
 
 1. Once you are satisfied with your changes, commit them to the branch you created:
