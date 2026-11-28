@@ -33,7 +33,11 @@
     "editorial-layout"
   ],
   "homepage": "https://gallery-layout-playground.vercel.app/",
-  "repository": "https://github.com/gilangabdian/gallery-layout.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilangabdian/gallery-layout.git",
+    "directory": "packages/core"
+  },
   "author": "Gilang Abdian",
   "license": "MIT",
   "devEngines": {
