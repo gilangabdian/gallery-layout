@@ -142,8 +142,15 @@
   right: 12px;
 }
 
-.gallery-layout[data-caption-position^='overlay'] .gallery-layout__item:hover figcaption {
+.gallery-layout[data-caption-position^='overlay'] .gallery-layout__item:hover figcaption,
+.gallery-layout[data-caption-position^='overlay'] .gallery-layout__item:focus-within figcaption {
   opacity: 1;
+}
+
+@media (hover: none) {
+  .gallery-layout[data-caption-position^='overlay'] .gallery-layout__item figcaption {
+    opacity: 1;
+  }
 }
 
 /* Keyboard Focus Styles */

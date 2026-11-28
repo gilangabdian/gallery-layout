@@ -257,4 +257,96 @@ describe('Tiptap Gallery Extension', () => {
     editor.destroy()
     editorHost.remove()
   })
+
+  it('should support defaultAlign and extended defaultSize presets via configure() and setGallerySize()', () => {
+    const editor = new Editor({
+      extensions: [
+        StarterKit,
+        GalleryExtension.configure({
+          defaultSize: 'extra-small',
+          defaultAlign: 'center',
+        }),
+      ],
+      content: '<p></p>',
+    })
+
+    editor
+      .chain()
+      .focus()
+      .insertGallery([{ src: '1.jpg', alt: 'Test' }])
+      .run()
+
+    let galleryNode = editor.getJSON().content?.find((n) => n.type === 'galleryLayout')
+    expect(galleryNode?.attrs?.size).toBe('extra-small')
+    expect(galleryNode?.attrs?.align).toBe('center')
+
+    editor.chain().setGallerySize('extra-large').run()
+    galleryNode = editor.getJSON().content?.find((n) => n.type === 'galleryLayout')
+    expect(galleryNode?.attrs?.size).toBe('extra-large')
+
+    editor.destroy()
+  })
+
+  it('should remove all document mousedown listeners when the editor is destroyed', () => {
+    const addSpy = vi.spyOn(document, 'addEventListener')
+    const removeSpy = vi.spyOn(document, 'removeEventListener')
+
+    const editorHost = document.createElement('div')
+    document.body.appendChild(editorHost)
+
+    const editor = new Editor({
+      element: editorHost,
+      extensions: [StarterKit, GalleryExtension],
+      content: `<div data-type="gallery-layout" data-images='[{"src":"1.jpg","alt":"Test"}]'></div>`,
+    })
+
+    const addedMousedownListeners = addSpy.mock.calls
+      .filter(([event]) => event === 'mousedown')
+      .map(([, handler]) => handler)
+
+    // NodeView registers 2 document mousedown listeners (dropdowns + settings panel)
+    expect(addedMousedownListeners.length).toBeGreaterThanOrEqual(2)
+
+    editor.destroy()
+
+    const removedMousedownListeners = removeSpy.mock.calls
+      .filter(([event]) => event === 'mousedown')
+      .map(([, handler]) => handler)
+
+    for (const handler of addedMousedownListeners) {
+      expect(removedMousedownListeners).toContain(handler)
+    }
+
+    addSpy.mockRestore()
+    removeSpy.mockRestore()
+    editorHost.remove()
+  })
+
+  it('should fire only a single update transaction when toggling Scroll Snap checkbox', () => {
+    const editorHost = document.createElement('div')
+    document.body.appendChild(editorHost)
+
+    const editor = new Editor({
+      element: editorHost,
+      extensions: [StarterKit, GalleryExtension],
+      content: `<div data-type="gallery-layout" data-layout="scroll" data-images='[{"src":"1.jpg","alt":"Test"}]'></div>`,
+    })
+
+    const onTransaction = vi.fn()
+    editor.on('transaction', onTransaction)
+
+    // Find the Scroll Snap checkbox inside the settings panel
+    const rows = Array.from(editorHost.querySelectorAll('.settings-row'))
+    const snapRow = rows.find((row) => row.textContent?.includes('Scroll Snap'))
+    const snapCheckbox = snapRow?.querySelector('input[type="checkbox"]') as HTMLInputElement
+    expect(snapCheckbox).not.toBeNull()
+
+    snapCheckbox.checked = false
+    snapCheckbox.dispatchEvent(new Event('change'))
+
+    expect(onTransaction).toHaveBeenCalledTimes(1)
+
+    editor.destroy()
+    editorHost.remove()
+  })
 })

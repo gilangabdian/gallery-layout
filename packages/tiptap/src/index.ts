@@ -1,9 +1,15 @@
 import { Node, mergeAttributes } from '@tiptap/core'
-import { createGallery, type GalleryOptions, type GalleryImage } from 'gallery-layout'
+import {
+  createGallery,
+  type GalleryOptions,
+  type GalleryImage,
+  type GallerySize,
+} from 'gallery-layout'
 
 export interface GalleryExtensionOptions {
   defaultLayout: 'scroll' | 'grid'
-  defaultSize: 'small' | 'medium' | 'large'
+  defaultSize: GallerySize
+  defaultAlign?: 'left' | 'center' | 'right'
   defaultGap?: string
   defaultRadius?: string
   defaultCaptionSize?: string
@@ -19,7 +25,7 @@ declare module '@tiptap/core' {
     galleryLayout: {
       insertGallery: (images: GalleryImage[]) => ReturnType
       setGalleryLayout: (layout: 'scroll' | 'grid') => ReturnType
-      setGallerySize: (size: 'small' | 'medium' | 'large') => ReturnType
+      setGallerySize: (size: GallerySize) => ReturnType
     }
   }
 }
@@ -139,7 +145,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           attributes.snap !== undefined ? { 'data-snap': String(attributes.snap) } : {},
       },
       align: {
-        default: 'left',
+        default: this.options.defaultAlign,
         parseHTML: (element) => element.getAttribute('data-align'),
         renderHTML: (attributes) => (attributes.align ? { 'data-align': attributes.align } : {}),
       },
@@ -171,6 +177,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
       let syncDOM: ((attrs: Record<string, any>) => void) | null = null
       let toolbarWrapper: HTMLDivElement | null = null
       let closePanelOutside: ((e: MouseEvent) => void) | null = null
+      let closeDropdownsOutside: ((e: MouseEvent) => void) | null = null
+      const timeouts: Record<string, ReturnType<typeof setTimeout>> = {}
       const resizeObservers: ResizeObserver[] = []
 
       {
@@ -446,13 +454,14 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         container.insertBefore(toolbarWrapper, galleryWrapper)
 
         // Global click listener to close custom dropdowns
-        document.addEventListener('mousedown', (e) => {
-          const target = e.target as HTMLElement
-          if (toolbarWrapper && !target.closest('.gallery-custom-dropdown')) {
+        closeDropdownsOutside = (e: MouseEvent) => {
+          const target = e.target as HTMLElement | null
+          if (toolbarWrapper && (!target?.closest || !target.closest('.gallery-custom-dropdown'))) {
             const allMenus = toolbarWrapper.querySelectorAll('.gallery-custom-dropdown-menu')
             allMenus.forEach((m) => ((m as HTMLElement).style.display = 'none'))
           }
-        })
+        }
+        document.addEventListener('mousedown', closeDropdownsOutside)
 
         // Main Toolbar
         const mainToolbar = document.createElement('div')
@@ -898,7 +907,6 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           updateAttr('size', 'extra-large')
         })
 
-        let timeouts: Record<string, any> = {}
         const debounceUpdate = (key: string, val: any) => {
           clearTimeout(timeouts[key])
           timeouts[key] = setTimeout(() => updateAttr(key, val), 400)
@@ -926,7 +934,6 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         chkCaptions.addEventListener('change', () => updateAttr('captions', chkCaptions.checked))
         chkPointer.addEventListener('change', () => updateAttr('pointer', chkPointer.checked))
         chkLightbox.addEventListener('change', () => updateAttr('lightbox', chkLightbox.checked))
-        chkSnap.addEventListener('change', () => updateAttr('snap', chkSnap.checked))
         chkSnap.addEventListener('change', () => updateAttr('snap', chkSnap.checked))
 
         // Sync Function: Tiptap Attrs -> DOM State
@@ -1161,6 +1168,10 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           if (closePanelOutside) {
             document.removeEventListener('mousedown', closePanelOutside)
           }
+          if (closeDropdownsOutside) {
+            document.removeEventListener('mousedown', closeDropdownsOutside)
+          }
+          Object.values(timeouts).forEach((t) => clearTimeout(t))
           if (observer) {
             observer.disconnect()
           }
@@ -1187,7 +1198,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           return commands.updateAttributes(this.name, { layout })
         },
       setGallerySize:
-        (size: 'small' | 'medium' | 'large') =>
+        (size: GallerySize) =>
         ({ commands }) => {
           return commands.updateAttributes(this.name, { size })
         },

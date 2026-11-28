@@ -68,6 +68,15 @@ describe('Caption overlay CSS customization (feature tests)', () => {
     )
   })
 
+  it('reveals overlay captions on keyboard focus-within and touch devices (hover: none)', () => {
+    expect(stylesCss).toContain(
+      ".gallery-layout[data-caption-position^='overlay'] .gallery-layout__item:focus-within figcaption"
+    )
+    expect(stylesCss).toMatch(
+      /@media\s*\(hover:\s*none\)\s*\{\s*\.gallery-layout\[data-caption-position\^='overlay'\]\s+\.gallery-layout__item\s+figcaption\s*\{\s*opacity:\s*1;\s*\}\s*\}/
+    )
+  })
+
   it('inherits :root overlay CSS variables in both gallery and lightbox without being shadowed', () => {
     document.documentElement.style.setProperty('--gallery-overlay-bg', 'transparent')
     document.documentElement.style.setProperty('--gallery-overlay-color', '#f8fafc')
