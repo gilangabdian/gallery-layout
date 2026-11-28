@@ -1,6 +1,7 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import {
   createGallery,
+  type GalleryInstance,
   type GalleryOptions,
   type GalleryImage,
   type GallerySize,
@@ -15,6 +16,7 @@ export interface GalleryExtensionOptions {
   defaultCaptionSize?: string
   defaultAspectRatio?: string
   defaultLightbox?: boolean
+  defaultLightboxNavigation?: boolean
   defaultCaptions?: boolean
   HTMLAttributes: Record<string, any>
   onUpload?: (files: File[]) => Promise<string[]>
@@ -45,6 +47,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
       defaultCaptionSize: '14px',
       defaultAspectRatio: 'auto',
       defaultLightbox: false,
+      defaultLightboxNavigation: false,
       defaultCaptions: true,
       HTMLAttributes: {},
     }
@@ -104,6 +107,14 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         parseHTML: (element) => element.getAttribute('data-lightbox') === 'true',
         renderHTML: (attributes) =>
           attributes.lightbox !== undefined ? { 'data-lightbox': String(attributes.lightbox) } : {},
+      },
+      lightboxNavigation: {
+        default: this.options.defaultLightboxNavigation,
+        parseHTML: (element) => element.getAttribute('data-lightbox-navigation') === 'true',
+        renderHTML: (attributes) =>
+          attributes.lightboxNavigation !== undefined
+            ? { 'data-lightbox-navigation': String(attributes.lightboxNavigation) }
+            : {},
       },
       gap: {
         default: this.options.defaultGap,
@@ -178,6 +189,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
       let toolbarWrapper: HTMLDivElement | null = null
       let closePanelOutside: ((e: MouseEvent) => void) | null = null
       let closeDropdownsOutside: ((e: MouseEvent) => void) | null = null
+      let currentGallery: GalleryInstance | null = null
       const timeouts: Record<string, ReturnType<typeof setTimeout>> = {}
       const resizeObservers: ResizeObserver[] = []
 
@@ -816,6 +828,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         const chkLightbox = document.createElement('input')
         chkLightbox.type = 'checkbox'
         chkLightbox.className = 'settings-checkbox'
+        const chkLightboxNav = document.createElement('input')
+        chkLightboxNav.type = 'checkbox'
+        chkLightboxNav.className = 'settings-checkbox'
         const chkSnap = document.createElement('input')
         chkSnap.type = 'checkbox'
         chkSnap.className = 'settings-checkbox'
@@ -847,6 +862,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         const rowAlign = createSettingRow('Align', customAlign.element)
         const rowColumns = createSettingRow('Columns', inpColumns)
         const rowSnap = createSettingRow('Scroll Snap', chkSnap)
+        const rowLightboxNav = createSettingRow('Lightbox Navigation', chkLightboxNav)
 
         settingsPanel.append(
           rowCustomWidth,
@@ -860,7 +876,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           createSettingRow('Caption Size', inpCaptionSize),
           createSettingRow('Caption Position', customCaptionPos.element),
           createSettingRow('Hover Pointer', chkPointer),
-          createSettingRow('Enable Lightbox', chkLightbox)
+          createSettingRow('Enable Lightbox', chkLightbox),
+          rowLightboxNav
         )
 
         // Event Listeners for State Updates
@@ -934,6 +951,9 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
         chkCaptions.addEventListener('change', () => updateAttr('captions', chkCaptions.checked))
         chkPointer.addEventListener('change', () => updateAttr('pointer', chkPointer.checked))
         chkLightbox.addEventListener('change', () => updateAttr('lightbox', chkLightbox.checked))
+        chkLightboxNav.addEventListener('change', () =>
+          updateAttr('lightboxNavigation', chkLightboxNav.checked)
+        )
         chkSnap.addEventListener('change', () => updateAttr('snap', chkSnap.checked))
 
         // Sync Function: Tiptap Attrs -> DOM State
@@ -999,6 +1019,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           chkCaptions.checked = !!attrs.captions
           chkPointer.checked = !!attrs.pointer
           chkLightbox.checked = !!attrs.lightbox
+          chkLightboxNav.checked = !!attrs.lightboxNavigation
+          rowLightboxNav.style.display = attrs.lightbox ? 'flex' : 'none'
           chkSnap.checked = attrs.snap !== false // snap is implicitly true by default in core
 
           customCaptionPos.setValue(attrs.captionPosition || '')
@@ -1010,16 +1032,21 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
 
       // Helper to render gallery
       const renderGallery = (attrs: Record<string, any>) => {
-        // Disconnect existing observers before re-rendering to prevent memory leaks
+        // Disconnect existing observers and destroy previous gallery instance before re-rendering
         resizeObservers.forEach((obs) => obs.disconnect())
         resizeObservers.length = 0
+        currentGallery?.destroy()
+        currentGallery = null
 
-        galleryWrapper.innerHTML = ''
         const options: GalleryOptions = {
           images: attrs.images,
           layout: attrs.layout,
           size: attrs.size,
-          lightbox: attrs.lightbox,
+          lightbox: attrs.lightbox
+            ? attrs.lightboxNavigation
+              ? { navigation: true }
+              : true
+            : false,
           pointer: attrs.pointer,
           gap: attrs.gap,
           radius: attrs.radius,
@@ -1032,7 +1059,7 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           align: attrs.align,
           lazyLoad: false, // MUST BE FALSE inside Tiptap to prevent the 0-height lazy-load rendering cancellation bug!
         }
-        createGallery(galleryWrapper, options)
+        currentGallery = createGallery(galleryWrapper, options)
 
         if (editor.isEditable) {
           const items = galleryWrapper.querySelectorAll('.gallery-layout__item')
@@ -1165,6 +1192,8 @@ export const GalleryExtension = Node.create<GalleryExtensionOptions>({
           return true
         },
         destroy: () => {
+          currentGallery?.destroy()
+          currentGallery = null
           if (closePanelOutside) {
             document.removeEventListener('mousedown', closePanelOutside)
           }

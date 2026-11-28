@@ -13,9 +13,14 @@ export interface GridResponsiveSettings {
   desktop?: number
 }
 
+export interface LightboxOptions {
+  navigation?: boolean
+  loop?: boolean
+}
+
 export interface BaseGalleryOptions {
   images: GalleryImage[]
-  lightbox?: boolean
+  lightbox?: boolean | LightboxOptions
   gap?: string
   pointer?: boolean
   radius?: boolean | string
@@ -36,6 +41,7 @@ export interface BaseGalleryOptions {
   captionSize?: string
   lazyLoad?: boolean
   align?: 'left' | 'center' | 'right'
+  onImageClick?: (image: GalleryImage, index: number) => void
 }
 
 export interface ScrollGalleryOptions extends BaseGalleryOptions {
@@ -53,3 +59,7 @@ export interface GridGalleryOptions extends BaseGalleryOptions {
 }
 
 export type GalleryOptions = ScrollGalleryOptions | GridGalleryOptions
+
+export interface GalleryInstance {
+  destroy: () => void
+}

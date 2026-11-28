@@ -1,4 +1,10 @@
 import './styles.css'
 
 export { createGallery } from './gallery'
-export type { GalleryImage, GalleryOptions, GallerySize } from './types'
+export type {
+  GalleryImage,
+  GalleryInstance,
+  GalleryOptions,
+  GallerySize,
+  LightboxOptions,
+} from './types'

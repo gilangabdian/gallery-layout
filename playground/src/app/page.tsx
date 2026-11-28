@@ -49,6 +49,7 @@ export default function Home() {
   const [aspectRatio, setAspectRatio] = useState<string>('')
 
   const [lightbox, setLightbox] = useState<boolean>(true)
+  const [lightboxNavigation, setLightboxNavigation] = useState<boolean>(false)
   const [captions, setCaptions] = useState(true)
   const [pointer, setPointer] = useState<boolean>(true)
   const [snapping, setSnapping] = useState<boolean>(true)
@@ -482,6 +483,18 @@ export default function Home() {
                       />
                       Lightbox
                     </label>
+                    <label
+                      className={`flex items-center gap-2 text-sm font-medium transition-colors ${lightbox ? 'cursor-pointer text-neutral-300 hover:text-white' : 'cursor-not-allowed text-neutral-600'}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={lightboxNavigation}
+                        onChange={(e) => setLightboxNavigation(e.target.checked)}
+                        disabled={!lightbox}
+                        className="accent-neutral-500 w-4 h-4 disabled:opacity-50"
+                      />
+                      Lightbox Navigation
+                    </label>
                     <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-neutral-300 hover:text-white transition-colors">
                       <input
                         type="checkbox"
@@ -528,7 +541,7 @@ export default function Home() {
                 captionPosition={captionPosition}
                 captionSize={captionSize.trim() ? captionSize : undefined}
                 pointer={pointer}
-                lightbox={lightbox}
+                lightbox={lightbox ? (lightboxNavigation ? { navigation: true } : true) : false}
                 gap={gap.trim() ? gap : undefined}
                 radius={radius.trim() ? radius : undefined}
                 aspectRatio={aspectRatio.trim() ? aspectRatio : undefined}

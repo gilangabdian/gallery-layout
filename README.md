@@ -99,7 +99,7 @@ export default function MyGallery() {
   useEffect(() => {
     if (!containerRef.current) return
 
-    createGallery(containerRef.current, {
+    const gallery = createGallery(containerRef.current, {
       layout: 'scroll',
       size: 'large',
       images: [
@@ -107,6 +107,8 @@ export default function MyGallery() {
         { src: '/photo2.jpg', alt: 'Photo 2', title: 'title two' },
       ],
     })
+
+    return () => gallery.destroy()
   }, [])
 
   return <div ref={containerRef}></div>
@@ -286,7 +288,8 @@ The `createGallery(container, options)` function accepts the following options:
 | `captions`        | `boolean`                                                                                                                                                                                                                                            | `false`           | If `true`, renders the image `title` as a visible caption     |
 | `captionPosition` | `"top-left" \| "top-center" \| "top-right" \| "bottom-left" \| "bottom-center" \| "bottom-right" \| "overlay-top-left" \| "overlay-top-center" \| "overlay-top-right" \| "overlay-bottom-left" \| "overlay-bottom-center" \| "overlay-bottom-right"` | `"bottom-center"` | Position of the caption relative to the image                 |
 | `captionSize`     | `string`                                                                                                                                                                                                                                             | `undefined`       | Custom CSS font size for captions (e.g. `14px`, `0.9rem`)     |
-| `lightbox`        | `boolean`                                                                                                                                                                                                                                            | `false`           | Enables a built-in click-to-zoom fullscreen lightbox          |
+| `lightbox`        | `boolean \| { navigation?: boolean; loop?: boolean }`                                                                                                                                                                                                 | `false`           | Enables built-in click-to-zoom lightbox. Set `{ navigation: true }` to enable prev/next arrows, keyboard arrows, and swipe when more than 1 image is present |
+| `onImageClick`    | `(image: GalleryImage, index: number) => void`                                                                                                                                                                                                         | `undefined`       | Callback fired when an image is clicked or activated via keyboard (useful for custom lightboxes)                                                             |
 | `lazyLoad`        | `boolean`                                                                                                                                                                                                                                            | `true`            | Automatically adds `loading="lazy"` to all images             |
 | `align`           | `"left" \| "center" \| "right"`                                                                                                                                                                                                                      | `undefined`       | Alignment of the entire gallery container                     |
 | `snap`            | `boolean`                                                                                                                                                                                                                                            | `true`            | Enables CSS scroll-snapping (only applies to `scroll` layout) |
@@ -306,7 +309,8 @@ If you use the Tiptap extension, you can pass default configurations when regist
 | `defaultSize`        | `"extra-small" \| "small" \| "medium" \| "large" \| "extra-large"` | `"medium"`  | The size applied to newly inserted galleries                                             |
 | `defaultAlign`       | `"left" \| "center" \| "right"`                                    | `"left"`    | Default alignment for the gallery container                                              |
 | `defaultCaptions`    | `boolean`                                                          | `true`      | Default toggle state for captions                                                        |
-| `defaultLightbox`    | `boolean`                                                          | `false`     | Default toggle state for the lightbox                                                    |
+| `defaultLightbox`           | `boolean`                                                          | `false`     | Default toggle state for the lightbox                                                    |
+| `defaultLightboxNavigation` | `boolean`                                                          | `false`     | Default toggle state for prev/next lightbox navigation (applies when lightbox is enabled)|
 | `defaultGap`         | `string`                                                           | `"16px"`    | Default CSS gap between images                                                           |
 | `defaultRadius`      | `string`                                                           | `"4px"`     | Default CSS border-radius for images                                                     |
 | `defaultCaptionSize` | `string`                                                           | `"14px"`    | Default CSS font size for captions                                                       |

@@ -109,7 +109,7 @@ Once a gallery is inserted, simply click on it inside the editor. A beautiful fl
 - **Adjust Sizes**: Pick from preset sizes (`extra-small`, `small`, `medium`, `large`, `extra-large`), or set a **Custom width**
 - **Alignment**: Automatically appears when using Custom Width, allowing you to align the gallery container to the `left`, `center`, or `right` of the article
 - **Edit Titles**: Add or change the title directly for each image
-- **Toggle Features**: Turn captions and the lightbox on or off on the fly
+- **Toggle Features**: Turn captions, lightbox, and optional prev/next lightbox navigation on or off on the fly
 - **Caption Position**: Choose from 12 different positions (e.g., `top-left`, `overlay-bottom-center`)
 - **Caption Size**: Adjust the font size of the captions
 - **Layout-Specific Options**:
@@ -131,7 +131,8 @@ If you use the Tiptap extension, you can pass default configurations when regist
 | `defaultSize`        | `"extra-small" \| "small" \| "medium" \| "large" \| "extra-large"` | `"medium"`  | The size applied to newly inserted galleries                                             |
 | `defaultAlign`       | `"left" \| "center" \| "right"`                                    | `"left"`    | Default alignment for the gallery container                                              |
 | `defaultCaptions`    | `boolean`                                                          | `true`      | Default toggle state for captions                                                        |
-| `defaultLightbox`    | `boolean`                                                          | `false`     | Default toggle state for the lightbox                                                    |
+| `defaultLightbox`           | `boolean`                                                          | `false`     | Default toggle state for the lightbox                                                    |
+| `defaultLightboxNavigation` | `boolean`                                                          | `false`     | Default toggle state for prev/next lightbox navigation (applies when lightbox is enabled)|
 | `defaultGap`         | `string`                                                           | `"16px"`    | Default CSS gap between images                                                           |
 | `defaultRadius`      | `string`                                                           | `"4px"`     | Default CSS border-radius for images                                                     |
 | `defaultCaptionSize` | `string`                                                           | `"14px"`    | Default CSS font size for captions                                                       |

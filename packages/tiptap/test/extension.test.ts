@@ -349,4 +349,38 @@ describe('Tiptap Gallery Extension', () => {
     editor.destroy()
     editorHost.remove()
   })
+
+  it('should default defaultLightboxNavigation to false and support enabling lightbox navigation', () => {
+    const editorHost = document.createElement('div')
+    document.body.appendChild(editorHost)
+
+    const editor = new Editor({
+      element: editorHost,
+      extensions: [
+        StarterKit,
+        GalleryExtension.configure({
+          defaultLightbox: true,
+          defaultLightboxNavigation: true,
+        }),
+      ],
+      content: `<div data-type="gallery-layout" data-lightbox="true" data-lightbox-navigation="true" data-images='[{"src":"img1.jpg","alt":"One"},{"src":"img2.jpg","alt":"Two"}]'></div>`,
+      editable: false,
+    })
+
+    const json = editor.getJSON()
+    const galleryNode = json.content?.find((n) => n.type === 'galleryLayout')
+    expect(galleryNode?.attrs?.lightboxNavigation).toBe(true)
+    expect(editor.getHTML()).toContain('data-lightbox-navigation="true"')
+
+    const imgs = editorHost.querySelectorAll('.gallery-layout__item img')
+    ;(imgs[0] as HTMLImageElement).click()
+
+    expect(document.querySelector('.gallery-layout__lightbox-prev')).not.toBeNull()
+    expect(document.querySelector('.gallery-layout__lightbox-next')).not.toBeNull()
+
+    // Destroying editor should also close any open lightbox via gallery.destroy()
+    editor.destroy()
+    expect(document.querySelector('.gallery-layout__lightbox')).toBeNull()
+    editorHost.remove()
+  })
 })

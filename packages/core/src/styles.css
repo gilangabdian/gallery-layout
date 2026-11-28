@@ -287,6 +287,52 @@
   outline: none;
 }
 
+.gallery-layout__lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  border-radius: 9999px;
+  color: white;
+  font-size: 2rem;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-layout__lightbox-prev {
+  left: 16px;
+}
+
+.gallery-layout__lightbox-next {
+  right: 16px;
+}
+
+.gallery-layout__lightbox-nav:hover,
+.gallery-layout__lightbox-nav:focus-visible {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.gallery-layout__lightbox-nav:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.gallery-layout__lightbox-nav:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 @keyframes lightbox-fade-in {
   from {
     opacity: 0;

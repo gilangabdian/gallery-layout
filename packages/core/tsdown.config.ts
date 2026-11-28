@@ -7,6 +7,7 @@ export default defineConfig({
   platform: 'browser',
   clean: true,
   sourcemap: true,
+  minify: true,
   css: {
     inject: false,
   },

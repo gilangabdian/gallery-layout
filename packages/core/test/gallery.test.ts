@@ -253,4 +253,72 @@ describe('createGallery', () => {
     lightbox?.remove()
     document.body.style.overflow = ''
   })
+
+  it('should throw a clear TypeError when container is not an HTMLElement', () => {
+    expect(() =>
+      createGallery(null as unknown as HTMLElement, { images: sampleImages })
+    ).toThrowError(TypeError)
+  })
+
+  it('should call onImageClick on click and keyboard activation even without lightbox', () => {
+    const clicked: Array<{ src: string; index: number }> = []
+    createGallery(container, {
+      images: sampleImages,
+      lightbox: false,
+      onImageClick: (image, index) => {
+        clicked.push({ src: image.src, index })
+      },
+    })
+
+    const imgs = container.querySelectorAll('img')
+    expect(imgs[0].getAttribute('tabindex')).toBe('0')
+    expect(imgs[0].getAttribute('role')).toBe('button')
+
+    imgs[1].click()
+    imgs[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+
+    expect(clicked).toEqual([
+      { src: 'photo2.jpg', index: 1 },
+      { src: 'photo1.jpg', index: 0 },
+    ])
+    expect(document.querySelector('.gallery-layout__lightbox')).toBeNull()
+  })
+
+  it('should open lightbox with navigation starting at the clicked image index', () => {
+    const gallery = createGallery(container, {
+      images: sampleImages,
+      lightbox: { navigation: true },
+    })
+
+    const imgs = container.querySelectorAll('img')
+    imgs[1].click()
+
+    const lightboxImg = document.querySelector('.gallery-layout__lightbox-img') as HTMLImageElement
+    expect(lightboxImg.src).toContain('photo2.jpg')
+    expect(document.querySelector('.gallery-layout__lightbox-prev')).not.toBeNull()
+    expect(document.querySelector('.gallery-layout__lightbox-next')).not.toBeNull()
+
+    gallery.destroy()
+  })
+
+  it('should clean up DOM, attributes, CSS variables, and open lightbox on destroy()', () => {
+    const gallery = createGallery(container, {
+      images: sampleImages,
+      layout: 'grid',
+      gap: '24px',
+      lightbox: true,
+    })
+
+    const img = container.querySelector('img') as HTMLImageElement
+    img.click()
+    expect(document.querySelector('.gallery-layout__lightbox')).not.toBeNull()
+
+    gallery.destroy()
+
+    expect(container.innerHTML).toBe('')
+    expect(container.classList.contains('gallery-layout')).toBe(false)
+    expect(container.dataset.layout).toBeUndefined()
+    expect(container.style.getPropertyValue('--gallery-gap')).toBe('')
+    expect(document.querySelector('.gallery-layout__lightbox')).toBeNull()
+  })
 })

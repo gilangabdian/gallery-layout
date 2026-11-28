@@ -9,16 +9,12 @@ export default function Gallery(options: GalleryOptions) {
 
   useEffect(() => {
     const container = containerRef.current
-    if (container) {
-      createGallery(container, options)
-    }
+    if (!container) return
+
+    const gallery = createGallery(container, options)
 
     return () => {
-      if (container) {
-        container.innerHTML = ''
-      }
-      // Clean up any open lightboxes appended to body during hot-reloads
-      document.querySelectorAll('.gallery-layout__lightbox').forEach((el) => el.remove())
+      gallery.destroy()
     }
   }, [options])
 

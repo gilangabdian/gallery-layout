@@ -1,10 +1,19 @@
-import type { GalleryOptions } from './types'
+import type { GalleryInstance, GalleryOptions } from './types'
 import { openLightbox } from './lightbox'
 
-export function createGallery(container: HTMLElement, options: GalleryOptions): void {
-  container.innerHTML = ''
+const GALLERY_CSS_VARS = [
+  '--gallery-custom-size',
+  '--gallery-gap',
+  '--gallery-aspect-ratio',
+  '--gallery-caption-size',
+  '--gallery-radius',
+  '--gallery-cols-desktop',
+  '--gallery-cols-tablet',
+  '--gallery-cols-mobile',
+] as const
 
-  // CLEANUP: Prevent DOM State Leak when options are toggled off during hot-reloads
+function resetContainer(container: HTMLElement): void {
+  container.innerHTML = ''
   delete container.dataset.layout
   delete container.dataset.align
   delete container.dataset.size
@@ -12,14 +21,18 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   delete container.dataset.captionPosition
   delete container.dataset.pointer
 
-  container.style.removeProperty('--gallery-custom-size')
-  container.style.removeProperty('--gallery-gap')
-  container.style.removeProperty('--gallery-aspect-ratio')
-  container.style.removeProperty('--gallery-caption-size')
-  container.style.removeProperty('--gallery-radius')
-  container.style.removeProperty('--gallery-cols-desktop')
-  container.style.removeProperty('--gallery-cols-tablet')
-  container.style.removeProperty('--gallery-cols-mobile')
+  for (const prop of GALLERY_CSS_VARS) {
+    container.style.removeProperty(prop)
+  }
+}
+
+export function createGallery(container: HTMLElement, options: GalleryOptions): GalleryInstance {
+  if (!(container instanceof HTMLElement)) {
+    throw new TypeError('[gallery-layout] Container must be a valid HTMLElement.')
+  }
+
+  // CLEANUP: Prevent DOM State Leak when options are toggled off during hot-reloads
+  resetContainer(container)
 
   container.classList.add('gallery-layout')
 
@@ -99,7 +112,11 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
   const track = document.createElement('div')
   track.className = 'gallery-layout__track'
 
-  for (const image of options.images) {
+  const hasLightbox = Boolean(options.lightbox)
+  const isInteractive = hasLightbox || typeof options.onImageClick === 'function'
+  let activeCloseLightbox: (() => void) | null = null
+
+  options.images.forEach((image, index) => {
     const item = document.createElement('figure')
     item.className = 'gallery-layout__item'
 
@@ -110,16 +127,23 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
       img.loading = 'lazy'
     }
 
-    if (options.lightbox) {
+    if (isInteractive) {
       img.setAttribute('tabindex', '0')
       img.setAttribute('role', 'button')
-      img.addEventListener('click', () => {
-        openLightbox(image, options, container)
-      })
+
+      const handleActivate = () => {
+        options.onImageClick?.(image, index)
+        if (hasLightbox) {
+          activeCloseLightbox?.()
+          activeCloseLightbox = openLightbox(image, options, container, index)
+        }
+      }
+
+      img.addEventListener('click', handleActivate)
       img.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          openLightbox(image, options, container)
+          handleActivate()
         }
       })
     }
@@ -138,7 +162,16 @@ export function createGallery(container: HTMLElement, options: GalleryOptions): 
     }
 
     track.appendChild(item)
-  }
+  })
 
   container.appendChild(track)
+
+  return {
+    destroy() {
+      activeCloseLightbox?.()
+      activeCloseLightbox = null
+      resetContainer(container)
+      container.classList.remove('gallery-layout')
+    },
+  }
 }
