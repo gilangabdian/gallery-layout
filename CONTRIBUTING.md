@@ -49,7 +49,7 @@ If you encounter errors, you can run the Prettier auto-fix using:
 pnpm lint-fix
 ```
 
-> **Note**: Not all rules can be auto-fixed, some require manual changes
+> **Note**: Not all rules can be auto-fixed, some require manual changes. A pre-commit hook (Husky + `lint-staged`) also runs Prettier and type checking automatically on `git commit`.
 
 #### Type Checking
 
@@ -86,16 +86,10 @@ pnpm typecheck
 
 1. Make your desired changes, and don't forget to edit or add tests. Refer to the [Testing](#testing) section for instructions on how to run tests
 
-1. Run linting in the root folder to make sure there are no linting errors
+1. Before opening a PR, run `pnpm verify` in the root folder, it automatically runs formatting (`pnpm lint`), type checking (`pnpm typecheck`), and tests (`pnpm test:run`) for you:
 
    ```bash
-   pnpm lint
-   ```
-
-1. Run type checking in the root folder to make sure there are no type errors
-
-   ```bash
-   pnpm typecheck
+   pnpm verify
    ```
 
 1. Once you are satisfied with your changes, commit them to the branch you created:

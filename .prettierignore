@@ -6,3 +6,5 @@ package.json
 .next
 next-env.d.ts
 README.md
+CHANGELOG.md
+.changeset
