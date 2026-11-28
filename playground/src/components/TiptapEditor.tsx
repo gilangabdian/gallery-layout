@@ -55,13 +55,11 @@ export default function TiptapEditor() {
       }),
     ],
     content: `
-      <h2>First time in Japan</h2>
-      <p>Hi! I just got back from a vacation in Japan🎌. It was my first time there, and I was so happy to finally visit; I spent a lot of time exploring various beautiful spots. Of course, I made sure to capture the moments in photos. Here is a collection of my photos from visiting various places in Japan (I'm actually a bit embarrassed to share them with you because many of my photos are bad😔):</p>
-      
-      <div data-type="gallery-layout" data-layout="grid" data-size="small" data-aspect-ratio="1/1" data-captions="true" data-lightbox="true" data-images='[{"src":"/_next/image?url=%2Fphotos%2Fbambo.jpg&w=1200&q=75","alt":"Bamboo Forest","title":"Bamboo Forest, Arashiyama"},{"src":"/_next/image?url=%2Fphotos%2Fdotonbori.jpg&w=1200&q=75","alt":"Dotonbori at Night","title":"Dotonbori at Night, Osaka"},{"src":"/_next/image?url=%2Fphotos%2Fgirl-with-umbrella.jpg&w=1200&q=75","alt":"Rainy Stroll","title":"Rainy Stroll in Japan"},{"src":"/_next/image?url=%2Fphotos%2Fkiyomizu-dera.jpg&w=1200&q=75","alt":"Kiyomizu-dera Temple","title":"Kiyomizu-dera Temple, Kyoto"},{"src":"/_next/image?url=%2Fphotos%2Fmasaki-kimoro.jpg&w=1200&q=75","alt":"Masaki Kimoro Street","title":"Masaki Kimoro Street View"},{"src":"/_next/image?url=%2Fphotos%2Fmount-fuji.jpg&w=1200&q=75","alt":"Mount Fuji","title":"Majestic Mount Fuji"},{"src":"/_next/image?url=%2Fphotos%2Fnara-park.jpg&w=1200&q=75","alt":"Nara Park Deer","title":"Friendly Deer at Nara Park"},{"src":"/_next/image?url=%2Fphotos%2Fnight-vibes-japan.jpg&w=1200&q=75","alt":"Tokyo Night Vibes","title":"Tokyo Night Vibes"},{"src":"/_next/image?url=%2Fphotos%2Fsensoji-temple.jpg&w=1200&q=75","alt":"Senso-ji Temple","title":"Senso-ji Temple, Asakusa"},{"src":"/_next/image?url=%2Fphotos%2Fshibuya.jpg&w=1200&q=75","alt":"Shibuya Crossing","title":"Shibuya Crossing"},{"src":"/_next/image?url=%2Fphotos%2Fshinjuku.jpg&w=1200&q=75","alt":"Neon Lights of Shinjuku","title":"Neon Lights of Shinjuku"},{"src":"/_next/image?url=%2Fphotos%2Funiversal-studio-japan.jpg&w=1200&q=75","alt":"Universal Studios Japan","title":"Universal Studios Japan (USJ)"}]'></div>
+      <h2>Cats like to Sleep</h2>
+      <p>I don't know why cat is like sleeping, i think that is one thing that they do to enjoy their life, so here i take a photos about them while sleep</p>
 
-      <p>That’s probably all I wanted to share. I hope you like the photo I’ve included here.</p>
-      <p>Thank you!</p>
+      <div data-type="gallery-layout" data-layout="grid" data-size="small" data-aspect-ratio="1/1" data-captions="true" data-lightbox="true" data-images='[{"src":"/_next/image?url=%2Fphotos%2Fcat1.jpg&w=1200&q=75","alt":"Cat sleeping on white bed with paw over its face","title":"Hiding from the Morning Light"},{"src":"/_next/image?url=%2Fphotos%2Fcat2.jpg&w=1200&q=75","alt":"Grey kitten sleeping inside a wooden box","title":"Wooden Box Nap"},{"src":"/_next/image?url=%2Fphotos%2Fcat3.jpg&w=1200&q=75","alt":"Fluffy brown and white cat curled up sleeping on a sofa","title":"Cozy Sofa Curl"},{"src":"/_next/image?url=%2Fphotos%2Fcat4.jpg&w=1200&q=75","alt":"Fluffy white kitten sleeping peacefully on grey sheets","title":"Sweet Dreams, Little Cloud"},{"src":"/_next/image?url=%2Fphotos%2Fcat5.jpg&w=1200&q=75","alt":"Close-up of a brown and white tabby cat sleeping on bedding","title":"Peaceful Nap"},{"src":"/_next/image?url=%2Fphotos%2Fcat6.jpg&w=1200&q=75","alt":"Small tabby kitten sleeping with head resting on its paws","title":"Paws as a Pillow"},{"src":"/_next/image?url=%2Fphotos%2Fcat7.jpg&w=1200&q=75","alt":"Ginger cat sleeping belly-up on a dark blanket","title":"Belly-Up Afternoon Snooze"},{"src":"/_next/image?url=%2Fphotos%2Fcat8.jpg&w=1200&q=75","alt":"Tabby cat curled up sleeping on a wooden deck","title":"Quiet Deck Rest"},{"src":"/_next/image?url=%2Fphotos%2Fcat9.jpg&w=1200&q=75","alt":"Cat sleeping on a wooden windowsill with paw dangling","title":"Windowsill Siesta"},{"src":"/_next/image?url=%2Fphotos%2Fcat10.jpg&w=1200&q=75","alt":"Fluffy ginger cat sleeping on its back on the floor","title":"Lazy Floor Stretch"},{"src":"/_next/image?url=%2Fphotos%2Fcat11.jpg&w=1200&q=75","alt":"Ginger cat napping under a grey fringed blanket","title":"Tucked Under the Blanket"},{"src":"/_next/image?url=%2Fphotos%2Fcat12.jpg&w=1200&q=75","alt":"Calico cat sleeping under a white duvet","title":"Burrowed in the Duvet"}]'></div>
+
     `,
     editorProps: {
       attributes: {
@@ -95,7 +93,7 @@ export default function TiptapEditor() {
       .chain()
       .focus()
       .insertGallery(images)
-      .updateAttributes('gallery', { captions: true })
+      .updateAttributes('galleryLayout', { captions: true })
       .run()
 
     // Reset input

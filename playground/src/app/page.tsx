@@ -29,7 +29,7 @@ const optimizeImage = (src: string) => `/_next/image?url=${encodeURIComponent(sr
 const defaultImages = [
   { src: optimizeImage('/photos/photo-1.jpg'), alt: 'Night', title: 'Car, 2024' },
   { src: optimizeImage('/photos/photo-2.jpg'), alt: 'Wait', title: 'Wait' },
-  { src: optimizeImage('/photos/photo-3.jpg'), alt: 'Laptop', title: 'Work with laptop' },
+  { src: optimizeImage('/photos/photo-3.jpg'), alt: 'Laptop', title: 'Cat' },
   { src: optimizeImage('/photos/photo-4.jpg'), alt: 'Owl', title: 'Owl' },
   { src: optimizeImage('/photos/photo-5.jpg'), alt: 'Green garden', title: 'Green garden' },
   { src: optimizeImage('/photos/photo-6.jpg'), alt: 'Forest', title: 'Forest' },
